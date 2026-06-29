@@ -1,3 +1,4 @@
+mod error;
 use std::path::PathBuf;
 use lofty::file::TaggedFileExt;
 use lofty::probe::Probe;
