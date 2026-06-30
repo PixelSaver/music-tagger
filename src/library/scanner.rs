@@ -17,9 +17,11 @@ pub fn walk_dir(dir: &Path) -> Result<Library> {
         match media::read_track_from_file(&mut file) {
             Ok(track) => {
                 log::debug!("Track: {:?}", track);
+                let relative_path = entry.path()
+                    .strip_prefix(dir)?.to_path_buf();
                 out.push(TrackLocation {
                     track,
-                    path: (entry.path().canonicalize()?).into(),
+                    path: (relative_path).into(),
                 });
             }
             Err(e) => {
@@ -31,8 +33,4 @@ pub fn walk_dir(dir: &Path) -> Result<Library> {
     return Ok(Library{
         tracks: out,
     });
-}
-
-fn is_file(entry: &walkdir::DirEntry) -> bool {
-    entry.file_type().is_file()
 }
