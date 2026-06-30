@@ -16,14 +16,14 @@ pub fn walk_dir(dir: PathBuf) -> Result<Library> {
         println!("Scanning: {:?}", entry.path());
         match media::read_track_from_file(&mut file) {
             Ok(track) => {
-                println!("Track: {:?}", track);
+                log::debug!("Track: {:?}", track);
                 out.push(TrackLocation {
                     track,
-                    path: PathBuf::from(entry.path()),
+                    path: PathBuf::from(entry.path()).canonicalize()?,
                 });
             }
             Err(e) => {
-                println!("Error when reading track: {:?}", e);
+                log::debug!("Error when reading track: {:?}", e);
                 continue;
             }
         }
