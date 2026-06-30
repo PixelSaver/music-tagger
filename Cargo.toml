@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 lofty = "0.24.0"
 thiserror = "2.0.18"
+walkdir = "2.5.0"

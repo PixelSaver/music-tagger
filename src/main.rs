@@ -2,6 +2,9 @@ mod error;
 use std::path::PathBuf;
 use lofty::file::TaggedFileExt;
 use lofty::probe::Probe;
+use music_tagger::library::scanner;
+
+
 
 
 fn main() {
@@ -15,4 +18,5 @@ fn main() {
             println!("{:?}: {:?}", item.key(), item.value());
         }
     }
+    scanner::walk_dir(PathBuf::from("./test/")).unwrap();
 }
