@@ -18,6 +18,8 @@ pub struct Track {
     pub script: Option<Language>,
     pub album: Option<Album>,
     pub genre: String,
+    /// Track length in milliseconds
+    pub duration: u64,
 }
 impl Track {
     pub fn new() -> Self {
@@ -33,6 +35,7 @@ impl Track {
             album: Some(Album::new()),
             genre: String::new(),
             isrc: String::new(),
+            duration: 0,
         }
     }
 }

@@ -56,6 +56,12 @@ impl TryFrom<TaggedFile> for Track {
                 .get_string(ItemKey::Genre)
                 .unwrap_or_default()
                 .to_owned(),
+            duration: tag
+                .get_string(ItemKey::Length)
+                .unwrap_or_default()
+                .to_owned()
+                .parse::<u64>()
+                .unwrap_or_default(),
         })
     }
 }

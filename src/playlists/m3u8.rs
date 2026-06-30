@@ -33,11 +33,11 @@ pub fn save_m3u8(path: &Path, playlist: &models::Playlist) -> Result<()> {
     out.push_str("#EXTM3U\n");
 
     for track_loc in &playlist.track_locations {
-        // let track = &track_loc.track;
+        let track = &track_loc.track;
         // TODO Set the duration in the playlist
-        // let duration = track_loc.track;
-        // let title = if track.track_title.is_empty() { "Unknown" } else { &track.track_title };
-        // out.push_str(&format!("#EXTINF:{:.0}, {}\n", duration, title));
+        let duration = track_loc.track.duration.div_ceil(1000);
+        let title = if track.track_title.is_empty() { "Unknown" } else { &track.track_title };
+        out.push_str(&format!("#EXTINF:{:?}, {}\n", duration, title));
 
         out.push_str(&format!(
             "{}\n",
