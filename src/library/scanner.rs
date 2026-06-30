@@ -1,10 +1,10 @@
-use std::path::PathBuf;
+use std::path::Path;
 use crate::error::*;
 use crate::media::media;
 use crate::core::models::{Library, TrackLocation};
 use walkdir::WalkDir;
 
-pub fn walk_dir(dir: PathBuf) -> Result<Library> {
+pub fn walk_dir(dir: &Path) -> Result<Library> {
     let walkdir = WalkDir::new(dir);
     let mut out = Vec::new();
     for entry in walkdir
@@ -19,7 +19,7 @@ pub fn walk_dir(dir: PathBuf) -> Result<Library> {
                 log::debug!("Track: {:?}", track);
                 out.push(TrackLocation {
                     track,
-                    path: PathBuf::from(entry.path()).canonicalize()?,
+                    path: Path::new(entry.path()).canonicalize()?,
                 });
             }
             Err(e) => {

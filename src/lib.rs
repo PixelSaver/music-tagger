@@ -1,5 +1,5 @@
 pub mod error;
-// pub mod app;
+pub mod app;
 pub mod core;
 pub mod media;
 pub mod library;

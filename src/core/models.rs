@@ -2,8 +2,9 @@ use std::str::FromStr;
 use std::path::PathBuf;
 use crate::error::MusicTaggerError;
 use crate::error::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Track {
     pub track_title: String,
     pub composer: String,
@@ -35,7 +36,7 @@ impl Track {
         }
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Album {
     album_artist: String,
     album_title: String,
@@ -49,7 +50,7 @@ impl Album {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum Language {
     English,
     Spanish,
@@ -75,13 +76,30 @@ impl FromStr for Language {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TrackLocation {
     pub track: Track,
     pub path: PathBuf,
 }
+impl TrackLocation {
+    pub fn new(track: Track, path: PathBuf) -> Self {
+        Self { track, path }
+    }
+}
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Library {
     pub tracks: Vec<TrackLocation>,
+}
+impl Library {
+    pub fn new() -> Self {
+        Self { tracks: Vec::new() }
+    }
+    
+    pub fn add_track(&mut self, track: TrackLocation) {
+        if self.tracks.iter().any(|t| t.path == track.path) {
+            return;
+        }
+        self.tracks.push(track);
+    }
 }

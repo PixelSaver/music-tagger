@@ -9,6 +9,12 @@ pub enum MusicTaggerError {
     #[error(transparent)]
     Io(#[from] io::Error),
 
+    #[error("Invalid cache")]
+    InvalidCache,
+
+    #[error(transparent)]
+    Serde(#[from] serde_json::Error),
+
     #[error("File not found: {0}")]
     FileNotFound(PathBuf),
 
@@ -28,9 +34,6 @@ pub enum MusicTaggerError {
     // library
     #[error("Track not found")]
     TrackNotFound,
-
-    #[error("Invalid cache")]
-    InvalidCache,
 
     // listen
     #[error("No active session")]
