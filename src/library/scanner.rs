@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use crate::error::*;
-use walkdir::WalkDir;
 use crate::core::models::Track;
+use walkdir::WalkDir;
 
 pub fn walk_dir(dir: PathBuf) -> Result<Vec<Track>> {
     let walkdir = WalkDir::new(dir);

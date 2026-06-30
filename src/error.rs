@@ -19,6 +19,9 @@ pub enum MusicTaggerError {
     #[error("Unsupported file type")]
     UnsupportedFileType,
 
+    #[error("Invalid language: {0}")]
+    InvalidLanguage(String),
+
     #[error("Missing tag")]
     MissingTag,
 
@@ -39,5 +42,5 @@ pub enum MusicTaggerError {
 
     //internal
     #[error("{0}")]
-    Mesage(String),
+    Message(String),
 }
