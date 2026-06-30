@@ -7,14 +7,14 @@ use crate::error::*;
 pub struct Track {
     pub track_title: String,
     pub composer: String,
-    pub isrc: Option<Language>,
+    pub isrc: String,
     pub track_artist: String,
     pub track_artists: String,
     pub copyright_message: String,
     pub description: String,
     pub publisher: String,
     /// Language
-    pub script: String,
+    pub script: Option<Language>,
     pub album: Option<Album>,
     pub genre: String,
 }
@@ -28,10 +28,10 @@ impl Track {
             copyright_message: String::new(),
             description: String::new(),
             publisher: String::new(),
-            script: String::new(),
+            script: Option::None,
             album: Some(Album::new()),
             genre: String::new(),
-            isrc: Option::None,
+            isrc: String::new(),
         }
     }
 }

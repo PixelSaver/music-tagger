@@ -23,8 +23,7 @@ impl TryFrom<TaggedFile> for Track {
                 .to_owned(),
             isrc: tag
                 .get_string(ItemKey::Isrc)
-                .map(|s| Language::from_str(s))
-                .transpose()?
+                .unwrap_or_default()
                 .to_owned(),
             track_artist: tag
                 .get_string(ItemKey::TrackArtist)
@@ -48,7 +47,8 @@ impl TryFrom<TaggedFile> for Track {
                 .to_owned(),
             script: tag
                 .get_string(ItemKey::Script)
-                .unwrap_or_default()
+                .map(|s| Language::from_str(s))
+                .transpose()?
                 .to_owned(),
             // TODO get the album 
             album: None,
