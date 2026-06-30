@@ -103,3 +103,22 @@ impl Library {
         self.tracks.push(track);
     }
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+/// TODO Add tags
+pub struct Playlist {
+    pub playlist_name: String,
+    pub track_locations: Vec<TrackLocation>,
+    // tags: String,
+}
+impl Playlist {
+    pub fn new() -> Self {
+        Self {
+            playlist_name: String::new(),
+            track_locations: Vec::new(),
+        }
+    }
+    pub fn add_track(&mut self, track: TrackLocation) {
+        self.track_locations.push(track);
+    }
+}

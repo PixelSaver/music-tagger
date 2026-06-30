@@ -1,31 +1,30 @@
 use std::{path::{Path, PathBuf}, fs::File};
+use serde::{de::DeserializeOwned, Serialize};
 use crate::core::models::*;
 use crate::error::*;
 use crate::library::scanner;
 
-pub fn load_cache(cache_path: &Path) -> Result<Option<Library>> {
-    for entry in cache_path.read_dir()? {
-        let entry = entry?;
-
-        let path = entry.path();
-
-        if path.is_file() {
-            let file = File::open(&path)?;
-
-            let library: Library = serde_json::from_reader(file)?;
-            return Ok(Some(library))
+pub fn load_library(cache_path: &Path) -> Result<Option<Library>> {
+    let lib: Option<Library> = load_json(cache_path)?;
+    match lib {
+        Some(lib) => Ok(Some(lib)),
+        None => {
+            log::debug!("Failed to find cache.");
+            return Ok(None);
         }
     }
-    log::debug!("Failed to find cache.");
-    return Ok(None);
     // return Ok(scanner::walk_dir(&PathBuf::from(backup_path))?)
 }
-pub fn store_cache(cache_path: &Path, library: &Library) -> Result<()> {
-    let cache_file = if cache_path.is_dir() {
-        File::create(&PathBuf::from(cache_path).join("library.json"))?
-    } else {
-        File::create(cache_path)?
-    };
-    serde_json::to_writer(cache_file, library)?;
+pub fn save_library(cache_path: &Path, library: &Library) -> Result<()> {
+    save_json(cache_path, library)
+}
+
+pub fn load_json<T: DeserializeOwned>(path: &Path) -> Result<T> {
+    let file = File::open(path)?;
+    Ok(serde_json::from_reader(file)?)
+}
+pub fn save_json<T: Serialize>(path: &Path, data: &T) -> Result<()> {
+    let file = File::create(path)?;
+    serde_json::to_writer(file, data)?;
     Ok(())
 }

@@ -9,6 +9,9 @@ pub enum MusicTaggerError {
     #[error(transparent)]
     Io(#[from] io::Error),
 
+    #[error("Path is a directory: {0}")]
+    PathIsDirectory(PathBuf),
+
     #[error("Invalid cache")]
     InvalidCache,
 
@@ -40,8 +43,8 @@ pub enum MusicTaggerError {
     NoActiveSession,
 
     //Playlist
-    #[error("Invalid playlist")]
-    InvalidPlaylist,
+    #[error("Playlist was invalid: {0}")]
+    InvalidPlaylist(String),
 
     //internal
     #[error("{0}")]

@@ -19,7 +19,7 @@ pub fn walk_dir(dir: &Path) -> Result<Library> {
                 log::debug!("Track: {:?}", track);
                 out.push(TrackLocation {
                     track,
-                    path: Path::new(entry.path()).canonicalize()?,
+                    path: (entry.path().canonicalize()?).into(),
                 });
             }
             Err(e) => {

@@ -28,6 +28,13 @@ This cli (might consider tui or gui later) app ~~can~~ will:
  - Lyrics fetching 
  - Turn into a gdextension to write frontend in godot
 
+ ## Roadmap
+ - [ ] Add tags to playlists / songs
+    - [ ] Mass update songs in a playlist (add tag to all)
+ - [ ] Playlist functionality
+    - [ ] Reordering
+    - [ ] Removing duplicates
+    - [ ] Duration reading from m3u8 for some reason
 
 ## Planning
 
