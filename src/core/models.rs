@@ -1,24 +1,22 @@
 use std::str::FromStr;
-
-use lofty::tag::ItemKey::MusicBrainzRecordingId;
-
+use std::path::PathBuf;
 use crate::error::MusicTaggerError;
 use crate::error::*;
 
 #[derive(Clone, Debug)]
 pub struct Track {
-    track_title: String,
-    composer: String,
-    isrc: Option<Language>,
-    track_artist: String,
-    track_artists: String,
-    copyright_message: String,
-    description: String,
-    publisher: String,
+    pub track_title: String,
+    pub composer: String,
+    pub isrc: Option<Language>,
+    pub track_artist: String,
+    pub track_artists: String,
+    pub copyright_message: String,
+    pub description: String,
+    pub publisher: String,
     /// Language
-    script: String,
-    album: Option<Album>,
-    genre: String,
+    pub script: String,
+    pub album: Option<Album>,
+    pub genre: String,
 }
 impl Track {
     pub fn new() -> Self {
@@ -30,6 +28,7 @@ impl Track {
             copyright_message: String::new(),
             description: String::new(),
             publisher: String::new(),
+            script: String::new(),
             album: Some(Album::new()),
             genre: String::new(),
             isrc: Option::None,
@@ -73,4 +72,16 @@ impl FromStr for Language {
             _ => Err(MusicTaggerError::InvalidLanguage(s.to_owned())),
         }
     }
+}
+
+
+#[derive(Debug)]
+pub struct TrackLocation {
+    pub track: Track,
+    pub path: PathBuf,
+}
+
+#[derive(Debug)]
+pub struct Library {
+    pub tracks: Vec<TrackLocation>,
 }
