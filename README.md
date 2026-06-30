@@ -36,6 +36,7 @@ This cli (might consider tui or gui later) app ~~can~~ will:
     - [ ] Removing duplicates
     - [ ] Duration reading from m3u8 for some reason
     - [ ] Upgrade to hls_m3u8 instead of m3u8_rs
+- [ ] Find a way to measure length of a file...
 
 ## Planning
 
