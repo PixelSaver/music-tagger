@@ -37,6 +37,12 @@ pub enum MusicTaggerError {
     #[error("Missing tag")]
     MissingTag,
 
+    #[error("Missing tagged file")]
+    MissingTaggedFile,
+
+    #[error("Invalid custom tags: {0}")]
+    InvalidCustomTags(String),
+
     // library
     #[error("Track not found")]
     TrackNotFound,

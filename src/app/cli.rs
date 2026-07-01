@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand, ValueEnum};
+use crate::core::models::TagMode;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -10,12 +11,6 @@ pub struct Cli {
   pub command: Commands,
 }
 
-#[derive(ValueEnum, Clone)]
-pub enum TagMode {
-    Append,
-    Replace,
-    Remove,
-}
 
 #[derive(Subcommand)]
 pub enum Commands {

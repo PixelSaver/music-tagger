@@ -1,10 +1,12 @@
+use clap::ValueEnum;
+use lofty::file::TaggedFile;
 use std::str::FromStr;
 use std::path::PathBuf;
 use crate::error::MusicTaggerError;
 use crate::error::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Track {
     pub track_title: String,
     pub composer: String,
@@ -20,6 +22,28 @@ pub struct Track {
     pub genre: String,
     /// Track length in milliseconds
     pub duration: u64,
+    pub custom_tags: Vec<CustomTag>,
+    #[serde(skip)]
+    pub lofty_tagged_file: Option<TaggedFile>,
+}
+impl std::fmt::Debug for Track {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Track")
+            .field("track_title", &self.track_title)
+            .field("composer", &self.composer)
+            .field("track_artist", &self.track_artist)
+            .field("track_artists", &self.track_artists)
+            .field("copyright_message", &self.copyright_message)
+            .field("description", &self.description)
+            .field("publisher", &self.publisher)
+            .field("script", &self.script)
+            .field("album", &self.album)
+            .field("genre", &self.genre)
+            .field("isrc", &self.isrc)
+            .field("duration", &self.duration)
+            .field("custom_tags", &self.custom_tags)
+            .finish()
+    }
 }
 impl Track {
     pub fn new() -> Self {
@@ -36,6 +60,8 @@ impl Track {
             genre: String::new(),
             isrc: String::new(),
             duration: 0,
+            custom_tags: Vec::new(),
+            lofty_tagged_file: Option::None,
         }
     }
 }
@@ -77,7 +103,50 @@ impl FromStr for Language {
         }
     }
 }
+impl ToString for Language {
+    fn to_string(&self) -> String {
+        match self {
+            Self::English => "eng".to_string(),
+            Self::Spanish => "spa".to_string(),
+            Self::Japanese => "jpn".to_string(),
+            Self::Korean => "kor".to_string(),
+        }
+    }
+}
 
+#[derive(ValueEnum, Clone)]
+pub enum TagMode {
+    Append,
+    Replace,
+    Remove,
+}
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct CustomTag {
+    pub value: String,
+}
+impl CustomTag {
+    pub fn new(value: String) -> Self {
+        Self { value }
+    }
+    pub fn vec_to_str(vec: Vec<CustomTag>) -> String {
+        let mut out = "MUSICTAGGER_CUSTOM_TAGS:".to_string();
+        for tag in vec {
+            out.push_str(&tag.value);
+            out.push_str(",");
+        }
+        out
+    }
+    pub fn str_to_vec(s: &str) -> Result<Vec<CustomTag>> {
+        if !s.starts_with("MUSICTAGGER_CUSTOM_TAGS:") {
+            return Err(MusicTaggerError::InvalidCustomTags(s.to_owned()));
+        }
+        let mut out = Vec::new();
+        for tag in s.split(',') {
+            out.push(CustomTag::new(tag.to_owned()));
+        }
+        Ok(out)
+    }
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TrackLocation {
