@@ -23,6 +23,8 @@ impl App {
 
         match cli.command {
             Commands::Scan { music_directory, cache_directory } => {
+                log::debug!("Scanning music directory: {:?}", music_directory);
+                log::debug!("Cache directory: {:?}", cache_directory);
                 self.scan(&music_directory, &cache_directory)?;
             },
             Commands::Playlist { playlist_name, playlist_directory } => {
@@ -31,8 +33,20 @@ impl App {
             Commands::Tag { isrc, mode } => {
                 self.tag(&isrc, mode)?;
             },
+            Commands::Inspect { path } => {
+                self.inspect(&path)?;
+            },
         }
         
+        Ok(())
+    }
+    fn inspect(&self, path: &Path) -> Result<()> {
+        let library = self.load_or_scan_library(&self.settings.cache_directory)?;
+        log::info!("Library: {:?}", library);
+        let track = library.tracks.iter().find(|t| t.path == path);
+        if let Some(track) = track {
+            log::info!("{:?}", track.track);
+        }
         Ok(())
     }
     fn scan(&self, music_directory: &Path, cache_directory: &Path) -> Result<Library> {

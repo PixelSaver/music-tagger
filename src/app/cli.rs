@@ -20,10 +20,10 @@ pub enum TagMode {
 #[derive(Subcommand)]
 pub enum Commands {
   Scan {
-      #[arg(short='m', long, default_value = ".")]
+      #[arg(short='m', long, default_value = "./test/")]
       music_directory: PathBuf,
 
-      #[arg(short='c', long, default_value = "./.cache/")]
+      #[arg(short='c', long, default_value = "./test/.cache/library.json")]
       cache_directory: PathBuf,
   },
   /// Export playlist??
@@ -40,5 +40,9 @@ pub enum Commands {
 
       #[arg(short='m', long, default_value = "replace")]
       mode: TagMode,
+  },
+  Inspect {
+      #[arg(short='p', long, default_value = "./test/")]
+      path: PathBuf,
   }
 }

@@ -13,8 +13,8 @@ impl Settings {
         Self {
             library: None,
             playlist_directory: PathBuf::from("."),
-            music_directories: vec![PathBuf::from(".")],
-            cache_directory: PathBuf::from("./.cache/"),
+            music_directories: vec![PathBuf::from("./test/")],
+            cache_directory: PathBuf::from("./test/.cache/library.json"),
         }
     }
 }
