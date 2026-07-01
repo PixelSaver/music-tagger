@@ -1,6 +1,6 @@
 use crate::error::*;
 use std::fs::File;
-use lofty::{file::TaggedFile, file::TaggedFileExt};
+use lofty;
 use crate::core::models::Track;
 
 

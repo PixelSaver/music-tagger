@@ -3,8 +3,18 @@ use std::path::PathBuf;
 
 
 pub struct Settings {
-    library: Option<Library>,
-    playlist_directory: PathBuf,
-    music_directories: Vec<PathBuf>,
-    cache_directory: PathBuf,
+    pub library: Option<Library>,
+    pub playlist_directory: PathBuf,
+    pub music_directories: Vec<PathBuf>,
+    pub cache_directory: PathBuf,
+}
+impl Settings {
+    pub fn new() -> Self {
+        Self {
+            library: None,
+            playlist_directory: PathBuf::from("."),
+            music_directories: vec![PathBuf::from(".")],
+            cache_directory: PathBuf::from("./.cache/"),
+        }
+    }
 }

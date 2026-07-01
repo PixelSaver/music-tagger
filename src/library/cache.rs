@@ -1,8 +1,7 @@
-use std::{path::{Path, PathBuf}, fs::File};
+use std::{path::Path, fs::File};
 use serde::{de::DeserializeOwned, Serialize};
 use crate::core::models::*;
 use crate::error::*;
-use crate::library::scanner;
 
 pub fn load_library(cache_path: &Path) -> Result<Option<Library>> {
     let lib: Option<Library> = load_json(cache_path)?;
