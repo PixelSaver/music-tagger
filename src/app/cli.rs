@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{Parser, Subcommand};
 use crate::core::models::TagMode;
 use std::path::PathBuf;
 
@@ -35,9 +35,12 @@ pub enum Commands {
 
       #[arg(short='m', long, default_value = "replace")]
       mode: TagMode,
+
+      #[arg(short='t', long, default_value = "")]
+      tag: String,
   },
   Inspect {
-      #[arg(short='p', long, default_value = "./test/")]
-      path: PathBuf,
+      #[arg(short='i', long)]
+      isrc: String,
   }
 }

@@ -1,10 +1,11 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use crate::error::*;
 use crate::media::media;
 use crate::core::models::{Library, TrackLocation};
 use walkdir::WalkDir;
 
 pub fn walk_dir(dir: &Path) -> Result<Library> {
+    let parent = dir.parent().unwrap_or(dir);
     let walkdir = WalkDir::new(dir);
     let mut out = Vec::new();
     for entry in walkdir
@@ -18,7 +19,7 @@ pub fn walk_dir(dir: &Path) -> Result<Library> {
             Ok(track) => {
                 log::debug!("Track: {:?}", track);
                 let relative_path = entry.path()
-                    .strip_prefix(dir)?.to_path_buf();
+                    .strip_prefix(parent)?.to_path_buf();
                 out.push(TrackLocation {
                     track,
                     path: (relative_path).into(),

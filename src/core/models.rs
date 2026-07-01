@@ -85,6 +85,7 @@ pub enum Language {
     Spanish,
     Japanese,
     Korean,
+    None,
 }
 impl FromStr for Language {
     type Err = MusicTaggerError;
@@ -99,7 +100,8 @@ impl FromStr for Language {
             "jpan" => Ok(Self::Japanese),
             "kor" => Ok(Self::Korean),
             "kore" => Ok(Self::Korean),
-            _ => Err(MusicTaggerError::InvalidLanguage(s.to_owned())),
+            // _ => Err(MusicTaggerError::InvalidLanguage(s.to_owned())),
+            _ => Ok(Self::None),
         }
     }
 }
@@ -110,6 +112,7 @@ impl ToString for Language {
             Self::Spanish => "spa".to_string(),
             Self::Japanese => "jpn".to_string(),
             Self::Korean => "kor".to_string(),
+            Self::None => "".to_string(),
         }
     }
 }
@@ -128,7 +131,7 @@ impl CustomTag {
     pub fn new(value: String) -> Self {
         Self { value }
     }
-    pub fn vec_to_str(vec: Vec<CustomTag>) -> String {
+    pub fn vec_to_str(vec: &[CustomTag]) -> String {
         let mut out = "MUSICTAGGER_CUSTOM_TAGS:".to_string();
         for tag in vec {
             out.push_str(&tag.value);
@@ -173,6 +176,13 @@ impl Library {
             return;
         }
         self.tracks.push(track);
+    }
+
+    pub fn find_track_by_isrc(&mut self, isrc: &str) -> Option<&mut TrackLocation> {
+        self.tracks.iter_mut().find(|t| t.track.isrc == isrc)
+    }
+    pub fn find_track_by_title(&mut self, title: &str) -> Option<&mut TrackLocation> {
+        self.tracks.iter_mut().find(|t| t.track.track_title == title)
     }
 }
 

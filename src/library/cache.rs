@@ -7,7 +7,10 @@ pub fn load_library(cache_path: &Path) -> Result<Option<Library>> {
     log::debug!("Trying cache at path: {:?}", cache_path);
     let lib: Option<Library> = load_json(cache_path)?;
     match lib {
-        Some(lib) => Ok(Some(lib)),
+        Some(lib) => {
+            log::debug!("Cache loaded successfully!");
+            Ok(Some(lib))
+        },
         None => {
             log::debug!("Failed to find cache.");
             return Ok(None);

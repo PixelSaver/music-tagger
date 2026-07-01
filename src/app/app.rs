@@ -1,5 +1,7 @@
+use crate::error::MusicTaggerError;
 use clap::Parser;
 use crate::app::cli::*;
+use crate::media::tag;
 use std::path::Path;
 use std::{fs, io::{self, Write}};
 use crate::error::Result;
@@ -18,7 +20,7 @@ impl App {
             library: None,
         }
     }
-    pub fn run(&self) -> Result<()> {
+    pub fn run(&mut self) -> Result<()> {
         let cli = Cli::parse();
 
         match cli.command {
@@ -30,20 +32,20 @@ impl App {
             Commands::Playlist { playlist_name, playlist_directory } => {
                 self.playlist(&playlist_name, &playlist_directory)?;
             }
-            Commands::Tag { isrc, mode } => {
-                self.tag(&isrc, mode)?;
+            Commands::Tag { isrc, mode, tag } => {
+                self.tag(&isrc, mode, CustomTag { value: tag })?;
             },
-            Commands::Inspect { path } => {
-                self.inspect(&path)?;
+            Commands::Inspect { isrc } => {
+                self.inspect(&isrc)?;
             },
         }
         
         Ok(())
     }
-    fn inspect(&self, path: &Path) -> Result<()> {
+    fn inspect(&self, isrc: &str) -> Result<()> {
         let library = self.load_or_scan_library(&self.settings.cache_directory)?;
         log::info!("Library: {:?}", library);
-        let track = library.tracks.iter().find(|t| t.path == path);
+        let track = library.tracks.iter().find(|t| t.track.isrc == isrc);
         if let Some(track) = track {
             log::info!("{:?}", track.track);
         }
@@ -57,11 +59,10 @@ impl App {
     fn playlist(&self, playlist_name: &str, playlist_directory: &Path) -> Result<()> {
         Ok(())
     }
-    fn tag(&self, isrc: &str, mode: TagMode) -> Result<()> {
-        let library = self.load_or_scan_library(&self.settings.cache_directory)?;
-        if let Some(library) = &self.library {
-            
-        } else {
+    fn tag(&mut self, isrc: &str, _mode: TagMode, tag: CustomTag) -> Result<()> {
+        if let Ok(library) = self.load_or_scan_library(&self.settings.cache_directory) {
+            self.library = Some(library);
+        }else {
             println!("\nNo cache found. Scan default directory? [Y/n] ");
             io::Write::flush(&mut std::io::stdout()).unwrap();
             
@@ -75,21 +76,19 @@ impl App {
             
             let library = scanner::walk_dir(&self.settings.music_directories[0])?;
             cache::save_library(&self.settings.cache_directory, &library)?;
+            self.library = Some(library);
         }
-        match mode {
-            TagMode::Append => {
-                
-            },
-            TagMode::Replace => {
-                
-            },
-            TagMode::Remove => {
-                
-            }
+        if let Some(library) = &mut self.library {
+            let track_loc: &mut TrackLocation = library.find_track_by_isrc(isrc).ok_or(MusicTaggerError::TrackNotFound)?;
+            tag::tag_track(&mut track_loc.track, _mode, tag)?;
+            track_loc.write()?;
         }
+        
+        
         Ok(())
     }
     fn load_or_scan_library(&self, cache_directory: &Path) -> Result<Library> {
+        log::debug!("Loading or scanning library path: {:?}", cache_directory);
         let cached_library = cache::load_library(cache_directory)?;
         if let Some(library) = cached_library {
             Ok(library)
