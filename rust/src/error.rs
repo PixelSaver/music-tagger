@@ -50,6 +50,10 @@ pub enum MusicTaggerError {
     #[error("Track not found")]
     TrackNotFound,
 
+    // godot
+    #[error("Godot error: {0}")]
+    GodotError(String),
+
     // listen
     #[error("No active session")]
     NoActiveSession,
