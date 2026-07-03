@@ -159,6 +159,13 @@ impl TrackLocation {
         let path = &self.path;
         let tagged_file: &mut TaggedFile = (&mut self.track).try_into()?;
         let mut file = OpenOptions::new().read(true).write(true).open(path)?;
+        log::debug!("Writing file: {:?}", path);
+        if let Some(tag) = tagged_file.primary_tag().or_else(|| tagged_file.first_tag()) {
+            log::debug!(
+                "Description: {:?}",
+                tag.get_string(ItemKey::Description)
+            );
+        }
         tagged_file.save_to(&mut file, WriteOptions::default())?;
         Ok(())
     }
