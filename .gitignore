@@ -25,3 +25,4 @@ rust/**/mutants.out*/
 
 rust/target
 rust/test/
+target/flycheck0/

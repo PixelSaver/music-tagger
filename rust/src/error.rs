@@ -12,6 +12,9 @@ pub enum MusicTaggerError {
     #[error("Path is a directory: {0}")]
     PathIsDirectory(PathBuf),
 
+    #[error("Directory error: {0}")]
+    DirectoryError(String),
+
     #[error("Strip prefix error: {0}")]
     StripPrefixError(#[from] std::path::StripPrefixError),
 

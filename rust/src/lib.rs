@@ -48,13 +48,13 @@ impl INode for MusicTagger {
 impl MusicTagger {
     #[func]
     pub fn scan_directory(&mut self, directory: String) -> String {
-        let library = match crate::library::cache::load_library(Path::new(&directory)) {
+        let library = match crate::library::scanner::walk_dir(Path::new(&directory)) {
             Ok(lib) => lib,
             Err(e) => {
                 return e.to_string();
             },
         };
-        self.library = library;
+        self.library = Some(library);
         if self.library.is_none() {
             return "No library loaded / found.".into();
         }

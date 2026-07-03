@@ -10,9 +10,9 @@ pub fn walk_dir(dir: &Path) -> Result<Library> {
     let mut out = Vec::new();
     for entry in walkdir
         .follow_links(true)
-        .into_iter()
-        .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_file()) {
+        .into_iter() {
+        let entry = entry.map_err(|e| MusicTaggerError::DirectoryError(e.to_string()))?;
+        if !entry.file_type().is_file() { continue; }
         let mut file = std::fs::File::open(entry.path())?;
         println!("Scanning: {:?}", entry.path());
         match media::read_track_from_file(&mut file) {
