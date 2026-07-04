@@ -6,7 +6,7 @@ use lofty::config::WriteOptions;
 use crate::error::*;
 use crate::core::models::{CustomTag, Language, Track, TrackLocation};
 // use crate::media::tag;
-use std::fs::{self, OpenOptions};
+use std::fs::OpenOptions;
 
 impl Track {
     pub fn to_tagged_file(&self, path: &Path) -> Result<TaggedFile> {

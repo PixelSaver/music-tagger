@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use crate::error::*;
 use crate::godot_log::event::{EventReporter, MusicTaggerEvent};
 use crate::media::media;
@@ -26,7 +26,7 @@ pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library>
                     out.push(TrackLocation {
                         track,
                         path: (relative_path).into(),
-                        lofty_tagged_file: None,
+                        lofty_tagged_file: Some(lofty_tagged_file),
                     });
                 }
                 Err(e) => {

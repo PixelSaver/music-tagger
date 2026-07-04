@@ -11,7 +11,6 @@ pub mod godot_log;
 
 use std::path::Path;
 
-use godot::meta::Element;
 use godot::prelude::*;
 use godot::classes::Node;
 
@@ -133,14 +132,15 @@ impl MusicTaggerNode {
     #[signal]
     fn track_found(title: String);
 
-    // #[func]
-    // pub fn get_all_tracks(&self) -> Array<Gd<GodotTrack>> {
-    //     let mut tracks = Array::<Gd<GodotTrack>>::new();
-    //     for track in self.library.as_ref().map(|lib| lib.tracks.iter()).unwrap_or_default() {
-    //         tracks.push(Gd::from_init_fn(|base| GodotTrack::from_track(track.track, base)));
-    //     }
-    //     tracks
-    // }
+    #[func]
+    pub fn get_all_tracks(&self) -> Array<Gd<GodotTrack>> {
+        let mut tracks = Array::<Gd<GodotTrack>>::new();
+        for track in self.library.as_ref().map(|lib| lib.tracks.iter()).unwrap_or_default() {
+            let gd_track = Gd::from_init_fn(|base| GodotTrack::from_track(track.track.clone(), base));
+            tracks.push(&gd_track);
+        }
+        tracks
+    }
     
     #[func]
     pub fn get_track_count(&self) -> i32 {
