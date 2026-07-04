@@ -31,7 +31,7 @@ pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library>
                 }
                 Err(e) => {
                     log::debug!("Error when reading track: {:?}", e);
-                    reporter.emit(MusicTaggerEvent::Error(&e.to_string()));
+                    // reporter.emit(MusicTaggerEvent::Error(&e.to_string()));
                     continue;
                 }
             }

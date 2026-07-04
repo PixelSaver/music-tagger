@@ -89,10 +89,6 @@ impl GodotTrack {
         }
     }
 }
-// impl ToGO
-// impl Element for GodotTrack {
-    
-// }
 
 #[derive(GodotClass)]
 #[class(base = Node)]
