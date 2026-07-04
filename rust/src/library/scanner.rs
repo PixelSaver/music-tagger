@@ -18,7 +18,7 @@ pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library>
             reporter.emit(MusicTaggerEvent::Scanning(entry.path()));
             let mut file = std::fs::File::open(entry.path())?;
             match media::read_track_from_file(&mut file) {
-                Ok(track) => {
+                Ok((track, lofty_tagged_file)) => {
                     log::debug!("Track: {:?}", track);
                     reporter.emit(MusicTaggerEvent::TrackFound(&track.track_title));
                     let relative_path = entry.path()
@@ -26,6 +26,7 @@ pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library>
                     out.push(TrackLocation {
                         track,
                         path: (relative_path).into(),
+                        lofty_tagged_file: None,
                     });
                 }
                 Err(e) => {

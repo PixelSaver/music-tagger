@@ -6,7 +6,7 @@ use crate::error::MusicTaggerError;
 use crate::error::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Track {
     pub track_title: String,
     pub composer: String,
@@ -23,8 +23,8 @@ pub struct Track {
     /// Track length in milliseconds
     pub duration: u64,
     pub custom_tags: Vec<CustomTag>,
-    #[serde(skip)]
-    pub lofty_tagged_file: Option<TaggedFile>,
+    // #[serde(skip)]
+    // pub lofty_tagged_file: Option<TaggedFile>,
 }
 impl std::fmt::Debug for Track {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -61,7 +61,7 @@ impl Track {
             isrc: String::new(),
             duration: 0,
             custom_tags: Vec::new(),
-            lofty_tagged_file: Option::None,
+            // lofty_tagged_file: Option::None,
         }
     }
 }
@@ -151,14 +151,24 @@ impl CustomTag {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct TrackLocation {
     pub track: Track,
     pub path: PathBuf,
+    #[serde(skip)]
+    pub lofty_tagged_file: Option<TaggedFile>,
+}
+impl std::fmt::Debug for TrackLocation {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("TrackLocation")
+            .field("track", &self.track)
+            .field("path", &self.path)
+            .finish()
+    }
 }
 impl TrackLocation {
     pub fn new(track: Track, path: PathBuf) -> Self {
-        Self { track, path }
+        Self { track, path, lofty_tagged_file: None}
     }
 }
 

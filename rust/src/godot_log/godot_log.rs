@@ -1,5 +1,5 @@
 use godot::prelude::*;
-use log::{Level, LevelFilter, Metadata, Record};
+use log::{LevelFilter, Metadata, Record};
 
 struct GodotLogger;
 
