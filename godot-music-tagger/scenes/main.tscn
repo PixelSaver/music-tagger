@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ch81su7nh77vx"]
+
+[ext_resource type="Theme" uid="uid://djxds56cenfds" path="res://assets/default_theme.tres" id="1_sugp2"]
+[ext_resource type="Script" uid="uid://bdffej275fwkl" path="res://scenes/main.gd" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://ch2phmrhhhody" path="res://scenes/setup_screen.tscn" id="3_sugp2"]
+
+[node name="PixelMenuManager" type="Control" unique_id=33857186]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("1_sugp2")
+script = ExtResource("2_sugp2")
+first_scene = ExtResource("3_sugp2")
+debug_first_scene = ExtResource("3_sugp2")
+metadata/_custom_type_script = "uid://bpo0dsawpb3qj"
+
+[node name="MusicTaggerNode" type="MusicTaggerNode" parent="." unique_id=469680657]

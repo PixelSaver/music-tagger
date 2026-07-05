@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://l1m3rl76alwl"]
+
+[ext_resource type="Script" uid="uid://cqdmu3qmaxw88" path="res://scenes/inspect_library_screen.gd" id="1_nwuve"]
+[ext_resource type="Script" uid="uid://dnjb5btvq2c7" path="res://scenes/song_display.gd" id="2_rhkcn"]
+[ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
+
+[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nwuve")
+song_display = NodePath("HBoxContainer/MarginContainer/SongDisplay")
+radial_selector = NodePath("HBoxContainer/RadialSelector")
+metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=382708563]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=620910383]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc")]
+layout_mode = 2
+script = ExtResource("2_rhkcn")
+title = NodePath("MarginContainer/VBoxContainer/Title")
+cover = NodePath("MarginContainer/VBoxContainer/Picture")
+desc = NodePath("MarginContainer/VBoxContainer/Description")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay" unique_id=694110974]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer" unique_id=1388247414]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1157568745]
+layout_mode = 2
+text = "Song Title"
+fit_content = true
+
+[node name="Picture" type="TextureRect" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=551163036]
+layout_mode = 2
+
+[node name="Description" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1656760021]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 22
+text = "Lorem: Ipsum"
+fit_content = true
+scroll_active = false
+
+[node name="RadialSelector" type="Container" parent="HBoxContainer" unique_id=1811888877 node_paths=PackedStringArray("selector", "excluded")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+script = ExtResource("3_hcd5l")
+selector = NodePath("Selector")
+offset = Vector2(520, -13)
+radius = 1300.0
+separation = 100.0
+circle_center = Vector2(-1100, 0)
+flip = true
+scale_multiplier = 0.001
+excluded = [NodePath("Selector")]
+metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
+
+[node name="Selector" type="Control" parent="HBoxContainer/RadialSelector" unique_id=930231776]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer/RadialSelector/Selector" unique_id=410167138]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 0
+offset_top = -50.0
+offset_right = 1000.0
+offset_bottom = 50.0
+color = Color(0.27058825, 0.22745098, 1, 0.21960784)
+
+[node name="_RichTextLabel_20" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=521645264]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "ただ声一つ"
+
+[node name="_RichTextLabel_23" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=785030645]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "色香水"
+
+[node name="_RichTextLabel_26" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1632939749]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "ベテルギウス"
+
+[node name="_RichTextLabel_29" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1187580498]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "死ぬのがいいわ"
+
+[node name="_RichTextLabel_32" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1983176901]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "まつり"
+
+[node name="_RichTextLabel_35" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=2014100905]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "きらり"
+
+[node name="_RichTextLabel_38" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=693906462]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "DADDY ! DADDY ! DO !"
+
+[node name="_RichTextLabel_41" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=139956448]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "KICK BACK"
+
+[node name="_RichTextLabel_44" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=903999187]
+custom_minimum_size = Vector2(1000, 100)
+layout_mode = 2
+text = "ピースサイン"
