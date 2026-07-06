@@ -171,14 +171,49 @@ impl MusicTaggerNode {
         
         out
     }
-
+    #[func]
+    pub fn get_all_custom_tags(&self) -> Array<GString> {
+        let mut out = Array::<GString>::new();
+        let library = self.library.as_ref();
+        if library.is_none() { return out; }
+        let library = library.unwrap();
+        library.tracks.iter().for_each(|track| {
+            track.track.custom_tags.iter().for_each(|tag| {
+                if out.find(&tag.value, 0.into()).is_none() {
+                    out.push(&tag.value);
+                };
+            });
+        });
+        
+        out
+    }
+    
     #[func]
     pub fn find_track_write_genre(&mut self, isrc: String, genre: String) -> String {
         let library = self.library.as_mut();
         if library.is_none() { return "No library loaded / found.".into(); }
         let library = library.unwrap();
-        if let Some(track) = library.tracks.iter_mut().find(|t| t.track.isrc == isrc) {
+        if let Some(track) = library.find_track_by_isrc(&isrc) {
             track.track.genre = genre;
+            return match track.write() {
+                Ok(_) => "".into(),
+                Err(e) => e.to_string(),
+            }
+        }
+        "Track not found.".into()
+    }
+    #[func]
+    pub fn find_track_write_custom_tags(&mut self, isrc: String, tags: Array<GString>) -> String {
+        let library = self.library.as_mut();
+        if library.is_none() { return "No library loaded / found.".into(); }
+        let library = library.unwrap();
+        if let Some(track) = library.find_track_by_isrc(&isrc) {
+            let mut custom_tags: Vec<CustomTag> = Vec::new();
+            let string_tags: Vec<String> = tags.iter_shared().map(|s| s.to_string()).collect();
+            for string in string_tags {
+                custom_tags.push(CustomTag { value: string });
+            }
+            track.track.custom_tags = custom_tags;
             return match track.write() {
                 Ok(_) => "".into(),
                 Err(e) => e.to_string(),

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dnjb5btvq2c7" path="res://scenes/song_display.gd" id="2_rhkcn"]
 [ext_resource type="Script" uid="uid://t0ff5c4bnvt0" path="res://scenes/genre.gd" id="3_2or6q"]
 [ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
+[ext_resource type="Script" uid="uid://cvtd786wu1m2s" path="res://scenes/custom_tags.gd" id="4_2or6q"]
 
 [node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector")]
 layout_mode = 3
@@ -100,6 +101,38 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/Genre/MenuButton" unique_id=1314772960]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
+
+[node name="CustomTags" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1274060399 node_paths=PackedStringArray("button", "line_edit")]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+script = ExtResource("4_2or6q")
+button = NodePath("MenuButton")
+line_edit = NodePath("MenuButton/LineEdit")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/CustomTags" unique_id=690395625]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "Tags:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/CustomTags" unique_id=1595321991]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/CustomTags/MenuButton" unique_id=1779066694]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
