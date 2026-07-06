@@ -25,4 +25,4 @@ func _process(delta: float) -> void:
 		dynamic_offset.x *= -1.
 		dynamic_offset.x -= selector.size.x
 	selector_target_global_position = get_closest_position() + dynamic_offset
-	selector.global_position = selector.global_position.lerp(selector_target_global_position, delta * 30.)
+	selector.global_position = selector.global_position.lerp(selector_target_global_position, delta * 10.)

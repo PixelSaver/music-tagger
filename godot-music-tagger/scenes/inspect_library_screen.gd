@@ -18,3 +18,5 @@ func _process(_delta: float) -> void:
 	var track_idx = radial_selector.get_closest_idx()
 	var track = Global.menu_manager.music_tagger_node.get_all_tracks()[track_idx]
 	song_display.display_track(track)
+	var genres = Global.menu_manager.music_tagger_node.get_all_genres()
+	if genres.size() > 0: song_display.set_genres(genres)

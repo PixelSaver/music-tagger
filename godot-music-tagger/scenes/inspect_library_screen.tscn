@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cqdmu3qmaxw88" path="res://scenes/inspect_library_screen.gd" id="1_nwuve"]
 [ext_resource type="Script" uid="uid://dnjb5btvq2c7" path="res://scenes/song_display.gd" id="2_rhkcn"]
+[ext_resource type="Script" uid="uid://t0ff5c4bnvt0" path="res://scenes/genre.gd" id="3_2or6q"]
 [ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
 
 [node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector")]
@@ -11,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_nwuve")
 song_display = NodePath("HBoxContainer/MarginContainer/SongDisplay")
 radial_selector = NodePath("HBoxContainer/RadialSelector")
@@ -28,12 +30,14 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc")]
+[node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc", "genre")]
 layout_mode = 2
+mouse_filter = 1
 script = ExtResource("2_rhkcn")
 title = NodePath("MarginContainer/VBoxContainer/Title")
-cover = NodePath("MarginContainer/VBoxContainer/Picture")
+cover = NodePath("MarginContainer/VBoxContainer/MarginContainer/Picture")
 desc = NodePath("MarginContainer/VBoxContainer/Description")
+genre = NodePath("MarginContainer/VBoxContainer/Genre")
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay" unique_id=694110974]
 layout_mode = 1
@@ -49,20 +53,61 @@ theme_override_constants/separation = 10
 
 [node name="Title" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1157568745]
 layout_mode = 2
+mouse_filter = 1
 text = "Song Title"
 fit_content = true
 
-[node name="Picture" type="TextureRect" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=551163036]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=551692344]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 0
+
+[node name="Picture" type="TextureRect" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/MarginContainer" unique_id=551163036]
 layout_mode = 2
 expand_mode = 5
 
 [node name="Description" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1656760021]
 layout_mode = 2
-size_flags_vertical = 3
+mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 22
 text = "Lorem: Ipsum"
 fit_content = true
 scroll_active = false
+
+[node name="Genre" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1527957047 node_paths=PackedStringArray("genre_text", "button", "line_edit")]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+script = ExtResource("3_2or6q")
+genre_text = NodePath("RichTextLabel")
+button = NodePath("MenuButton")
+line_edit = NodePath("MenuButton/LineEdit")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/Genre" unique_id=1707427178]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "Genre:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/Genre" unique_id=1793547205]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/Genre/MenuButton" unique_id=1314772960]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
 
 [node name="RadialSelector" type="Container" parent="HBoxContainer" unique_id=1811888877 node_paths=PackedStringArray("selector", "excluded")]
 layout_mode = 2

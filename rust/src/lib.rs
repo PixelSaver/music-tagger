@@ -156,6 +156,21 @@ impl MusicTaggerNode {
         }
         tracks
     }
+
+    #[func]
+    pub fn get_all_genres(&self) -> Array<GString> {
+        let mut out = Array::<GString>::new();
+        let library = self.library.as_ref();
+        if library.is_none() { return out; }
+        let library = library.unwrap();
+        library.tracks.iter().for_each(|track| {
+            if out.find(&track.track.genre, 0.into()).is_none() {
+                out.push(&track.track.genre);
+            };
+        });
+        
+        out
+    }
     
     #[func]
     pub fn get_track_count(&self) -> i32 {
