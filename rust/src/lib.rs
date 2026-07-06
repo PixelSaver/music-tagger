@@ -12,7 +12,7 @@ pub mod godot_log;
 use std::path::Path;
 
 use godot::prelude::*;
-use godot::classes::Node;
+use godot::classes::{Image, Node};
 
 struct MusicTaggerGDExtension;
 // use crate::error::*;
@@ -35,6 +35,8 @@ pub struct GodotTrack {
     pub track_artist: GString,
     #[var]
     pub track_artists: GString,
+    #[var]
+    pub cover_art: Option<Gd<Image>>,
     #[var]
     pub copyright_message: GString,
     #[var]
@@ -60,6 +62,7 @@ impl IRefCounted for GodotTrack {
             isrc: GString::new(),
             track_artist: GString::new(),
             track_artists: GString::new(),
+            cover_art: None,
             copyright_message: GString::new(),
             description: GString::new(),
             publisher: GString::new(),
@@ -73,12 +76,28 @@ impl IRefCounted for GodotTrack {
 #[godot_api]
 impl GodotTrack {
     fn from_track(track: Track, base: Base<RefCounted>) -> Self {
+        let cover_art = if let Some(cover_art) = track.cover_art {
+            let mut image = Image::new_gd();
+            
+            match cover_art.mime_type.as_deref() {
+                Some("image/png") => {
+                    image.load_png_from_buffer(&PackedByteArray::from(cover_art.data));
+                    Some(image)
+                }
+                Some("image/jpeg") | Some("image/jpg") => {
+                    image.load_jpg_from_buffer(&PackedByteArray::from(cover_art.data));
+                    Some(image)
+                }
+                _ => None,
+            }
+        } else { None };
         Self {
             track_title: GString::from(track.track_title.as_str()),
             composer: GString::from(track.composer.as_str()),
             isrc: GString::from(track.isrc.as_str()),
             track_artist: GString::from(track.track_artist.as_str()),
             track_artists: GString::from(track.track_artists.as_str()),
+            cover_art,
             copyright_message: GString::from(track.copyright_message.as_str()),
             description: GString::from(track.description.as_str()),
             publisher: GString::from(track.publisher.as_str()),

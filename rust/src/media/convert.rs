@@ -1,10 +1,11 @@
 use std::path::Path;
 use std::str::FromStr;
 use lofty::file::{AudioFile, TaggedFile, TaggedFileExt};
+use lofty::picture::PictureType;
 use lofty::tag::{ItemKey};
 use lofty::config::WriteOptions;
 use crate::error::*;
-use crate::core::models::{CustomTag, Language, Track, TrackLocation};
+use crate::core::models::{CustomTag, Language, Track, TrackLocation, TrackPicture};
 // use crate::media::tag;
 use std::fs::OpenOptions;
 
@@ -48,6 +49,15 @@ impl Track {
         let tag = file.primary_tag()
             .or_else(|| file.first_tag())
             .ok_or(MusicTaggerError::MissingTag)?;
+        let cover = tag
+            .pictures()
+            .iter()
+            .find(|p| p.pic_type() == PictureType::CoverFront)
+            .or_else(|| tag.pictures().first())
+            .map(|p| TrackPicture {
+                data: p.data().to_vec(),
+                mime_type: p.mime_type().map(|s| s.to_string()),
+            });
         Ok(Track {
             track_title: tag
                 .get_string(ItemKey::TrackTitle)
@@ -69,6 +79,7 @@ impl Track {
                 .get_string(ItemKey::TrackArtists)
                 .unwrap_or_default()
                 .to_owned(),
+            cover_art: cover,
             copyright_message: tag
                 .get_string(ItemKey::CopyrightMessage)
                 .unwrap_or_default()

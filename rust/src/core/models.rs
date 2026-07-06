@@ -7,12 +7,19 @@ use crate::error::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
+pub struct TrackPicture {
+    pub data: Vec<u8>,
+    pub mime_type: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Track {
     pub track_title: String,
     pub composer: String,
     pub isrc: String,
     pub track_artist: String,
     pub track_artists: String,
+    pub cover_art: Option<TrackPicture>,
     pub copyright_message: String,
     pub description: String,
     pub publisher: String,
@@ -52,6 +59,7 @@ impl Track {
             composer: String::new(),
             track_artist: String::new(),
             track_artists: String::new(),
+            cover_art: Option::None,
             copyright_message: String::new(),
             description: String::new(),
             publisher: String::new(),
