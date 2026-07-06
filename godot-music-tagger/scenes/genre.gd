@@ -4,6 +4,7 @@ class_name Genre
 @export var genre_text: RichTextLabel
 @export var button: MenuButton
 @export var line_edit: LineEdit
+signal genre_picked(genre:String)
 
 func _ready() -> void:
 	button.get_popup().index_pressed.connect(_on_idx_pressed)
@@ -20,4 +21,5 @@ func set_genres(genres: Array[String]) -> void:
 func _on_idx_pressed(idx:int) -> void:
 	var text = button.get_popup().get_item_text(idx)
 	print("Id pressed: %s, %s" % [idx, text])
+	genre_picked.emit(text)
 	set_genre(text)

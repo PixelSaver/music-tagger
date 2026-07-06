@@ -171,7 +171,22 @@ impl MusicTaggerNode {
         
         out
     }
-    
+
+    #[func]
+    pub fn find_track_write_genre(&mut self, isrc: String, genre: String) -> String {
+        let library = self.library.as_mut();
+        if library.is_none() { return "No library loaded / found.".into(); }
+        let library = library.unwrap();
+        if let Some(track) = library.tracks.iter_mut().find(|t| t.track.isrc == isrc) {
+            track.track.genre = genre;
+            return match track.write() {
+                Ok(_) => "".into(),
+                Err(e) => e.to_string(),
+            }
+        }
+        "Track not found.".into()
+    }
+
     #[func]
     pub fn get_track_count(&self) -> i32 {
         self.library

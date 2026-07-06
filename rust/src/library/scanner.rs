@@ -6,7 +6,7 @@ use crate::core::models::{Library, TrackLocation};
 use walkdir::WalkDir;
 
 pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library> {
-    let parent = dir.parent().unwrap_or(dir);
+    // let parent = dir.parent().unwrap_or(dir);
     let walkdir = WalkDir::new(dir);
     let mut out = Vec::new();
     for entry in walkdir
@@ -21,11 +21,11 @@ pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library>
                 Ok((track, lofty_tagged_file)) => {
                     log::debug!("Track: {:?}", track);
                     reporter.emit(MusicTaggerEvent::TrackFound(&track.track_title));
-                    let relative_path = entry.path()
-                        .strip_prefix(parent)?.to_path_buf();
+                    // let relative_path = entry.path()
+                    //     .strip_prefix(parent)?.to_path_buf();
                     out.push(TrackLocation {
                         track,
-                        path: (relative_path).into(),
+                        path: entry.path().canonicalize()?,
                         lofty_tagged_file: Some(lofty_tagged_file),
                     });
                 }

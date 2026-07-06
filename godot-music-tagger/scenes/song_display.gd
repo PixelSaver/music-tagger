@@ -6,12 +6,19 @@ class_name SongDisplayPanel
 @export var desc: RichTextLabel
 @export var genre: Genre
 var genres: Array[String] = []
+var _track: GodotTrack = null
+
+func _ready() -> void:
+	genre.genre_picked.connect(func(genre:String):
+		Global.menu_manager.music_tagger_node.find_track_write_genre(_track.isrc, genre)
+	)
 
 func set_genres(_genres: Array[String]) -> void:
 	genre.set_genres(_genres)
 	genres = _genres
 
 func display_track(track:GodotTrack) -> void:
+	_track = track
 	title.text = track.track_title
 	desc.text = ""
 	cover.texture = null
