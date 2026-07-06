@@ -8,6 +8,7 @@ class_name SongDisplayPanel
 func display_track(track:GodotTrack) -> void:
 	title.text = track.track_title
 	desc.text = ""
+	cover.texture = null
 	if track.track_artist.length() > 0:
 		desc.text += "Artist: %s\n" % track.track_artist
 	if track.composer.length() > 0:
@@ -20,4 +21,6 @@ func display_track(track:GodotTrack) -> void:
 			if tag.length() <= 0: continue
 			desc.text += "%s," % tag
 		desc.text += "\n"
+	if track.cover_art != null:
+		cover.texture = ImageTexture.create_from_image(track.cover_art)
 	

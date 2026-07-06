@@ -54,6 +54,7 @@ fit_content = true
 
 [node name="Picture" type="TextureRect" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=551163036]
 layout_mode = 2
+expand_mode = 5
 
 [node name="Description" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1656760021]
 layout_mode = 2
