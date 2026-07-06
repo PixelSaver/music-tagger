@@ -7,6 +7,7 @@ class_name Genre
 
 func _ready() -> void:
 	button.get_popup().index_pressed.connect(_on_idx_pressed)
+	button.get_popup().add_theme_color_override("font_color_hover", Color.RED)
 
 func set_genre(genre_name:String) -> void:
 	line_edit.text = genre_name

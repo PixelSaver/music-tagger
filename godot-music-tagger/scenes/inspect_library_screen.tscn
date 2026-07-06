@@ -126,6 +126,7 @@ metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 
 [node name="Selector" type="Control" parent="HBoxContainer/RadialSelector" unique_id=930231776]
 layout_mode = 2
+mouse_filter = 1
 
 [node name="ColorRect" type="ColorRect" parent="HBoxContainer/RadialSelector/Selector" unique_id=410167138]
 custom_minimum_size = Vector2(1000, 100)
@@ -133,49 +134,59 @@ layout_mode = 0
 offset_top = -50.0
 offset_right = 1000.0
 offset_bottom = 50.0
+mouse_filter = 1
 color = Color(0.27058825, 0.22745098, 1, 0.21960784)
 
 [node name="_RichTextLabel_20" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=521645264]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "ただ声一つ"
 
 [node name="_RichTextLabel_23" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=785030645]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "色香水"
 
 [node name="_RichTextLabel_26" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1632939749]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "ベテルギウス"
 
 [node name="_RichTextLabel_29" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1187580498]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "死ぬのがいいわ"
 
 [node name="_RichTextLabel_32" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1983176901]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "まつり"
 
 [node name="_RichTextLabel_35" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=2014100905]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "きらり"
 
 [node name="_RichTextLabel_38" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=693906462]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "DADDY ! DADDY ! DO !"
 
 [node name="_RichTextLabel_41" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=139956448]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "KICK BACK"
 
 [node name="_RichTextLabel_44" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=903999187]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
+mouse_filter = 1
 text = "ピースサイン"
