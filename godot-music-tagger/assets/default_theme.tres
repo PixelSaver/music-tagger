@@ -99,3 +99,4 @@ MarginContainer/constants/margin_right = 20
 MarginContainer/constants/margin_top = 20
 MenuButton/styles/hover = SubResource("StyleBoxFlat_vkpim")
 Panel/styles/panel = SubResource("StyleBoxFlat_cs2sx")
+PopupMenu/font_sizes/font_size = 22

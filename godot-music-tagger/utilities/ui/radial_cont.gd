@@ -4,6 +4,10 @@ extends Container
 ## Osu-like container to scroll through options
 class_name RadialContainer
 
+signal selected_item_changed(idx: int)
+
+var _current_selected_idx := -1
+
 @export var radius := 100.0:
 	set(val):
 		radius = val
@@ -87,6 +91,11 @@ func _process(delta: float) -> void:
 
 	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 10.0)
 	_update_children()
+
+	var idx := get_closest_idx()
+	if idx != _current_selected_idx:
+		_current_selected_idx = idx
+		selected_item_changed.emit(idx)
 
 	if Engine.is_editor_hint():
 		return
