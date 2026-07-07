@@ -151,8 +151,12 @@ impl CustomTag {
         if !s.starts_with("MUSICTAGGER_CUSTOM_TAGS:") {
             return Err(MusicTaggerError::InvalidCustomTags(s.to_owned()));
         }
+        let stripped = s.strip_prefix("MUSICTAGGER_CUSTOM_TAGS:").unwrap_or(s);
         let mut out = Vec::new();
-        for tag in s.split(',') {
+        for tag in stripped.split(',') {
+            if tag.is_empty() {
+                continue;
+            }
             out.push(CustomTag::new(tag.to_owned()));
         }
         Ok(out)

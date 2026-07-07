@@ -22,5 +22,5 @@ func _on_selection_changed(track_idx:int) -> void:
 	var genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	if genres.size() > 0: song_display.set_genres(genres)
 	var tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()
-	if tags.size > 0: song_display.set_possible_tags(tags)
+	if tags.size() > 0: song_display.set_possible_tags(tags)
 	song_display.display_track(track)

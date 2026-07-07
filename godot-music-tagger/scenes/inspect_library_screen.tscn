@@ -31,7 +31,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc", "genre")]
+[node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc", "genre", "tags")]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("2_rhkcn")
@@ -39,6 +39,7 @@ title = NodePath("MarginContainer/VBoxContainer/Title")
 cover = NodePath("MarginContainer/VBoxContainer/MarginContainer/Picture")
 desc = NodePath("MarginContainer/VBoxContainer/Description")
 genre = NodePath("MarginContainer/VBoxContainer/Genre")
+tags = NodePath("MarginContainer/VBoxContainer/CustomTags")
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay" unique_id=694110974]
 layout_mode = 1
