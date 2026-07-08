@@ -15,14 +15,15 @@ func _ready() -> void:
 	)
 	tags.tags_changed.connect(func(_tags:Array[String]):
 		print("Tags changed:", _tags)
+		_track.custom_tags = _tags
 		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _tags)
 	)
 
 func set_genres(_genres: Array[String]) -> void:
 	genre.set_possible_genres(_genres)
 	genres = _genres
-func set_possible_tags(_tags: Array[String]) -> void:
-	tags.set_possible_tags(_tags)
+func set_possible_tags(possible_tags: Array[String]) -> void:
+	tags.set_possible_tags(possible_tags)
 
 func display_track(track:GodotTrack) -> void:
 	_track = track
@@ -46,5 +47,6 @@ func display_track(track:GodotTrack) -> void:
 	if track.genre.length() > 0:
 		genre.set_genre(track.genre)
 	
-	tags.set_tags(track.custom_tags)
+	tags.set_selected_tags(track.custom_tags)
+	print("Selected track tags: ", track.custom_tags)
 	
