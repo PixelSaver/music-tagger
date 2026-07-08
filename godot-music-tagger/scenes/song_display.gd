@@ -48,5 +48,4 @@ func display_track(track:GodotTrack) -> void:
 		genre.set_genre(track.genre)
 	
 	tags.set_selected_tags(track.custom_tags)
-	print("Selected track tags: ", track.custom_tags)
 	

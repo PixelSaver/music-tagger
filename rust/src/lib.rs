@@ -103,7 +103,7 @@ impl GodotTrack {
             publisher: GString::from(track.publisher.as_str()),
             genre: GString::from(track.genre.as_str()),
             duration: track.duration as i32,
-            custom_tags: Array::<GString>::new(),
+            custom_tags: track.custom_tags.iter().map(|tag| GString::from(tag.value.as_str())).collect::<Array<GString>>(),
             base,
         }
     }
