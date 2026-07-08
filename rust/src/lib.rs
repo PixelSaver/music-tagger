@@ -18,6 +18,7 @@ struct MusicTaggerGDExtension;
 // use crate::error::*;
 use crate::core::models::*;
 use crate::godot_log::event::{EventReporter, MusicTaggerEvent};
+use crate::library::search::search_tracks;
 
 #[gdextension]
 unsafe impl ExtensionLibrary for MusicTaggerGDExtension {}
@@ -157,6 +158,23 @@ impl MusicTaggerNode {
         tracks
     }
 
+    pub fn search_tracks<'a>(&self, query: &str) -> Array<Gd<GodotTrack>> {
+        let mut out = Array::<Gd<GodotTrack>>::new();
+        let library = self.library.as_ref();
+        if library.is_none() { return out; }
+        let library = library.unwrap();
+        let tracks = library.tracks.iter().map(|t| &t.track);
+        
+        for (track, _) in search_tracks(query, tracks) {
+            let gd_track = Gd::from_init_fn(|base| {
+                GodotTrack::from_track(track.clone(), base)
+            });
+        
+            out.push(&gd_track);
+        }
+        out
+    }
+    
     #[func]
     pub fn get_all_genres(&self) -> Array<GString> {
         let mut out = Array::<GString>::new();

@@ -429,6 +429,7 @@ dependencies = [
  "m3u8-rs",
  "serde",
  "serde_json",
+ "strsim",
  "thiserror",
  "walkdir",
 ]
