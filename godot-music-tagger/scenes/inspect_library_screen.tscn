@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
 [ext_resource type="Script" uid="uid://cvtd786wu1m2s" path="res://scenes/custom_tags.gd" id="4_2or6q"]
 
-[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector")]
+[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_bar")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,7 +16,8 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_nwuve")
 song_display = NodePath("HBoxContainer/MarginContainer/SongDisplay")
-radial_selector = NodePath("HBoxContainer/RadialSelector")
+radial_selector = NodePath("HBoxContainer/VBoxContainer/RadialSelector")
+search_bar = NodePath("HBoxContainer/VBoxContainer/MarginContainer/LineEdit")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=382708563]
@@ -143,9 +144,20 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_font_sizes/font_size = 22
 
-[node name="RadialSelector" type="Container" parent="HBoxContainer" unique_id=1811888877 node_paths=PackedStringArray("selector", "excluded")]
+[node name="VBoxContainer" type="Control" parent="HBoxContainer" unique_id=1261115125]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="RadialSelector" type="Container" parent="HBoxContainer/VBoxContainer" unique_id=1811888877 node_paths=PackedStringArray("selector", "excluded")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 script = ExtResource("3_hcd5l")
 selector = NodePath("Selector")
@@ -158,11 +170,11 @@ scale_multiplier = 0.001
 excluded = [NodePath("Selector")]
 metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 
-[node name="Selector" type="Control" parent="HBoxContainer/RadialSelector" unique_id=930231776]
+[node name="Selector" type="Control" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=930231776]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer/RadialSelector/Selector" unique_id=410167138]
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer/VBoxContainer/RadialSelector/Selector" unique_id=410167138]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 0
 offset_top = -50.0
@@ -171,56 +183,68 @@ offset_bottom = 50.0
 mouse_filter = 1
 color = Color(0.27058825, 0.22745098, 1, 0.21960784)
 
-[node name="_RichTextLabel_20" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=521645264]
+[node name="_RichTextLabel_20" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=521645264]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "ただ声一つ"
 
-[node name="_RichTextLabel_23" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=785030645]
+[node name="_RichTextLabel_23" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=785030645]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "色香水"
 
-[node name="_RichTextLabel_26" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1632939749]
+[node name="_RichTextLabel_26" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=1632939749]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "ベテルギウス"
 
-[node name="_RichTextLabel_29" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1187580498]
+[node name="_RichTextLabel_29" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=1187580498]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "死ぬのがいいわ"
 
-[node name="_RichTextLabel_32" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=1983176901]
+[node name="_RichTextLabel_32" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=1983176901]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "まつり"
 
-[node name="_RichTextLabel_35" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=2014100905]
+[node name="_RichTextLabel_35" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=2014100905]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "きらり"
 
-[node name="_RichTextLabel_38" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=693906462]
+[node name="_RichTextLabel_38" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=693906462]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "DADDY ! DADDY ! DO !"
 
-[node name="_RichTextLabel_41" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=139956448]
+[node name="_RichTextLabel_41" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=139956448]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "KICK BACK"
 
-[node name="_RichTextLabel_44" type="RichTextLabel" parent="HBoxContainer/RadialSelector" unique_id=903999187]
+[node name="_RichTextLabel_44" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=903999187]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1
 text = "ピースサイン"
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=179439764]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 103.0
+grow_horizontal = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=372626817]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+placeholder_text = "Search"

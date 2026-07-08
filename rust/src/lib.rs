@@ -158,18 +158,23 @@ impl MusicTaggerNode {
         tracks
     }
 
-    pub fn search_tracks<'a>(&self, query: &str) -> Array<Gd<GodotTrack>> {
+    #[func]
+    pub fn search_tracks(&self, query: GString) -> Array<Gd<GodotTrack>> {
         let mut out = Array::<Gd<GodotTrack>>::new();
         let library = self.library.as_ref();
         if library.is_none() { return out; }
         let library = library.unwrap();
         let tracks = library.tracks.iter().map(|t| &t.track);
         
-        for (track, _) in search_tracks(query, tracks) {
+        let results = search_tracks(&query.to_string(), tracks);
+        
+        
+        for (track, score) in results {
+            
             let gd_track = Gd::from_init_fn(|base| {
                 GodotTrack::from_track(track.clone(), base)
             });
-        
+            
             out.push(&gd_track);
         }
         out

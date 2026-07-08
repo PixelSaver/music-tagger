@@ -5,12 +5,19 @@ pub fn search_tracks<'a, I>
 (query: &str, tracks: I) -> Vec<(&'a Track, f64)>
 where I: IntoIterator<Item = &'a Track>
 {
-    tracks.into_iter()
+    let mut results: Vec<_> = tracks.into_iter()
         .map(|track| {
-            let score = jaro_winkler(&track.track_title, query);
+            let title = track.track_title.as_str().to_lowercase();
+            let query = query.to_string();
+    
+            let score = jaro_winkler(&title, &query);
+    
             (track, score)
         })
-        .collect()
+        .filter(|(_, score)| *score > 0.5)
+        .collect();
+    results.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+    results
     // let query = query.to_lowercase();
     // let mut results: Vec<_> = tracks
     //     .iter()
