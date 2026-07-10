@@ -21,7 +21,7 @@ pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library
             let mut file = std::fs::File::open(entry.path())?;
             match media::read_track_from_file(&mut file) {
                 Ok((track, lofty_tagged_file)) => {
-                    log::debug!("Track: {:?}", track);
+                    // log::debug!("Track: {:?}", track);
                     let _ = sender.send(MusicTaggerEvent::TrackFound(track.track_title.clone()));
                     // let relative_path = entry.path()
                     //     .strip_prefix(parent)?.to_path_buf();
@@ -32,9 +32,8 @@ pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library
                         lofty_tagged_file: Some(lofty_tagged_file),
                     });
                 }
-                Err(e) => {
-                    log::debug!("Error when reading track: {:?}", e);
-                    // reporter.emit(MusicTaggerEvent::Error(&e.to_string()));
+                Err(_e) => {
+                    // log::debug!("Error when reading track: {:?}", e);
                     continue;
                 }
             }

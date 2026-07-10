@@ -9,7 +9,7 @@ pub mod playlists;
 // 
 pub mod godot_log;
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use godot::prelude::*;
 use godot::classes::{Image, Node};
@@ -129,7 +129,7 @@ struct MusicTaggerNode {
 #[godot_api]
 impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
-        // crate::godot_log::godot_log::init_logger();
+        crate::godot_log::godot_log::init_logger();
         Self {
             receiver: None,
             library: None,
@@ -166,6 +166,20 @@ impl INode for MusicTaggerNode {
                     let mut arr: Array<Gd<GodotTrack>> = Array::new();
                     for track in &library.tracks {
                         arr.push(&Gd::from_init_fn(|base| GodotTrack::from_track(track.track.clone(), base)));
+                    }
+                    let cache_dir = self.cache_directory.to_string();
+                    let path = Path::new(&cache_dir);
+                    let canonical_path = if let Ok(canonical) = path.canonicalize() {
+                        canonical
+                    } else {
+                        PathBuf::from(path)
+                    };
+                    log::debug!("Saving library cache to {:?}", canonical_path);
+                    if let Err(e) = crate::library::cache::save_library(path, &library) {
+                        self.base_mut().emit_signal(
+                            "error",
+                            &[e.to_string().to_variant()],
+                        );
                     }
                     self.library = Some(library);
                     self.godot_tracks = self.get_all_tracks();
@@ -331,12 +345,9 @@ impl MusicTaggerNode {
             let library = crate::library::scanner::walk_dir(Path::new(&directory), &tx);
             let _ = tx.send(MusicTaggerEvent::Finished(library));
         });
-        if self.library.is_none() {
-            return "No library loaded / found.".into();
-        }
-        if let Err(e) = crate::library::cache::save_library(&Path::new(&self.cache_directory.to_string()), self.library.as_ref().unwrap()) {
-            return e.to_string();
-        }
+        // if self.library.is_none() {
+        //     return "No library loaded / found.".into();
+        // }
         
         return "".into();
     }
