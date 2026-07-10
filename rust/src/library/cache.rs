@@ -5,7 +5,7 @@ use crate::error::*;
 
 pub fn load_library(cache_path: &Path) -> Result<Option<Library>> {
     log::debug!("Trying cache at path: {:?}", cache_path);
-    let lib: Option<Library> = load_json(cache_path)?;
+    let lib: Option<Library> = load_bincode(cache_path)?;
     match lib {
         Some(lib) => {
             log::debug!("Cache loaded successfully!");
@@ -19,7 +19,7 @@ pub fn load_library(cache_path: &Path) -> Result<Option<Library>> {
     // return Ok(scanner::walk_dir(&PathBuf::from(backup_path))?)
 }
 pub fn save_library(cache_path: &Path, library: &Library) -> Result<()> {
-    save_json(cache_path, library)
+    save_bincode(cache_path, library)
 }
 
 pub fn load_json<T: DeserializeOwned>(path: &Path) -> Result<T> {
@@ -29,5 +29,14 @@ pub fn load_json<T: DeserializeOwned>(path: &Path) -> Result<T> {
 pub fn save_json<T: Serialize>(path: &Path, data: &T) -> Result<()> {
     let file = File::create(path)?;
     serde_json::to_writer(file, data)?;
+    Ok(())
+}
+pub fn load_bincode<T: DeserializeOwned>(path: &Path) -> Result<T> {
+    let file = File::open(path)?;
+    Ok(bincode::deserialize_from(file)?)
+}
+pub fn save_bincode<T: Serialize>(path: &Path, data: &T) -> Result<()> {
+    let file = File::create(path)?;
+    bincode::serialize_into(file, data)?;
     Ok(())
 }
