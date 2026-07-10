@@ -166,7 +166,6 @@ radius = 1300.0
 separation = 100.0
 circle_center = Vector2(-1100, 0)
 flip = true
-visibility_window = null
 excluded = [NodePath("Selector")]
 metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 
@@ -184,6 +183,7 @@ mouse_filter = 1
 color = Color(0.27058825, 0.22745098, 1, 0.21960784)
 
 [node name="_RichTextLabel_20" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=521645264]
+visible = false
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 2
 mouse_filter = 1

@@ -223,12 +223,16 @@ impl MusicTaggerNode {
         
         
         for (track, _) in results {
-            
-            let gd_track = Gd::from_init_fn(|base| {
-                GodotTrack::from_track(track.clone(), base)
-            });
-            
-            out.push(&gd_track);
+            let idx: usize;
+            if let Some(library) = &self.library {
+                idx = library.tracks.iter().position(|t| t.track.isrc == track.isrc).map(|i| i as usize).unwrap_or(0);
+                if let Some(track) = &self.godot_tracks.get(idx) {
+                    out.push(track);
+                }
+            } else {
+                let gd_track = Gd::from_init_fn(|base| GodotTrack::from_track(track.clone(), base));
+                out.push(&gd_track);
+            }
         }
         out
     }
@@ -304,6 +308,10 @@ impl MusicTaggerNode {
             .as_ref()
             .map(|lib| lib.tracks.len() as i32)
             .unwrap_or(0)
+    }
+    #[func]
+    pub fn get_track_at(&self, idx: i32) -> Option<Gd<GodotTrack>> {
+        self.godot_tracks.get(idx as usize)
     }
     
     #[func]
