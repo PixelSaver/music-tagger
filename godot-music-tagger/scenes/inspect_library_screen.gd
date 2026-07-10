@@ -8,9 +8,12 @@ class_name InspectLibraryScene
 func _ready() -> void:
 	radial_selector.selected_item_changed.connect(_on_selection_changed)
 	search_bar.text_changed.connect(_on_search)
+	Global.menu_manager.music_tagger_node.library_scanned.connect(func():
+		_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
+	)
 
 func start_anim() -> void: 
-	_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
+	pass
 
 func end_anim() -> void: pass
 
@@ -33,7 +36,9 @@ func _on_search(text:String) -> void:
 		_set_all_tracks(searched_tracks)
 
 func _on_selection_changed(track_idx:int) -> void:
-	var track = Global.menu_manager.music_tagger_node.get_all_tracks()[track_idx]
+	var all_tracks = Global.menu_manager.music_tagger_node.get_all_tracks()
+	if all_tracks.size() == 0: return
+	var track = all_tracks[track_idx]
 	var genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	if genres.size() > 0: song_display.set_genres(genres)
 	var tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()

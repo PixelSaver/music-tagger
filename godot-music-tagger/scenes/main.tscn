@@ -8,6 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_sugp2"]
 script = ExtResource("3_jyhfs")
+music_directories = Array[String](["/home/stem/Music/spotiflacopus"])
 metadata/_custom_type_script = "uid://d342b2ltiplk1"
 
 [node name="PixelMenuManager" type="Control" unique_id=33857186]

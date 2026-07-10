@@ -38,6 +38,12 @@ var _current_selected_idx := -1
 		queue_sort()
 		if Engine.is_editor_hint():
 			_update_children()
+@export var visibility_window := 15 :
+	set(val):
+		visibility_window = val
+		queue_sort()
+		if Engine.is_editor_hint():
+			_update_children()
 @export var drag_sensitivity := 0.0005
 ## Proportion taken off the scale of neighboring children.
 ## Children farther away from current angle are this much smaller
@@ -168,8 +174,16 @@ func _update_children():
 	var children = _get_layout_children()
 	var theta = get_theta()
 	var center = get_actual_center()
-
+	var closest_idx = get_closest_idx()
+	if closest_idx == -1: return
+	var start = max(closest_idx - visibility_window, 0)
+	var end = min(closest_idx + visibility_window, children.size())
+	
 	for i in range(children.size()):
+		children[i].visible = (start < i && i < end)
+		
+	
+	for i in range(start, end):
 		var child = children[i]
 		var current_angle = scroll_angle + (i * theta)
 		# Distance from selected idx# angular distance from center
@@ -180,7 +194,8 @@ func _update_children():
 
 		var dist = angle_dist / theta
 		var _scale = pow(1.0 / (1.0 + dist * scale_multiplier), 1.5)
-		child.pivot_offset_ratio = Vector2(0.0, 0.5) if not flip else Vector2(1.0, 0.5)
+		#child.pivot_offset_ratio = Vector2(0.0, 0.5) if not flip else Vector2(1.0, 0.5)
+		child.pivot_offset_ratio = Vector2(0.0, 0.5) if flip else Vector2(1.0, 0.5)
 		var child_size = child.get_combined_minimum_size()
 		fit_child_in_rect(child, Rect2(pos - (child_size / 2.0), child_size))
 		child.scale = Vector2(_scale, _scale)

@@ -15,6 +15,9 @@ func _ready() -> void:
 		line_edit.release_focus()
 		line_edit.grab_focus()
 	)
+	line_edit.editing_toggled.connect(func(toggled_on:bool):
+		if toggled_on: line_edit.text = ""
+	)
 	line_edit.text_submitted.connect(func(new_text:String):
 		add_tag(new_text)
 		pass

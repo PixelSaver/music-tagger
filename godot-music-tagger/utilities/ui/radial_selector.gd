@@ -26,3 +26,7 @@ func _process(delta: float) -> void:
 		dynamic_offset.x -= selector.size.x
 	selector_target_global_position = get_closest_position() + dynamic_offset
 	selector.global_position = selector.global_position.lerp(selector_target_global_position, delta * 10.)
+	if _get_layout_children().size() == 0:
+		selector.hide()
+	else:
+		selector.show()

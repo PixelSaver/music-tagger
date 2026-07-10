@@ -17,7 +17,7 @@ use godot::classes::{Image, Node};
 struct MusicTaggerGDExtension;
 // use crate::error::*;
 use crate::core::models::*;
-use crate::godot_log::event::{EventReporter, MusicTaggerEvent};
+use crate::godot_log::event::MusicTaggerEvent;
 use crate::library::search::search_tracks;
 
 #[gdextension]
@@ -113,7 +113,10 @@ impl GodotTrack {
 #[derive(GodotClass)]
 #[class(base = Node)]
 struct MusicTaggerNode {
+    receiver: Option<flume::Receiver<MusicTaggerEvent>>,
+    
     pub library: Option<Library>,
+    pub godot_tracks: Array<Gd<GodotTrack>>,
     #[export]
     pub playlist_directory: GString,
     #[export]
@@ -128,7 +131,9 @@ impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
         crate::godot_log::godot_log::init_logger();
         Self {
+            receiver: None,
             library: None,
+            godot_tracks: Array::new(),
             playlist_directory: GString::new(),
             music_directories: Array::<GString>::new(),
             cache_directory: GString::new(),
@@ -136,7 +141,53 @@ impl INode for MusicTaggerNode {
         }
     }
     fn process(&mut self, _delta: f64) {
-        
+        let mut events = Vec::new();
+        if let Some(receiver) = &mut self.receiver {
+            while let Ok(event) = receiver.try_recv() {
+                events.push(event);
+            }
+        }
+        for event in events {
+            match event {
+                MusicTaggerEvent::Scanning(path) => {
+                    self.base_mut().emit_signal(
+                        "scan_progress",
+                        &[path.display().to_string().to_variant()],
+                    );
+                }
+                MusicTaggerEvent::TrackFound(title) => {
+                    self.base_mut().emit_signal(
+                        "track_found",
+                        &[title.to_variant()],
+                    );
+                }
+                MusicTaggerEvent::Finished(Ok(library)) => {
+                    self.receiver = None;
+                    let mut arr: Array<Gd<GodotTrack>> = Array::new();
+                    for track in &library.tracks {
+                        arr.push(&Gd::from_init_fn(|base| GodotTrack::from_track(track.track.clone(), base)));
+                    }
+                    self.library = Some(library);
+                    self.godot_tracks = self.get_all_tracks();
+                    self.base_mut().emit_signal(
+                        "library_scanned",
+                        &[]
+                    );
+                }
+                MusicTaggerEvent::Finished(Err(e)) => {
+                    self.base_mut().emit_signal(
+                        "error",
+                        &[e.to_string().to_variant()],
+                    );
+                }
+                MusicTaggerEvent::Error(msg) => {
+                    self.base_mut().emit_signal(
+                        "error",
+                        &[msg.to_variant()],
+                    );
+                }
+            }
+        }
     }
 }
 #[godot_api]
@@ -147,6 +198,8 @@ impl MusicTaggerNode {
     fn error(message: String);
     #[signal]
     fn track_found(title: String);
+    #[signal]
+    fn library_scanned();
 
     #[func]
     pub fn get_all_tracks(&self) -> Array<Gd<GodotTrack>> {
@@ -169,7 +222,7 @@ impl MusicTaggerNode {
         let results = search_tracks(&query.to_string(), tracks);
         
         
-        for (track, score) in results {
+        for (track, _) in results {
             
             let gd_track = Gd::from_init_fn(|base| {
                 GodotTrack::from_track(track.clone(), base)
@@ -255,47 +308,16 @@ impl MusicTaggerNode {
     
     #[func]
     pub fn scan_directory(&mut self, directory: String) -> String {
-        let library = match crate::library::scanner::walk_dir(Path::new(&directory), self) {
-            Ok(lib) => lib,
-            Err(e) => {
-                return e.to_string();
-            },
-        };
-        self.library = Some(library);
+        let (tx, rx) = flume::unbounded();
+        self.receiver = Some(rx);
+        std::thread::spawn(move || {
+            let library = crate::library::scanner::walk_dir(Path::new(&directory), &tx);
+            let _ = tx.send(MusicTaggerEvent::Finished(library));
+        });
         if self.library.is_none() {
             return "No library loaded / found.".into();
         }
         
         return "".into();
-    }
-}
-impl EventReporter for MusicTaggerNode {
-    fn emit(&mut self, event: MusicTaggerEvent) {
-        match event {
-            MusicTaggerEvent::Scanning(path) => {
-                godot_print!("Scanning: {}", path.display());
-                self.base_mut().emit_signal(
-                    "scan_progress",
-                    &[path.display().to_string().to_variant()]
-                );
-            },
-            MusicTaggerEvent::TrackFound(track) => {
-                godot_print!("Track found: {}", track);
-                self.base_mut().emit_signal(
-                    "track_found",
-                    &[track.to_variant()]
-                );
-            },
-            MusicTaggerEvent::Error(error) => {
-                godot_error!("Error: {}", error);
-                self.base_mut().emit_signal(
-                    "error",
-                    &[error.to_variant()]
-                );
-            },
-            // _ => {
-                
-            // }
-        }
     }
 }

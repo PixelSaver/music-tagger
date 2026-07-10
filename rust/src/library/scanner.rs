@@ -1,11 +1,12 @@
 use std::path::Path;
 use crate::error::*;
-use crate::godot_log::event::{EventReporter, MusicTaggerEvent};
+use crate::godot_log::event::MusicTaggerEvent;
+use flume::Sender;
 use crate::media::media;
 use crate::core::models::{Library, TrackLocation};
 use walkdir::WalkDir;
 
-pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library> {
+pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library> {
     // let parent = dir.parent().unwrap_or(dir);
     let walkdir = WalkDir::new(dir);
     let mut out = Vec::new();
@@ -15,17 +16,19 @@ pub fn walk_dir(dir: &Path, reporter: &mut dyn EventReporter) -> Result<Library>
         .filter_map(|e| e.ok())
         .filter(|e| e.file_type().is_file()) {
 
-            reporter.emit(MusicTaggerEvent::Scanning(entry.path()));
+            let _ = sender.send(MusicTaggerEvent::Scanning(entry.path().to_path_buf()));
+            
             let mut file = std::fs::File::open(entry.path())?;
             match media::read_track_from_file(&mut file) {
                 Ok((track, lofty_tagged_file)) => {
                     log::debug!("Track: {:?}", track);
-                    reporter.emit(MusicTaggerEvent::TrackFound(&track.track_title));
+                    let _ = sender.send(MusicTaggerEvent::TrackFound(track.track_title.clone()));
                     // let relative_path = entry.path()
                     //     .strip_prefix(parent)?.to_path_buf();
                     out.push(TrackLocation {
                         track,
-                        path: entry.path().canonicalize()?,
+                        // path: entry.path().canonicalize()?,
+                        path: entry.path().to_path_buf(),
                         lofty_tagged_file: Some(lofty_tagged_file),
                     });
                 }

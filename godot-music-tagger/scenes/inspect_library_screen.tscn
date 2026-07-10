@@ -166,7 +166,7 @@ radius = 1300.0
 separation = 100.0
 circle_center = Vector2(-1100, 0)
 flip = true
-scale_multiplier = 0.001
+visibility_window = null
 excluded = [NodePath("Selector")]
 metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 

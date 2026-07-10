@@ -1,11 +1,10 @@
-use std::path::Path;
+use std::path::PathBuf;
+use crate::core::models::Library;
+use crate::error::Result;
 
-pub enum MusicTaggerEvent<'a> {
-    Scanning(&'a Path),
-    TrackFound(&'a str),
-    Error(&'a str),
-}
-
-pub trait EventReporter {
-    fn emit(&mut self, event: MusicTaggerEvent);
+pub enum MusicTaggerEvent {
+    Scanning(PathBuf),
+    TrackFound(String),
+    Error(String),
+    Finished(Result<Library>),
 }
