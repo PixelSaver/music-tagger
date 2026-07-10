@@ -36,11 +36,11 @@ size_flags_horizontal = 3
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("2_rhkcn")
-title = NodePath("MarginContainer/VBoxContainer/Title")
-cover = NodePath("MarginContainer/VBoxContainer/MarginContainer/Picture")
-desc = NodePath("MarginContainer/VBoxContainer/Description")
-genre = NodePath("MarginContainer/VBoxContainer/Genre")
-tags = NodePath("MarginContainer/VBoxContainer/CustomTags")
+title = NodePath("MarginContainer/ScrollContainer/VBoxContainer/Title")
+cover = NodePath("MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/Picture")
+desc = NodePath("MarginContainer/ScrollContainer/VBoxContainer/Description")
+genre = NodePath("MarginContainer/ScrollContainer/VBoxContainer/Genre")
+tags = NodePath("MarginContainer/ScrollContainer/VBoxContainer/CustomTags")
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay" unique_id=694110974]
 layout_mode = 1
@@ -50,28 +50,33 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer" unique_id=1388247414]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer" unique_id=1467551750]
 layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer" unique_id=1388247414]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="Title" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1157568745]
+[node name="Title" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1157568745]
 layout_mode = 2
 mouse_filter = 1
 text = "Song Title"
 fit_content = true
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=551692344]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=551692344]
 layout_mode = 2
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 0
 
-[node name="Picture" type="TextureRect" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/MarginContainer" unique_id=551163036]
+[node name="Picture" type="TextureRect" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer" unique_id=551163036]
 layout_mode = 2
 expand_mode = 5
 
-[node name="Description" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1656760021]
+[node name="Description" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1656760021]
 layout_mode = 2
 mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 22
@@ -79,7 +84,7 @@ text = "Lorem: Ipsum"
 fit_content = true
 scroll_active = false
 
-[node name="Genre" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1527957047 node_paths=PackedStringArray("genre_text", "button", "line_edit")]
+[node name="Genre" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1527957047 node_paths=PackedStringArray("genre_text", "button", "line_edit")]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("3_2or6q")
@@ -87,7 +92,7 @@ genre_text = NodePath("RichTextLabel")
 button = NodePath("MenuButton")
 line_edit = NodePath("MenuButton/LineEdit")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/Genre" unique_id=1707427178]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre" unique_id=1707427178]
 layout_mode = 2
 mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 22
@@ -98,11 +103,11 @@ scroll_active = false
 autowrap_mode = 0
 vertical_alignment = 1
 
-[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/Genre" unique_id=1793547205]
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre" unique_id=1793547205]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/Genre/MenuButton" unique_id=1314772960]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre/MenuButton" unique_id=1314772960]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -112,14 +117,14 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_font_sizes/font_size = 22
 
-[node name="CustomTags" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer" unique_id=1274060399 node_paths=PackedStringArray("button", "line_edit")]
+[node name="CustomTags" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1274060399 node_paths=PackedStringArray("button", "line_edit")]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("4_2or6q")
 button = NodePath("MenuButton")
 line_edit = NodePath("MenuButton/LineEdit")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/CustomTags" unique_id=690395625]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/CustomTags" unique_id=690395625]
 layout_mode = 2
 mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 22
@@ -130,11 +135,11 @@ scroll_active = false
 autowrap_mode = 0
 vertical_alignment = 1
 
-[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/CustomTags" unique_id=1595321991]
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/CustomTags" unique_id=1595321991]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/VBoxContainer/CustomTags/MenuButton" unique_id=1779066694]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/CustomTags/MenuButton" unique_id=1779066694]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -170,6 +175,7 @@ excluded = [NodePath("Selector")]
 metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 
 [node name="Selector" type="Control" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=930231776]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 
@@ -181,61 +187,6 @@ offset_right = 1000.0
 offset_bottom = 50.0
 mouse_filter = 1
 color = Color(0.27058825, 0.22745098, 1, 0.21960784)
-
-[node name="_RichTextLabel_20" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=521645264]
-visible = false
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "ただ声一つ"
-
-[node name="_RichTextLabel_23" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=785030645]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "色香水"
-
-[node name="_RichTextLabel_26" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=1632939749]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "ベテルギウス"
-
-[node name="_RichTextLabel_29" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=1187580498]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "死ぬのがいいわ"
-
-[node name="_RichTextLabel_32" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=1983176901]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "まつり"
-
-[node name="_RichTextLabel_35" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=2014100905]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "きらり"
-
-[node name="_RichTextLabel_38" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=693906462]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "DADDY ! DADDY ! DO !"
-
-[node name="_RichTextLabel_41" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=139956448]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "KICK BACK"
-
-[node name="_RichTextLabel_44" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=903999187]
-custom_minimum_size = Vector2(1000, 100)
-layout_mode = 2
-mouse_filter = 1
-text = "ピースサイン"
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=179439764]
 layout_mode = 1

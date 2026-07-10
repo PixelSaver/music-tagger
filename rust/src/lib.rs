@@ -315,6 +315,15 @@ impl MusicTaggerNode {
     }
     
     #[func]
+    pub fn try_load_cache(&mut self) -> bool {
+        if let Ok(Some(library)) = crate::library::cache::load_library(&Path::new(&self.cache_directory.to_string())) {
+            self.library = Some(library);
+            true
+        } else {
+            false
+        }
+    }
+    #[func]
     pub fn scan_directory(&mut self, directory: String) -> String {
         let (tx, rx) = flume::unbounded();
         self.receiver = Some(rx);
@@ -324,6 +333,9 @@ impl MusicTaggerNode {
         });
         if self.library.is_none() {
             return "No library loaded / found.".into();
+        }
+        if let Err(e) = crate::library::cache::save_library(&Path::new(&self.cache_directory.to_string()), self.library.as_ref().unwrap()) {
+            return e.to_string();
         }
         
         return "".into();

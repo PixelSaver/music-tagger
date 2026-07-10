@@ -6,14 +6,11 @@ class_name MusicManager
 
 func _ready() -> void:
 	Global.menu_manager = self
-	SignalBus.scan.connect(_on_scan)
 	load_settings(settings)
-	SignalBus.scan.emit(settings.music_directories)
+	if music_tagger_node.try_load_cache() == false:
+		music_tagger_node.scan_directory(settings.music_directories[0])
 	super()
 
-func _on_scan(dirs: Array[String]) -> void:
-	if dirs.size() == 0: return
-	music_tagger_node.scan_directory(dirs[0])
 
 func load_settings(s:TaggerSettings):
 	music_tagger_node.cache_directory = s.cache_directory

@@ -180,7 +180,7 @@ func _update_children():
 	var end = min(closest_idx + visibility_window, children.size())
 	
 	for i in range(children.size()):
-		children[i].visible = (start < i && i < end)
+		children[i].visible = (start <= i && i < end)
 		
 	
 	for i in range(start, end):
