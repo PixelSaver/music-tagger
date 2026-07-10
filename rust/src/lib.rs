@@ -129,7 +129,7 @@ struct MusicTaggerNode {
 #[godot_api]
 impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
-        crate::godot_log::godot_log::init_logger();
+        // crate::godot_log::godot_log::init_logger();
         Self {
             receiver: None,
             library: None,

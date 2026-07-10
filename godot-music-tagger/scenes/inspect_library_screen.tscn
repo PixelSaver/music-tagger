@@ -62,8 +62,12 @@ theme_override_constants/separation = 10
 [node name="Title" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1157568745]
 layout_mode = 2
 mouse_filter = 1
+bbcode_enabled = true
 text = "Song Title"
 fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=551692344]
 layout_mode = 2
@@ -154,7 +158,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="RadialSelector" type="Container" parent="HBoxContainer/VBoxContainer" unique_id=1811888877 node_paths=PackedStringArray("selector", "excluded")]
+[node name="RadialSelector" type="Container" parent="HBoxContainer/VBoxContainer" unique_id=1811888877 node_paths=PackedStringArray("selector", "scroll_bar", "excluded")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -171,7 +175,9 @@ radius = 1300.0
 separation = 100.0
 circle_center = Vector2(-1100, 0)
 flip = true
-excluded = [NodePath("Selector")]
+scroll_active = null
+scroll_bar = NodePath("VScrollBar")
+excluded = [NodePath("Selector"), NodePath(""), NodePath("VScrollBar")]
 metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 
 [node name="Selector" type="Control" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=930231776]
@@ -188,14 +194,21 @@ offset_bottom = 50.0
 mouse_filter = 1
 color = Color(0.27058825, 0.22745098, 1, 0.21960784)
 
+[node name="VScrollBar" type="VScrollBar" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=877659560]
+z_index = 1
+layout_mode = 2
+mouse_filter = 1
+
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=179439764]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 103.0
 grow_horizontal = 2
+mouse_filter = 2
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=372626817]
 layout_mode = 2
+mouse_filter = 2
 theme_override_font_sizes/font_size = 30
 placeholder_text = "Search"

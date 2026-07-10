@@ -44,10 +44,16 @@ var _current_selected_idx := -1
 		queue_sort()
 		if Engine.is_editor_hint():
 			_update_children()
+@export var scroll_active := true :
+	set(val):
+		scroll_active = val
+		if Engine.is_editor_hint():
+			_update_children()
 @export var drag_sensitivity := 0.0005
 ## Proportion taken off the scale of neighboring children.
 ## Children farther away from current angle are this much smaller
 @export var scale_multiplier := 0.1
+@export var scroll_bar: VScrollBar
 @export_category("Container Exclusion")
 @export var excluded: Array[Node] = []
 @export var max_lerp_cooldown := 0.6
@@ -58,17 +64,36 @@ var _lerp_cooldown: float
 var _dragging := false
 var _last_mouse_pos := Vector2.ZERO
 
+func _enter_tree() -> void:
+	if !scroll_bar: 
+		scroll_bar = VScrollBar.new()
+		add_child(scroll_bar)
+		excluded.append(scroll_bar)
+	scroll_bar.z_index = 100
 
 func _ready() -> void:
 	self.scroll_angle = 0
 	self.target_scroll_angle = self.scroll_angle
 	_lerp_cooldown = max_lerp_cooldown
+	scroll_bar.scrolling.connect(func():
+		self.scroll_to_index(int(scroll_bar.value))
+	)
 
+func _update_scrollbar():
+	if scroll_bar == null or Engine.is_editor_hint():
+		return
+	var count := _get_layout_children().size()
+	scroll_bar.visible = count > visibility_window
+	if !scroll_bar.visible:
+		return
+	scroll_bar.min_value = 0
+	scroll_bar.max_value = max(0, count - 1)
+	scroll_bar.page = visibility_window
+	scroll_bar.set_value_no_signal(get_closest_idx())
 
 func _notification(what):
 	if what == NOTIFICATION_SORT_CHILDREN:
 		_update_children()
-
 
 func _get_layout_children() -> Array[Control]:
 	var result: Array[Control] = []
@@ -97,6 +122,7 @@ func _process(delta: float) -> void:
 
 	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 10.0)
 	_update_children()
+	_update_scrollbar()
 
 	var idx := get_closest_idx()
 	if idx != _current_selected_idx:
@@ -171,9 +197,15 @@ func lerp_to_closest():
 
 
 func _update_children():
+	if scroll_bar:
+		var width := 12.0
+		scroll_bar.position = Vector2(size.x - width, 0)
+		scroll_bar.size = Vector2(width, size.y)
+	
 	var children = _get_layout_children()
 	var theta = get_theta()
 	var center = get_actual_center()
+	
 	var closest_idx = get_closest_idx()
 	if closest_idx == -1: return
 	var start = max(closest_idx - visibility_window, 0)
