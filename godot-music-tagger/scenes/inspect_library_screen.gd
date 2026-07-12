@@ -5,12 +5,16 @@ class_name InspectLibraryScene
 @export var radial_selector: RadialSelector
 @export var search_bar: LineEdit
 
-func _ready() -> void:
+func _enter_tree() -> void:
 	radial_selector.selected_item_changed.connect(_on_selection_changed)
 	search_bar.text_changed.connect(_on_search)
-	Global.menu_manager.music_tagger_node.library_scanned.connect(func():
+	if Global.menu_manager.music_tagger_node.has_library():
 		_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
-	)
+	else:
+		Global.menu_manager.music_tagger_node.library_scanned.connect(func():
+			_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
+		)
+	
 
 func start_anim() -> void: 
 	pass

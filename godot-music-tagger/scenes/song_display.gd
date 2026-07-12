@@ -44,6 +44,10 @@ func display_track(track:GodotTrack) -> void:
 		#desc.text += "\n"
 	if track.cover_art != null:
 		cover.texture = ImageTexture.create_from_image(track.cover_art)
+	else:
+		var im = Global.menu_manager.music_tagger_node.get_track_cover_art(_track.isrc)
+		if im != null: 
+			cover.texture = ImageTexture.create_from_image(track.cover_art)
 	if track.genre.length() > 0:
 		genre.set_genre(track.genre)
 	

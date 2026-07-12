@@ -175,9 +175,9 @@ radius = 1300.0
 separation = 100.0
 circle_center = Vector2(-1100, 0)
 flip = true
-scroll_active = null
+target_scroll_angle = 0.07694205481465664
 scroll_bar = NodePath("VScrollBar")
-excluded = [NodePath("Selector"), NodePath(""), NodePath("VScrollBar")]
+excluded = [NodePath("Selector"), null, NodePath("VScrollBar")]
 metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 
 [node name="Selector" type="Control" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=930231776]
@@ -195,7 +195,7 @@ mouse_filter = 1
 color = Color(0.27058825, 0.22745098, 1, 0.21960784)
 
 [node name="VScrollBar" type="VScrollBar" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=877659560]
-z_index = 1
+z_index = 100
 layout_mode = 2
 mouse_filter = 1
 
