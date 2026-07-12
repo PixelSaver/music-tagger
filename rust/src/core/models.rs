@@ -19,6 +19,7 @@ pub struct Track {
     pub isrc: String,
     pub track_artist: String,
     pub track_artists: String,
+    #[serde(skip)]
     pub cover_art: Option<TrackPicture>,
     pub copyright_message: String,
     pub description: String,

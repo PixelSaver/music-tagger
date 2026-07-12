@@ -315,6 +315,32 @@ impl MusicTaggerNode {
         }
         "Track not found.".into()
     }
+    #[func]
+    pub fn get_track_cover_art(&mut self, isrc: String) -> Option<Gd<Image>> {
+        let library = self.library.as_mut()?;
+        let track = library.find_track_by_isrc(&isrc)?;
+        let cover: TrackPicture = if let Some(cover_art) = track.track.cover_art.clone() {
+            cover_art
+        } else {
+            match track.get_cover_art() {
+                Ok(cover) => cover,
+                Err(_) => return None,
+            }
+        };
+        let mut image = Image::new_gd();
+        
+        match cover.mime_type.as_deref() {
+            Some("image/png") => {
+                image.load_png_from_buffer(&PackedByteArray::from(cover.data));
+                Some(image)
+            }
+            Some("image/jpeg") | Some("image/jpg") => {
+                image.load_jpg_from_buffer(&PackedByteArray::from(cover.data));
+                Some(image)
+            }
+            _ => None,
+        }
+    }
 
     #[func]
     pub fn get_track_count(&self) -> i32 {

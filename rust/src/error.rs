@@ -24,6 +24,9 @@ pub enum MusicTaggerError {
     #[error(transparent)]
     Serde(#[from] serde_json::Error),
 
+    #[error(transparent)]
+    Bincode(#[from] bincode::Error),
+
     #[error("File not found: {0}")]
     FileNotFound(PathBuf),
 

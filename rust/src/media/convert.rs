@@ -123,6 +123,31 @@ impl Track {
 
 
 impl TrackLocation {
+    pub fn get_cover_art(&mut self) -> Result<TrackPicture> {
+        if let Some(cover_art) = self.track.cover_art.clone() {
+            return Ok(cover_art);
+        } else {
+            self.get_file()?;
+            let file = self.lofty_tagged_file.as_ref().ok_or(MusicTaggerError::MissingTaggedFile)?;
+            let tag = file.primary_tag()
+                .or_else(|| file.first_tag())
+                .ok_or(MusicTaggerError::MissingTag)?;
+            let cover = tag
+                .pictures()
+                .iter()
+                .find(|p| p.pic_type() == PictureType::CoverFront)
+                .or_else(|| tag.pictures().first())
+                .map(|p| TrackPicture {
+                    data: p.data().to_vec(),
+                    mime_type: p.mime_type().map(|s| s.to_string()),
+                });
+            if cover.is_none() {
+                return Err(MusicTaggerError::MissingTag);
+            }
+            Ok(cover.unwrap())
+        }
+    }
+
     pub fn write(&mut self) -> Result<()> {
         self.get_file()?;
         let path = &self.path;

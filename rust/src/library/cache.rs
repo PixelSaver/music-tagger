@@ -4,6 +4,7 @@ use crate::core::models::*;
 use crate::error::*;
 
 pub fn load_library(cache_path: &Path) -> Result<Option<Library>> {
+    //TODO Don't cache art
     log::debug!("Trying cache at path: {:?}", cache_path);
     let lib: Option<Library> = load_bincode(cache_path)?;
     match lib {
