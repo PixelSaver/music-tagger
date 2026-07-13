@@ -26,6 +26,7 @@ func set_possible_tags(possible_tags: Array[String]) -> void:
 	tags.set_possible_tags(possible_tags)
 
 func display_track(track:GodotTrack) -> void:
+	if track == _track: return
 	_track = track
 	title.text = track.track_title
 	desc.text = ""
@@ -46,7 +47,7 @@ func display_track(track:GodotTrack) -> void:
 		cover.texture = ImageTexture.create_from_image(track.cover_art)
 	else:
 		print("Cover art is null so trying to get track cover art")
-		var im = Global.menu_manager.music_tagger_node.get_track_cover_art(_track.isrc)
+		var im = _get_cover_art()
 		if im != null: 
 			print("Trying to get cover art worked!! %s" % str(im))
 			cover.texture = ImageTexture.create_from_image(im)
@@ -55,4 +56,6 @@ func display_track(track:GodotTrack) -> void:
 		genre.set_genre(track.genre)
 	
 	tags.set_selected_tags(track.custom_tags)
-	
+
+func _get_cover_art():
+	return Global.menu_manager.music_tagger_node.get_track_cover_art(_track.isrc)

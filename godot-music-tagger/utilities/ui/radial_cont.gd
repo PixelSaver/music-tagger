@@ -59,6 +59,8 @@ var _current_selected_idx := -1
 @export var max_lerp_cooldown := 0.6
 var current_children: Array[Control] = []
 var scroll_angle := 0.0
+var _previous_start: int = INT32_MAX
+var _previous_end: int = INT32_MIN
 var _lerp_cooldown: float
 
 # Dragging
@@ -91,6 +93,7 @@ func _ready() -> void:
 	for child in get_children():
 		if not child is Control: continue
 		if excluded.has(child): continue
+		child.visible = false
 		current_children.append(child)
 
 func _update_scrollbar():
@@ -224,12 +227,16 @@ func _update_children(children:Array[Control]=[]):
 	
 	var closest_idx = get_closest_idx()
 	if closest_idx == -1: return
-	var start = max(closest_idx - visibility_window, 0)
-	var end = min(closest_idx + visibility_window, children.size())
+	var start = closest_idx - visibility_window
+	var end = closest_idx + visibility_window
 	
-	for i in range(children.size()):
+	var window_start = max(min(start, _previous_start), 0)
+	var window_end = min(max(end, _previous_end), children.size())
+	_previous_start = start
+	_previous_end = end
+	
+	for i in range(window_start, window_end):
 		children[i].visible = (start <= i && i < end)
-		
 	
 	for i in range(start, end):
 		var child = children[i]
