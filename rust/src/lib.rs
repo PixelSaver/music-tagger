@@ -317,23 +317,16 @@ impl MusicTaggerNode {
     }
     #[func]
     pub fn get_track_cover_art(&mut self, isrc: String) -> Option<Gd<Image>> {
+        let godot_track_idx = self.find_track_idx_by_isrc(isrc.clone());
+        if godot_track_idx == -1 { return None; }
+        
         let library = self.library.as_mut()?;
         let track = library.find_track_by_isrc(&isrc)?;
-        let cover: TrackPicture = if let Some(cover_art) = track.track.cover_art.clone() {
-            cover_art
-        } else {
-            match track.get_cover_art() {
-                Ok(cover) => {
-                    cover
-                },
-                Err(_) => {
-                    return None;
-                },
-            }
-        };
+        let cover: TrackPicture = track.track.cover_art.clone()
+            .or_else(|| track.get_cover_art().ok() )?;
         let mut image = Image::new_gd();
         
-        match cover.mime_type.as_deref() {
+        let result = match cover.mime_type.as_deref() {
             Some("image/png") => {
                 image.load_png_from_buffer(&PackedByteArray::from(cover.data));
                 Some(image)
@@ -343,6 +336,21 @@ impl MusicTaggerNode {
                 Some(image)
             }
             _ => None,
+        };
+        if let Some(mut godot_track) = self.get_track_at(godot_track_idx) {
+            let mut track = godot_track.bind_mut();
+            track.cover_art = result.clone();
+        };
+        result
+    }
+    #[func]
+    pub fn find_track_idx_by_isrc(&self, isrc: String) -> i32 {
+        let idx = self.library
+            .as_ref()
+            .and_then(|lib| lib.tracks.iter().position(|track| track.track.isrc == isrc));
+        match idx {
+            Some(i) => i as i32,
+            None => -1,
         }
     }
 

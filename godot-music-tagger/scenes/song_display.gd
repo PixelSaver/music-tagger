@@ -30,7 +30,6 @@ func display_track(track:GodotTrack) -> void:
 	_track = track
 	title.text = track.track_title
 	desc.text = ""
-	cover.texture = null
 	if track.track_artist.length() > 0:
 		desc.text += "Artist: %s\n" % track.track_artist
 	if track.composer.length() > 0:
