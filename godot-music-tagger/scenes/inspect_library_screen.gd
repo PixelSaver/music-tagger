@@ -4,9 +4,15 @@ class_name InspectLibraryScene
 @export var song_display: SongDisplayPanel
 @export var radial_selector: RadialSelector
 @export var search_bar: LineEdit
+var _genres: Array[String] = []
+var _tags: Array[String] = []
+var _selected_idx: int = 0
 
 func _enter_tree() -> void:
-	radial_selector.selected_item_changed.connect(_on_selection_changed)
+	radial_selector.selected_item_changed.connect(func(idx:int): 
+		_selected_idx = idx
+		call_deferred("_on_selection_changed")
+	)
 	search_bar.text_changed.connect(_on_search)
 	if Global.menu_manager.music_tagger_node.has_library():
 		_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
@@ -30,6 +36,11 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 		label.custom_minimum_size = Vector2(1000, 100)
 		label.text = track.track_title
 		radial_selector.add_child(label)
+	_genres = Global.menu_manager.music_tagger_node.get_all_genres()
+	_tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()
+	song_display.set_genres(_genres)
+	song_display.set_possible_tags(_tags)
+	
 
 func _on_search(text:String) -> void:
 	if text.is_empty(): 
@@ -39,11 +50,8 @@ func _on_search(text:String) -> void:
 		
 		_set_all_tracks(searched_tracks)
 
-func _on_selection_changed(track_idx:int) -> void:
+func _on_selection_changed() -> void:
+	var track_idx = _selected_idx
 	var track = Global.menu_manager.music_tagger_node.get_track_at(track_idx)
 	if not track: return
-	var genres = Global.menu_manager.music_tagger_node.get_all_genres()
-	if genres.size() > 0: song_display.set_genres(genres)
-	var tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()
-	song_display.set_possible_tags(tags)
 	song_display.display_track(track)

@@ -57,6 +57,7 @@ var _current_selected_idx := -1
 @export_category("Container Exclusion")
 @export var excluded: Array[Node] = []
 @export var max_lerp_cooldown := 0.6
+var current_children: Array[Control] = []
 var scroll_angle := 0.0
 var _lerp_cooldown: float
 
@@ -78,6 +79,19 @@ func _ready() -> void:
 	scroll_bar.scrolling.connect(func():
 		self.scroll_to_index(int(scroll_bar.value))
 	)
+	self.child_entered_tree.connect(func(node:Node):
+		if node is not Control: return
+		if excluded.has(node): return
+		current_children.append(node)
+	)
+	self.child_exiting_tree.connect(func(node:Node):
+		if current_children.has(node): 
+			current_children.erase(node)
+	)
+	for child in get_children():
+		if not child is Control: continue
+		if excluded.has(child): continue
+		current_children.append(child)
 
 func _update_scrollbar():
 	if scroll_bar == null or Engine.is_editor_hint():
@@ -96,14 +110,15 @@ func _notification(what):
 		_update_children()
 
 func _get_layout_children() -> Array[Control]:
-	var result: Array[Control] = []
-	for child in get_children():
-		if not child is Control:
-			continue
-		if excluded.has(child):
-			continue
-		result.append(child)
-	return result
+	return current_children
+	#var result: Array[Control] = []
+	#for child in get_children():
+		#if not child is Control:
+			#continue
+		#if excluded.has(child):
+			#continue
+		#result.append(child)
+	#return result
 
 
 func _process(delta: float) -> void:
@@ -121,7 +136,7 @@ func _process(delta: float) -> void:
 		target_scroll_angle = lerpf(target_scroll_angle, target, delta * 10.0)
 
 	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 10.0)
-	_update_children()
+	_update_children(children)
 	_update_scrollbar()
 
 	var idx := get_closest_idx()
@@ -196,13 +211,14 @@ func lerp_to_closest():
 	target_scroll_angle = lerpf(target_scroll_angle, snap, 0.03)
 
 
-func _update_children():
+func _update_children(children:Array[Control]=[]):
+	if children.size() == 0: children = _get_layout_children()
+	if children.size() == 0: return
 	if scroll_bar:
 		var width := 12.0
 		scroll_bar.position = Vector2(size.x - width, 0)
 		scroll_bar.size = Vector2(width, size.y)
 	
-	var children = _get_layout_children()
 	var theta = get_theta()
 	var center = get_actual_center()
 	
