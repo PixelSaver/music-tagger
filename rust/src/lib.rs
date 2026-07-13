@@ -323,8 +323,12 @@ impl MusicTaggerNode {
             cover_art
         } else {
             match track.get_cover_art() {
-                Ok(cover) => cover,
-                Err(_) => return None,
+                Ok(cover) => {
+                    cover
+                },
+                Err(_) => {
+                    return None;
+                },
             }
         };
         let mut image = Image::new_gd();

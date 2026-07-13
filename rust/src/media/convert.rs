@@ -144,7 +144,9 @@ impl TrackLocation {
             if cover.is_none() {
                 return Err(MusicTaggerError::MissingTag);
             }
-            Ok(cover.unwrap())
+            let unwrapped_cover = cover.unwrap();
+            self.track.cover_art = Some(unwrapped_cover.clone());
+            Ok(unwrapped_cover)
         }
     }
 
