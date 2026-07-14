@@ -35,6 +35,7 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 		var label = RichTextLabel.new()
 		label.custom_minimum_size = Vector2(1000, 100)
 		label.text = track.track_title
+		label.mouse_filter = Control.MOUSE_FILTER_PASS
 		radial_selector.add_child(label)
 	_genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	_tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()

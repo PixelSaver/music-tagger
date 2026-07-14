@@ -50,7 +50,8 @@ var _last_scrolled_angle : float = INF
 		scroll_active = val
 		if Engine.is_editor_hint():
 			_update_children()
-@export var drag_sensitivity := 0.0005
+@export var drag_sensitivity := 0.005
+@export_range(0.0, 1.0) var scroll_accel := 1.0
 ## Proportion taken off the scale of neighboring children.
 ## Children farther away from current angle are this much smaller
 @export var scale_multiplier := 0.1
@@ -139,11 +140,10 @@ func _process(delta: float) -> void:
 		var target = clampf(target_scroll_angle, min_limit, max_limit)
 		target_scroll_angle = lerpf(target_scroll_angle, target, delta * 10.0)
 
-	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 10.0)
-	if !(abs(scroll_angle - _last_scrolled_angle) < .000001) and !(abs(target_scroll_angle - scroll_angle) < .00001):
+	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 5.0)
+	if !(abs(scroll_angle - _last_scrolled_angle) < .000001) or !(abs(target_scroll_angle - scroll_angle) < .00001):
 		_update_children(children)
 		_update_scrollbar()
-	else: print("Not going")
 	var idx := get_closest_idx()
 	if idx != _current_selected_idx:
 		_current_selected_idx = idx
@@ -199,7 +199,7 @@ func get_closest_idx() -> int:
 		return -1
 
 	var idx = round(-(scroll_angle) / theta)
-	idx = clamp(idx, 0, children.size() - 1)
+	idx = clampi(idx, 0, children.size() - 1)
 	return idx
 
 
@@ -230,10 +230,10 @@ func _update_children(children:Array[Control]=[]):
 	var closest_idx = get_closest_idx()
 	if closest_idx == -1: return
 	var start = max(closest_idx - visibility_window, 0)
-	var end = min(closest_idx + visibility_window, children.size()-1)
+	var end = min(closest_idx + visibility_window, children.size())
 	
 	var window_start = max(min(start, _previous_start), 0)
-	var window_end = min(max(end, _previous_end), children.size()-1)
+	var window_end = min(max(end, _previous_end), children.size())
 	_previous_start = start
 	_previous_end = end
 	
@@ -260,6 +260,7 @@ func _update_children(children:Array[Control]=[]):
 
 func _gui_input(event: InputEvent) -> void:
 	var scroll_strength = 0.05
+	var boost = clampf(exp(1.5*scroll_accel*abs(target_scroll_angle - scroll_angle)), 1, 5)
 	if target_scroll_angle > 0 or target_scroll_angle < -(_get_layout_children().size() - 1) * get_theta():
 		scroll_strength = 0.025
 	if event is InputEventMouseButton:
@@ -275,14 +276,14 @@ func _gui_input(event: InputEvent) -> void:
 		_last_mouse_pos = event.position
 
 		#TODO Generalize to x and y if exporting this
-		target_scroll_angle += delta.y * drag_sensitivity
+		target_scroll_angle += delta.y * drag_sensitivity * boost
 		_on_scrolled()
 
 	if event.is_action_pressed("scroll_up"):
-		target_scroll_angle += scroll_strength
+		target_scroll_angle += scroll_strength * boost
 		_on_scrolled()
 	elif event.is_action_pressed("scroll_down"):
-		target_scroll_angle -= scroll_strength
+		target_scroll_angle -= scroll_strength * boost
 		_on_scrolled()
 
 
