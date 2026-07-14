@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use lofty::file::{AudioFile, TaggedFile, TaggedFileExt};
 use lofty::picture::PictureType;
@@ -170,4 +170,25 @@ impl TrackLocation {
         self.lofty_tagged_file = Some(lofty::read_from_path(&self.path)?);
         Ok(())
     }
+}
+
+pub fn get_cover_art(path: PathBuf) -> Result<TrackPicture> {
+    let file = lofty::read_from_path(&path)?;
+    let tag = file.primary_tag()
+        .or_else(|| file.first_tag())
+        .ok_or(MusicTaggerError::MissingTag)?;
+    let cover = tag
+        .pictures()
+        .iter()
+        .find(|p| p.pic_type() == PictureType::CoverFront)
+        .or_else(|| tag.pictures().first())
+        .map(|p| TrackPicture {
+            data: p.data().to_vec(),
+            mime_type: p.mime_type().map(|s| s.to_string()),
+        });
+    if cover.is_none() {
+        return Err(MusicTaggerError::MissingTag);
+    }
+    let unwrapped_cover = cover.unwrap();
+    Ok(unwrapped_cover)
 }

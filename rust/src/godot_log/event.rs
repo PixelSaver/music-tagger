@@ -8,5 +8,5 @@ pub enum MusicTaggerEvent {
     TrackFound(String),
     Error(String),
     Finished(Result<Library>),
-    LoadedCoverArt((String, Option<TrackPicture>)),
+    LoadedCoverArt(String, Option<TrackPicture>),
 }
