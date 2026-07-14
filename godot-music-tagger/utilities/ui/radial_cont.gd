@@ -87,6 +87,7 @@ func _ready() -> void:
 		if node is not Control: return
 		if excluded.has(node): return
 		current_children.append(node)
+		move_child(scroll_bar, get_child_count() - 1)
 	)
 	self.child_exiting_tree.connect(func(node:Node):
 		if current_children.has(node): 
