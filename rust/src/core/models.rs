@@ -171,6 +171,15 @@ pub struct TrackLocation {
     #[serde(skip)]
     pub lofty_tagged_file: Option<TaggedFile>,
 }
+impl Clone for TrackLocation {
+    fn clone(&self) -> Self {
+        Self {
+            track: self.track.clone(),
+            path: self.path.clone(),
+            lofty_tagged_file: None,
+        }
+    }
+}
 impl std::fmt::Debug for TrackLocation {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("TrackLocation")

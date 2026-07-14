@@ -1,5 +1,6 @@
 use std::path::PathBuf;
-use crate::core::models::Library;
+
+use crate::core::models::{Library, TrackPicture};
 use crate::error::Result;
 
 pub enum MusicTaggerEvent {
@@ -7,4 +8,5 @@ pub enum MusicTaggerEvent {
     TrackFound(String),
     Error(String),
     Finished(Result<Library>),
+    LoadedCoverArt((String, Option<TrackPicture>)),
 }

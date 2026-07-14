@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://t0ff5c4bnvt0" path="res://scenes/genre.gd" id="3_2or6q"]
 [ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
 [ext_resource type="Script" uid="uid://cvtd786wu1m2s" path="res://scenes/custom_tags.gd" id="4_2or6q"]
+[ext_resource type="Script" uid="uid://bmekf355e5l0s" path="res://scenes/label.gd" id="6_b1chm"]
 
 [node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_bar")]
 layout_mode = 3
@@ -212,3 +213,9 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_font_sizes/font_size = 30
 placeholder_text = "Search"
+
+[node name="Label" type="Label" parent="." unique_id=1685975787]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 55.0
+script = ExtResource("6_b1chm")

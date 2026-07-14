@@ -110,6 +110,24 @@ impl GodotTrack {
     }
 }
 
+
+impl TrackPicture {
+    pub fn to_gd_image(self) -> Option<Gd<Image>> {
+        let mut image = Image::new_gd();
+        let bytes = PackedByteArray::from(self.data);
+    
+        match self.mime_type.as_deref() {
+            Some("image/png") => image.load_png_from_buffer(&bytes),
+            Some("image/jpeg") | Some("image/jpg") => {
+                image.load_jpg_from_buffer(&bytes)
+            }
+            _ => return None,
+        };
+    
+        Some(image)
+    }
+}
+
 #[derive(GodotClass)]
 #[class(base = Node)]
 struct MusicTaggerNode {
@@ -129,7 +147,7 @@ struct MusicTaggerNode {
 #[godot_api]
 impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
-        crate::godot_log::godot_log::init_logger();
+        // crate::godot_log::godot_log::init_logger();
         Self {
             receiver: None,
             library: None,
@@ -194,6 +212,19 @@ impl INode for MusicTaggerNode {
                         &[e.to_string().to_variant()],
                     );
                 }
+                MusicTaggerEvent::LoadedCoverArt((isrc, Some(cover))) => {
+                    let img = cover.to_gd_image();
+                    self.base_mut().emit_signal(
+                        "loaded_cover_art",
+                        &[Variant::from(isrc), Variant::from(img)],
+                    );
+                }
+                MusicTaggerEvent::LoadedCoverArt((isrc, None)) => {
+                    self.base_mut().emit_signal(
+                        "error",
+                        &[Variant::from(format!("Failed to fetch cover art data from {}", isrc))],
+                    );
+                }
                 MusicTaggerEvent::Error(msg) => {
                     self.base_mut().emit_signal(
                         "error",
@@ -214,6 +245,8 @@ impl MusicTaggerNode {
     fn track_found(title: String);
     #[signal]
     fn library_scanned();
+    #[signal]
+    fn loaded_cover_art(isrc: String, cover_art: Option<Gd<Image>>);
 
     #[func]
     pub fn get_all_tracks(&self) -> Array<Gd<GodotTrack>> {
@@ -316,32 +349,26 @@ impl MusicTaggerNode {
         "Track not found.".into()
     }
     #[func]
-    pub fn get_track_cover_art(&mut self, isrc: String) -> Option<Gd<Image>> {
+    pub fn request_track_cover_art(&mut self, isrc: String) -> String {
         let godot_track_idx = self.find_track_idx_by_isrc(isrc.clone());
-        if godot_track_idx == -1 { return None; }
-        
-        let library = self.library.as_mut()?;
-        let track = library.find_track_by_isrc(&isrc)?;
-        let cover: TrackPicture = track.track.cover_art.clone()
-            .or_else(|| track.get_cover_art().ok() )?;
-        let mut image = Image::new_gd();
-        
-        let result = match cover.mime_type.as_deref() {
-            Some("image/png") => {
-                image.load_png_from_buffer(&PackedByteArray::from(cover.data));
-                Some(image)
-            }
-            Some("image/jpeg") | Some("image/jpg") => {
-                image.load_jpg_from_buffer(&PackedByteArray::from(cover.data));
-                Some(image)
-            }
-            _ => None,
+        if godot_track_idx == -1 { return "Failed to find godot_track idx using isrc!".into(); }
+        let (tx, rx) = flume::bounded(1);
+        self.receiver = Some(rx);
+        let library = match self.library.as_mut() {
+            Some(lib) => lib,
+            None => return "Library not loaded".into(),
         };
-        if let Some(mut godot_track) = self.get_track_at(godot_track_idx) {
-            let mut track = godot_track.bind_mut();
-            track.cover_art = result.clone();
+        
+        let mut track = match library.find_track_by_isrc(&isrc) {
+            Some(track) => track.clone(),
+            None => return "Track not found".into(),
         };
-        result
+        std::thread::spawn(move || {
+            let cover: Option<TrackPicture> = track.track.cover_art.clone()
+                .or_else(|| track.get_cover_art().ok() );
+            let _ = tx.send(MusicTaggerEvent::LoadedCoverArt((isrc, cover)));
+        });
+        "".into()
     }
     #[func]
     pub fn find_track_idx_by_isrc(&self, isrc: String) -> i32 {

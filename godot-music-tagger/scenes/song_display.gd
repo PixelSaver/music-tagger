@@ -18,6 +18,7 @@ func _ready() -> void:
 		_track.custom_tags = _tags
 		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _tags)
 	)
+	#Global.menu_manager.music_tagger_node.loaded_cover_art.connect(_on_cover_art_received)
 
 func set_genres(_genres: Array[String]) -> void:
 	genre.set_possible_genres(_genres)
@@ -57,4 +58,8 @@ func display_track(track:GodotTrack) -> void:
 	tags.set_selected_tags(track.custom_tags)
 
 func _get_cover_art():
-	return Global.menu_manager.music_tagger_node.get_track_cover_art(_track.isrc)
+	Global.menu_manager.music_tagger_node.request_track_cover_art(_track.isrc)
+func _on_cover_art_received(isrc:String, image:Image) -> void:
+	if isrc != _track.isrc: return
+	cover.texture = ImageTexture.create_from_image(image)
+	

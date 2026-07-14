@@ -7,6 +7,7 @@ class_name RadialContainer
 signal selected_item_changed(idx: int)
 
 var _current_selected_idx := -1
+var _last_scrolled_angle : float = INF
 
 @export var radius := 100.0:
 	set(val):
@@ -139,19 +140,20 @@ func _process(delta: float) -> void:
 		target_scroll_angle = lerpf(target_scroll_angle, target, delta * 10.0)
 
 	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 10.0)
-	_update_children(children)
-	_update_scrollbar()
-
+	if !(abs(scroll_angle - _last_scrolled_angle) < .000001) and !(abs(target_scroll_angle - scroll_angle) < .00001):
+		_update_children(children)
+		_update_scrollbar()
+	else: print("Not going")
 	var idx := get_closest_idx()
 	if idx != _current_selected_idx:
 		_current_selected_idx = idx
 		selected_item_changed.emit(idx)
-
-	if Engine.is_editor_hint():
-		return
+		
+	if Engine.is_editor_hint(): return
 	_lerp_cooldown -= delta
 	if _lerp_cooldown < 0.0:
 		lerp_to_closest()
+	_last_scrolled_angle = scroll_angle
 
 
 ## Angle separation between two children
@@ -227,11 +229,11 @@ func _update_children(children:Array[Control]=[]):
 	
 	var closest_idx = get_closest_idx()
 	if closest_idx == -1: return
-	var start = closest_idx - visibility_window
-	var end = closest_idx + visibility_window
+	var start = max(closest_idx - visibility_window, 0)
+	var end = min(closest_idx + visibility_window, children.size()-1)
 	
 	var window_start = max(min(start, _previous_start), 0)
-	var window_end = min(max(end, _previous_end), children.size())
+	var window_end = min(max(end, _previous_end), children.size()-1)
 	_previous_start = start
 	_previous_end = end
 	
