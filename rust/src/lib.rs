@@ -13,6 +13,7 @@ use std::path::{Path, PathBuf};
 
 use godot::classes::{Image, Node};
 use godot::prelude::*;
+use strsim::jaro_winkler;
 
 struct MusicTaggerGDExtension;
 // use crate::error::*;
@@ -486,5 +487,14 @@ impl MusicTaggerNode {
         });
 
         return "".into();
+    }
+
+    #[func]
+    pub fn search_list(list_godot: Array<GString>, query: String) -> Array<GString> {
+        Array::from_iter(
+            list_godot
+                .iter_shared()
+                .filter(|item| jaro_winkler(&item.to_string(), &query) > 0.6)
+        )
     }
 }

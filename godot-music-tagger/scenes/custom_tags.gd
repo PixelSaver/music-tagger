@@ -7,6 +7,7 @@ class_name CustomTagsDisplay
 signal tags_changed(tags:Array[String])
 var possible_tags: Array[String] = []
 var selected_tags: Array[String] = []
+var searched_tags: Array[String] = []
 
 func _ready() -> void:
 	button.get_popup().index_pressed.connect(_on_idx_pressed)
@@ -18,10 +19,24 @@ func _ready() -> void:
 	line_edit.editing_toggled.connect(func(toggled_on:bool):
 		if toggled_on: line_edit.text = ""
 	)
+	line_edit.text_changed.connect(func(new_text:String):
+		if new_text.is_empty():
+			_refresh_popup(possible_tags)
+		else:
+			searched_tags = MusicTaggerNode.search_list(possible_tags, new_text)
+			_refresh_popup(searched_tags)
+	)
 	line_edit.text_submitted.connect(func(new_text:String):
 		add_tag(new_text)
 		pass
 	)
+
+func _refresh_popup(tags:Array[String]) -> void:
+	var pop = button.get_popup()
+	pop.clear()
+	for tag in tags:
+		pop.add_check_item(tag)
+		pop.set_item_checked(pop.item_count - 1, selected_tags.has(tag))
 
 ## Sets possible tags, selected tags, and updates popup options
 func set_possible_tags(_possible_tags: Array[String]) -> void:
