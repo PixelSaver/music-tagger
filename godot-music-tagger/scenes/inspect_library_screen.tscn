@@ -211,7 +211,7 @@ mouse_filter = 2
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=372626817]
 layout_mode = 2
-mouse_filter = 2
+mouse_filter = 1
 theme_override_font_sizes/font_size = 30
 placeholder_text = "Search"
 

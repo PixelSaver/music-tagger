@@ -147,6 +147,8 @@ struct MusicTaggerNode {
     pub library: Option<Library>,
     pub godot_tracks: Array<Gd<GodotTrack>>,
     #[export]
+    pub searched_track_idxs: Array<i32>,
+    #[export]
     pub playlist_directory: GString,
     #[export]
     pub music_directories: Array<GString>,
@@ -158,7 +160,7 @@ struct MusicTaggerNode {
 #[godot_api]
 impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
-        crate::godot_log::godot_log::init_logger();
+        // crate::godot_log::godot_log::init_logger();
         let (request_tx, request_rx) = flume::unbounded::<CoverRequest>();
         let (event_tx, event_rx) = flume::unbounded::<MusicTaggerEvent>();
         let cover_event_tx = event_tx.clone();
@@ -175,6 +177,7 @@ impl INode for MusicTaggerNode {
         Self {
             cover_request_tx: request_tx,
             event_tx,
+            searched_track_idxs: Array::new(),
             receiver: event_rx,
             library: None,
             godot_tracks: Array::new(),
@@ -284,7 +287,11 @@ impl MusicTaggerNode {
     }
 
     #[func]
-    pub fn search_tracks(&self, query: GString) -> Array<Gd<GodotTrack>> {
+    pub fn search_tracks(&mut self, query: GString) -> Array<Gd<GodotTrack>> {
+        self.searched_track_idxs.clear();
+        if query.is_empty() {
+            return self.get_all_tracks();
+        }
         let mut out = Array::<Gd<GodotTrack>>::new();
         let library = self.library.as_ref();
         if library.is_none() {
@@ -296,15 +303,16 @@ impl MusicTaggerNode {
         let results = search_tracks(&query.to_string(), tracks);
 
         for (track, _) in results {
-            let idx: usize;
+            let idx: i32;
             if let Some(library) = &self.library {
                 idx = library
                     .tracks
                     .iter()
                     .position(|t| t.track.isrc == track.isrc)
-                    .map(|i| i as usize)
+                    .map(|i| i as i32)
                     .unwrap_or(0);
-                if let Some(track) = &self.godot_tracks.get(idx) {
+                self.searched_track_idxs.push(idx as i32);
+                if let Some(track) = &self.godot_tracks.get(idx as usize) {
                     out.push(track);
                 }
             } else {
@@ -312,6 +320,7 @@ impl MusicTaggerNode {
                 out.push(&gd_track);
             }
         }
+        log::debug!("Found {} tracks", self.searched_track_idxs);
         out
     }
 

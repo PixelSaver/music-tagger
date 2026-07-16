@@ -9,11 +9,15 @@ where I: IntoIterator<Item = &'a Track>
     let mut results: Vec<_> = tracks.into_iter()
         .map(|track| {
             let title = track.track_title.as_str().to_lowercase();
+            let genres = track.genre.as_str().to_lowercase();
+            let custom_tags = track.custom_tags.iter().map(|tag| tag.value.to_lowercase()).collect::<Vec<_>>();
+            let artist = track.track_artist.as_str().to_lowercase();
+            let total = title + " " + &genres + " " + " " + &artist + " " + &custom_tags.join(" ");
             
-            let score = if title.contains(&query) {
+            let score = if total.contains(&query) {
                 1.0
             } else {
-                jaro_winkler(&title, &query)
+                jaro_winkler(&total, &query)
             };
     
             (track, score)

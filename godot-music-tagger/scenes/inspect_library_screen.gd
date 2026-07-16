@@ -6,6 +6,7 @@ class_name InspectLibraryScene
 @export var search_bar: LineEdit
 var _genres: Array[String] = []
 var _tags: Array[String] = []
+var _idxs: Array[int] = []
 var _selected_idx: int = 0
 
 func _enter_tree() -> void:
@@ -36,6 +37,7 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 		label.custom_minimum_size = Vector2(1000, 100)
 		label.text = track.track_title
 		label.mouse_filter = Control.MOUSE_FILTER_PASS
+		label.visible = false
 		radial_selector.add_child(label)
 	_genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	_tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()
@@ -48,11 +50,12 @@ func _on_search(text:String) -> void:
 		_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
 	else:
 		var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(text)
+		_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
 		
 		_set_all_tracks(searched_tracks)
 
 func _on_selection_changed() -> void:
-	var track_idx = _selected_idx
+	var track_idx = _selected_idx if _idxs.size() == 0 else _idxs[clampi(_selected_idx, 0, _idxs.size())]
 	var track = Global.menu_manager.music_tagger_node.get_track_at(track_idx)
 	if not track: return
 	song_display.display_track(track)

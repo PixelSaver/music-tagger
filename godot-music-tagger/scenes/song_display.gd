@@ -49,7 +49,6 @@ func display_track(track:GodotTrack) -> void:
 	if track.cover_art != null:
 		cover.texture = ImageTexture.create_from_image(track.cover_art)
 	else:
-		print("Cover art is null so trying to get track cover art")
 		var im = _get_cover_art()
 		if im != null: 
 			print("Trying to get cover art worked!! %s" % str(im))
