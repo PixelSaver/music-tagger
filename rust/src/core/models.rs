@@ -27,7 +27,7 @@ pub struct Track {
     /// Language
     pub script: Option<Language>,
     pub album: Option<Album>,
-    pub genre: String,
+    pub genre: Vec<String>,
     /// Track length in milliseconds
     pub duration: u64,
     pub custom_tags: Vec<CustomTag>,
@@ -66,12 +66,18 @@ impl Track {
             publisher: String::new(),
             script: Option::None,
             album: Some(Album::new()),
-            genre: String::new(),
+            genre: Vec::new(),
             isrc: String::new(),
             duration: 0,
             custom_tags: Vec::new(),
             // lofty_tagged_file: Option::None,
         }
+    }
+    pub fn genre_to_str(genre: &[String]) -> String {
+        genre.join(";")
+    }
+    pub fn genre_from_str(genre: &str) -> Vec<String> {
+        genre.split(';').map(|s| s.to_string()).collect()
     }
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]

@@ -47,7 +47,7 @@ pub struct GodotTrack {
     pub publisher: GString,
     // pub album: Option<Album>,
     #[var]
-    pub genre: GString,
+    pub genres: Array<GString>,
     #[var]
     pub duration: i32,
     #[var]
@@ -68,7 +68,7 @@ impl IRefCounted for GodotTrack {
             copyright_message: GString::new(),
             description: GString::new(),
             publisher: GString::new(),
-            genre: GString::new(),
+            genres: Array::<GString>::new(),
             duration: 0,
             custom_tags: Array::<GString>::new(),
             base,
@@ -105,7 +105,11 @@ impl GodotTrack {
             copyright_message: GString::from(track.copyright_message.as_str()),
             description: GString::from(track.description.as_str()),
             publisher: GString::from(track.publisher.as_str()),
-            genre: GString::from(track.genre.as_str()),
+            genres: track
+                .genre
+                .iter()
+                .map(|genre| GString::from(genre.as_str()))
+                .collect::<Array<GString>>(),
             duration: track.duration as i32,
             custom_tags: track
                 .custom_tags
@@ -160,7 +164,7 @@ struct MusicTaggerNode {
 #[godot_api]
 impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
-        // crate::godot_log::godot_log::init_logger();
+        crate::godot_log::godot_log::init_logger();
         let (request_tx, request_rx) = flume::unbounded::<CoverRequest>();
         let (event_tx, event_rx) = flume::unbounded::<MusicTaggerEvent>();
         let cover_event_tx = event_tx.clone();
@@ -333,8 +337,10 @@ impl MusicTaggerNode {
         }
         let library = library.unwrap();
         library.tracks.iter().for_each(|track| {
-            if out.find(&track.track.genre, 0.into()).is_none() {
-                out.push(&track.track.genre);
+            for genre in &track.track.genre {
+                if out.find(genre, 0.into()).is_none() {
+                    out.push(genre);
+                }
             };
         });
 
@@ -361,14 +367,15 @@ impl MusicTaggerNode {
     }
 
     #[func]
-    pub fn find_track_write_genre(&mut self, isrc: String, genre: String) -> String {
+    pub fn find_track_write_genres(&mut self, isrc: String, genres_godot: Array<GString>) -> String {
         let library = self.library.as_mut();
         if library.is_none() {
             return "No library loaded / found.".into();
         }
+        let genres = genres_godot.iter_shared().map(|g| g.to_string()).collect::<Vec<_>>();
         let library = library.unwrap();
         if let Some(track) = library.find_track_by_isrc(&isrc) {
-            track.track.genre = genre;
+            track.track.genre = genres;
             return match track.write() {
                 Ok(_) => "".into(),
                 Err(e) => e.to_string(),

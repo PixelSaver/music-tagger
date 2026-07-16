@@ -9,7 +9,7 @@ where I: IntoIterator<Item = &'a Track>
     let mut results: Vec<_> = tracks.into_iter()
         .map(|track| {
             let title = track.track_title.as_str().to_lowercase();
-            let genres = track.genre.as_str().to_lowercase();
+            let genres = track.genre.join(" ").to_lowercase();
             let custom_tags = track.custom_tags.iter().map(|tag| tag.value.to_lowercase()).collect::<Vec<_>>();
             let artist = track.track_artist.as_str().to_lowercase();
             let total = title + " " + &genres + " " + " " + &artist + " " + &custom_tags.join(" ");

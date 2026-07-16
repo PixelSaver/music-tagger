@@ -32,7 +32,7 @@ impl Track {
         tag.insert_text(ItemKey::TrackArtists, self.track_artists.clone());
         tag.insert_text(ItemKey::CopyrightMessage, self.copyright_message.clone());
         tag.insert_text(ItemKey::Publisher, self.publisher.clone());
-        tag.insert_text(ItemKey::Genre, self.genre.clone());
+        tag.insert_text(ItemKey::Genre, Track::genre_to_str(&self.genre));
         
         tag.insert_text(
             ItemKey::Description,
@@ -99,10 +99,12 @@ impl Track {
                 .to_owned(),
             // TODO get the album 
             album: None,
-            genre: tag
-                .get_string(ItemKey::Genre)
-                .unwrap_or_default()
-                .to_owned(),
+            genre: Track::genre_from_str(
+                &tag
+                    .get_string(ItemKey::Genre)
+                    .unwrap_or_default()
+                    .to_owned()
+            ),
             duration: tag
                 .get_string(ItemKey::Length)
                 .unwrap_or_default()

@@ -6,15 +6,14 @@ class_name SongDisplayPanel
 @export var desc: RichTextLabel
 @export var genre: Genre
 @export var tags: CustomTagsDisplay
-var genres: Array[String] = []
 var _track: GodotTrack = null
 var _cover_texture : ImageTexture
 
 func _ready() -> void:
 	_cover_texture = ImageTexture.new()
 	cover.texture = _cover_texture
-	genre.genre_picked.connect(func(_genre:String):
-		Global.menu_manager.music_tagger_node.find_track_write_genre(_track.isrc, _genre)
+	genre.genres_changed.connect(func(_genres:Array[String]):
+		Global.menu_manager.music_tagger_node.find_track_write_genres(_track.isrc, _genres)
 	)
 	tags.tags_changed.connect(func(_tags:Array[String]):
 		print("Tags changed:", _tags)
@@ -25,7 +24,7 @@ func _ready() -> void:
 
 func set_genres(_genres: Array[String]) -> void:
 	genre.set_possible_genres(_genres)
-	genres = _genres
+
 func set_possible_tags(possible_tags: Array[String]) -> void:
 	tags.set_possible_tags(possible_tags)
 
@@ -54,8 +53,8 @@ func display_track(track:GodotTrack) -> void:
 			print("Trying to get cover art worked!! %s" % str(im))
 			cover.texture = ImageTexture.create_from_image(im)
 			return
-	if track.genre.length() > 0:
-		genre.set_genre(track.genre)
+	if track.genres.size() > 0:
+		genre.set_selected_genres(track.genres)
 	
 	tags.set_selected_tags(track.custom_tags)
 
