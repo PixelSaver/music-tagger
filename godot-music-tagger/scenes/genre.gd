@@ -4,6 +4,7 @@ class_name Genre
 @export var genre_text: RichTextLabel
 @export var button: MenuButton
 @export var line_edit: LineEdit
+var possible_genres : Array[String] = []
 signal genre_picked(genre:String)
 
 func _ready() -> void:

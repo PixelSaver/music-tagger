@@ -329,6 +329,7 @@ impl MusicTaggerNode {
             };
         });
 
+        out.sort_unstable();
         out
     }
     #[func]
