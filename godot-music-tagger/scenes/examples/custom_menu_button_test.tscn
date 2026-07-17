@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://bdh8cl67yb8ik"]
+
+[ext_resource type="Script" uid="uid://beqkkofmpbhnq" path="res://scenes/examples/genre_test.gd" id="1_3h6d1"]
+[ext_resource type="Script" uid="uid://0w827hmi23q" path="res://scenes/custom_menu_button.gd" id="1_lbth7"]
+
+[node name="CustomMenuButtonTest" type="Control" unique_id=1165180541]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Genre" type="HBoxContainer" parent="." unique_id=1836648674 node_paths=PackedStringArray("genre_text", "button", "line_edit")]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 0
+script = ExtResource("1_3h6d1")
+genre_text = NodePath("RichTextLabel")
+button = NodePath("")
+line_edit = NodePath("MenuButton/LineEdit")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Genre" unique_id=528359406]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "Genre:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="MenuButton" type="Button" parent="Genre" unique_id=747024425]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_lbth7")
+metadata/_custom_type_script = "uid://0w827hmi23q"
+
+[node name="@Panel@257087" type="Panel" parent="Genre/MenuButton" unique_id=1992519640]
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 0
+offset_top = 40.0
+offset_right = 100.0
+offset_bottom = 50.0
+
+[node name="@MarginContainer@257088" type="MarginContainer" parent="Genre/MenuButton/@Panel@257087" unique_id=2124011020]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="@HBoxContainer@257089" type="HBoxContainer" parent="Genre/MenuButton/@Panel@257087/@MarginContainer@257088" unique_id=503277724]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="Genre/MenuButton" unique_id=1783230463]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22

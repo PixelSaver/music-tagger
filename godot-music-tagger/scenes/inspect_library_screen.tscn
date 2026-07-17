@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://t0ff5c4bnvt0" path="res://scenes/genre.gd" id="3_2or6q"]
 [ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
 [ext_resource type="Script" uid="uid://cvtd786wu1m2s" path="res://scenes/custom_tags.gd" id="4_2or6q"]
+[ext_resource type="Script" uid="uid://0w827hmi23q" path="res://scenes/custom_menu_button.gd" id="4_vs6d8"]
 [ext_resource type="Script" uid="uid://bmekf355e5l0s" path="res://scenes/label.gd" id="6_b1chm"]
 
 [node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_bar")]
@@ -108,9 +109,26 @@ scroll_active = false
 autowrap_mode = 0
 vertical_alignment = 1
 
-[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre" unique_id=1793547205]
+[node name="MenuButton" type="Button" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre" unique_id=1195324391]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("4_vs6d8")
+metadata/_custom_type_script = "uid://0w827hmi23q"
+
+[node name="Popup" type="Panel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre/MenuButton" unique_id=928814102]
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 0
+offset_top = 40.0
+offset_right = 100.0
+offset_bottom = 50.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre/MenuButton/Popup" unique_id=1794653809]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre/MenuButton/Popup/MarginContainer" unique_id=340728977]
+layout_mode = 2
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre/MenuButton" unique_id=1314772960]
 layout_mode = 1
