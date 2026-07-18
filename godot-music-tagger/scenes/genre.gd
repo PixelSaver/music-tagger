@@ -16,6 +16,7 @@ func _ready() -> void:
 		line_edit.release_focus()
 		line_edit.grab_focus()
 	)
+	button.get_popup().window_input.connect(_on_popup_input)
 	line_edit.editing_toggled.connect(func(toggled_on:bool):
 		if toggled_on: line_edit.text = ""
 	)
@@ -30,10 +31,15 @@ func _ready() -> void:
 		add_tag(new_text)
 		pass
 	)
-
+	line_edit.focus_exited.connect(func() -> void:
+		_update_display()
+	)
+func _on_popup_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		pass
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if not line_edit.get_rect().has_point(event.global_position):
+		if not line_edit.get_rect().has_point(event.global_position) and not button.get_popup().visible:
 			line_edit.release_focus()
 
 func _refresh_popup(genres:Array[String]) -> void:
@@ -45,7 +51,18 @@ func _refresh_popup(genres:Array[String]) -> void:
 
 func set_genre(genre_name:String) -> void:
 	line_edit.text = genre_name
+func _sort_genres(genres: Array[String]) -> Array[String]:
+	var sorted := genres.duplicate()
 	
+	sorted.sort_custom(func(a:String, b:String) -> bool:
+		var a_select = selected_genres.has(a)
+		var b_select = selected_genres.has(b)
+		
+		if a_select != b_select:
+			return a_select
+		return a.naturalcasecmp_to(b) < 0
+	)
+	return sorted
 ## Sets possible tags, selected tags, and updates popup options
 func set_possible_genres(_possible_genres: Array[String]) -> void:
 	possible_genres = _possible_genres
@@ -67,6 +84,7 @@ func set_selected_genres(genres:Array[String]) -> void:
 		pop.set_item_checked(i, selected_genres.has(n))
 	_update_display()
 func _update_display() -> void:
+	if button.get_popup().item_count > 0: button.get_popup().scroll_to_item(0)
 	line_edit.text = ", ".join(selected_genres)
 func add_tag(genre:String) -> void:
 	if possible_genres.has(genre):

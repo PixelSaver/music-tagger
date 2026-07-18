@@ -340,7 +340,7 @@ impl MusicTaggerNode {
         library.tracks.iter().for_each(|track| {
             for genre in &track.track.genre {
                 if out.find(genre, 0.into()).is_none() {
-                    out.push(genre);
+                    if !genre.is_empty() { out.push(genre); }
                 }
             };
         });
