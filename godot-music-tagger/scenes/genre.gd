@@ -45,12 +45,10 @@ func _unhandled_input(event: InputEvent) -> void:
 func _refresh_popup(genres:Array[String]) -> void:
 	var pop = button.get_popup()
 	pop.clear()
-	for g in genres:
+	for g in _sort_genres(genres):
 		pop.add_check_item(g)
 		pop.set_item_checked(pop.item_count - 1, selected_genres.has(g))
 
-func set_genre(genre_name:String) -> void:
-	line_edit.text = genre_name
 func _sort_genres(genres: Array[String]) -> Array[String]:
 	var sorted := genres.duplicate()
 	
@@ -78,10 +76,7 @@ func set_possible_genres(_possible_genres: Array[String]) -> void:
 	_update_display()
 func set_selected_genres(genres:Array[String]) -> void:
 	selected_genres = genres
-	var pop := button.get_popup()
-	for i in pop.item_count:
-		var n = pop.get_item_text(i)
-		pop.set_item_checked(i, selected_genres.has(n))
+	_refresh_popup(possible_genres)
 	_update_display()
 func _update_display() -> void:
 	if button.get_popup().item_count > 0: button.get_popup().scroll_to_item(0)
