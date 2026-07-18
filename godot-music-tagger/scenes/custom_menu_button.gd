@@ -10,7 +10,7 @@ var popup_cont: Control
 #region Making the popup
 func _enter_tree() -> void:
 	popup = get_node_or_null("Popup")
-	popup_cont = get_node_or_null("Popup/MarginContainer/HBoxContainer")
+	popup_cont = get_node_or_null("Popup/MarginContainer/ScrollContainer/VBoxContainer")
 	if popup != null or not Engine.is_editor_hint(): return
 	var _owner = get_tree().edited_scene_root
 	popup = Panel.new()
@@ -27,12 +27,16 @@ func _enter_tree() -> void:
 	mcont.set_anchors_preset(Control.PRESET_FULL_RECT)
 	mcont.owner = _owner
 	
-	var hbox = HBoxContainer.new()
-	hbox.set_anchors_preset(Control.PRESET_FULL_RECT)
-	mcont.add_child(hbox)
-	hbox.name = "HBoxContainer"
-	hbox.owner = _owner
-	popup_cont = hbox
+	var scroll := ScrollContainer.new()
+	mcont.add_child(scroll)
+	scroll.name = "ScrollContainer"
+	scroll.owner = _owner
+	
+	var vbox = VBoxContainer.new()
+	scroll.add_child(vbox)
+	vbox.name = "VBoxContainer"
+	vbox.owner = _owner
+	popup_cont = vbox
 
 func _ready() -> void:
 	popup.hide()
@@ -48,7 +52,8 @@ func _notification(what: int) -> void:
 #endregion
 
 func _update_popup_position() -> void:
-	popup.position = self.get_rect().size * Vector2(0., 1.)
+	popup.top_level = true
+	popup.global_position = global_position + self.get_rect().size * Vector2(0., 1.)
 
 func _update_popup_items() -> void:
 	for child in popup_cont.get_children():
@@ -58,10 +63,13 @@ func _update_popup_items() -> void:
 		button.pressed.connect(func(): self.idx_pressed.emit(item.idx))
 		button.custom_minimum_size = Vector2(0., 50)
 		popup_cont.add_child(button)
-		var label = Label.new()
-		label.text = item.text
-		button.add_child(label)
-		label.set_anchors_preset(Control.PRESET_FULL_RECT)
+		button.text = item.text
+		#var label = Label.new()
+		#label.text = item.text
+		#button.add_child(label)
+		#label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var desired = popup_cont.get_combined_minimum_size()
+	popup.size = Vector2(desired.x, min(desired.y, 300))
 
 #region Utility functions exposing items
 func clear_popup() -> void:

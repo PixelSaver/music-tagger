@@ -10,6 +10,8 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cs2sx"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_203bq"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o54fn"]
 content_margin_left = 4.0
 content_margin_top = 4.0
@@ -90,6 +92,9 @@ Button/styles/focus = SubResource("StyleBoxEmpty_qew4h")
 Button/styles/hover = SubResource("StyleBoxEmpty_81pgw")
 Button/styles/normal = SubResource("StyleBoxEmpty_vkpim")
 Button/styles/pressed = SubResource("StyleBoxEmpty_cs2sx")
+CheckBox/constants/line_spacing = 100
+CheckBox/font_sizes/font_size = 16
+CheckBox/styles/hover = SubResource("StyleBoxFlat_203bq")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_o54fn")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_qew4h")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_81pgw")
