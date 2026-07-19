@@ -7,6 +7,10 @@ var has_library := false
 
 func _ready() -> void:
 	Global.menu_manager = self
+	SignalBus.scan.connect(func():
+		for dir in music_tagger_node.music_directories:
+			music_tagger_node.scan_directory(dir)
+	)
 	load_settings(settings)
 	var result = music_tagger_node.try_load_cache()
 	print("Cached result: %s" % result)

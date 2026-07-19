@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="2_j878g"]
 [ext_resource type="PackedScene" uid="uid://b3lrxeqo3o0kr" path="res://scenes/directory_entry.tscn" id="2_kt6hf"]
 
-[node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "confirm_button", "next_button")]
+[node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,8 +14,8 @@ grow_vertical = 2
 script = ExtResource("1_74idx")
 music_directory_cont = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/MusicDirectoryCont")
 add_dir_but = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer/AddDirectoryButton")
-confirm_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScanButton")
-next_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2/GoNext")
+cache_dir = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/CacheLineEdit")
+scan_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2/GoNext")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1169056325]
@@ -161,6 +161,22 @@ vertical_alignment = 1
 [node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer" unique_id=444191513]
 layout_mode = 2
 
+[node name="CacheDirectory" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer" unique_id=14598566]
+layout_mode = 2
+size_flags_stretch_ratio = 0.1
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 30
+text = "Cache Directory"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="CacheLineEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer" unique_id=1279290556]
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer" unique_id=400433538]
+layout_mode = 2
+
 [node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer" unique_id=2145772795]
 layout_mode = 2
 size_flags_vertical = 3
@@ -202,7 +218,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 bbcode_enabled = true
-text = "[font_size=30]Inspect Library"
+text = "[font_size=30]Scan Library"
 fit_content = true
 scroll_active = false
 shortcut_keys_enabled = false

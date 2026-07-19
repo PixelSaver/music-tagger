@@ -95,6 +95,7 @@ Button/styles/pressed = SubResource("StyleBoxEmpty_cs2sx")
 CheckBox/constants/line_spacing = 100
 CheckBox/font_sizes/font_size = 16
 CheckBox/styles/hover = SubResource("StyleBoxFlat_203bq")
+LineEdit/font_sizes/font_size = 30
 LineEdit/styles/focus = SubResource("StyleBoxFlat_o54fn")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_qew4h")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_81pgw")
