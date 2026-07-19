@@ -4,11 +4,10 @@
 [ext_resource type="Script" uid="uid://bdffej275fwkl" path="res://scenes/main.gd" id="2_sugp2"]
 [ext_resource type="Script" uid="uid://d342b2ltiplk1" path="res://standalones/tagger_settings.gd" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://ch2phmrhhhody" path="res://scenes/setup_screen.tscn" id="3_sugp2"]
-[ext_resource type="PackedScene" uid="uid://l1m3rl76alwl" path="res://scenes/inspect_library_screen.tscn" id="5_tbgi4"]
 
 [sub_resource type="Resource" id="Resource_sugp2"]
 script = ExtResource("3_jyhfs")
-music_directories = Array[String](["/home/stem/Music/spotiflacopus"])
+music_directories = Array[String](["~/Music/spotiflacopus"])
 cache_directory = "../test/.cache/library.bin"
 metadata/_custom_type_script = "uid://d342b2ltiplk1"
 
@@ -24,7 +23,6 @@ theme = ExtResource("1_sugp2")
 script = ExtResource("2_sugp2")
 settings = SubResource("Resource_sugp2")
 first_scene = ExtResource("3_sugp2")
-debug_first_scene = ExtResource("5_tbgi4")
 metadata/_custom_type_script = "uid://bpo0dsawpb3qj"
 
 [node name="MusicTaggerNode" type="MusicTaggerNode" parent="." unique_id=469680657]

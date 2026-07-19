@@ -21,7 +21,7 @@ func _ready() -> void:
 		if toggled_on: line_edit.text = ""
 	)
 	line_edit.text_changed.connect(func(new_text:String):
-		if new_text.is_empty():
+		if new_text.is_empty() or line_edit.text.is_empty():
 			_refresh_popup(possible_genres)
 		else:
 			searched_genres = MusicTaggerNode.search_list(possible_genres, new_text)
@@ -39,8 +39,9 @@ func _on_popup_input(event: InputEvent) -> void:
 		pass
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if not line_edit.get_rect().has_point(event.global_position) and not button.get_popup().visible:
-			line_edit.release_focus()
+		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+			if not line_edit.get_rect().has_point(event.global_position) and not button.get_popup().visible:
+				line_edit.release_focus()
 
 func _refresh_popup(genres:Array[String]) -> void:
 	var pop = button.get_popup()
