@@ -251,11 +251,11 @@ impl INode for MusicTaggerNode {
                         .emit_signal("error", &[e.to_string().to_variant()]);
                 }
                 MusicTaggerEvent::LoadedCoverArt(isrc, Some(cover)) => {
-                    if let Some(library) = &mut self.library {
-                        if let Some(track_loc) = library.tracks.iter_mut().find(|t| t.track.isrc == isrc) {
-                            track_loc.track.cover_art = Some(cover.clone());
-                        }
-                    }
+                    // if let Some(library) = &mut self.library {
+                    //     if let Some(track_loc) = library.tracks.iter_mut().find(|t| t.track.isrc == isrc) {
+                    //         track_loc.track.cover_art = Some(cover.clone());
+                    //     }
+                    // }
                     let img = cover.to_gd_image();
                     self.base_mut().emit_signal(
                         "loaded_cover_art",
