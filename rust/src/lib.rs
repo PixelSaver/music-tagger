@@ -78,20 +78,24 @@ impl IRefCounted for GodotTrack {
 }
 #[godot_api]
 impl GodotTrack {
-    fn from_track(track: Track, base: Base<RefCounted>) -> Self {
-        let cover_art = if let Some(cover_art) = track.cover_art {
-            let mut image = Image::new_gd();
+    fn from_track(track: Track, base: Base<RefCounted>, get_cover_art:bool) -> Self {
+        let cover_art = if get_cover_art {
+            if let Some(cover_art) = track.cover_art {
+                let mut image = Image::new_gd();
 
-            match cover_art.mime_type.as_deref() {
-                Some("image/png") => {
-                    image.load_png_from_buffer(&PackedByteArray::from(cover_art.data));
-                    Some(image)
+                match cover_art.mime_type.as_deref() {
+                    Some("image/png") => {
+                        image.load_png_from_buffer(&PackedByteArray::from(cover_art.data));
+                        Some(image)
+                    }
+                    Some("image/jpeg") | Some("image/jpg") => {
+                        image.load_jpg_from_buffer(&PackedByteArray::from(cover_art.data));
+                        Some(image)
+                    }
+                    _ => None,
                 }
-                Some("image/jpeg") | Some("image/jpg") => {
-                    image.load_jpg_from_buffer(&PackedByteArray::from(cover_art.data));
-                    Some(image)
-                }
-                _ => None,
+            } else {
+                None
             }
         } else {
             None
@@ -183,6 +187,8 @@ impl INode for MusicTaggerNode {
                 let cover = get_cover_art(request.path).ok();
                 let _ = cover_event_tx.send(MusicTaggerEvent::LoadedCoverArt(request.isrc, cover));
             }
+        });
+        std::thread::spawn(move || {
             while let Ok(CacheRequest::Save(path, library)) = cache_rx.recv() {
                 if let Err(e) = crate::library::cache::save_library(&path, &library) {
                     log::error!("{e}");
@@ -219,12 +225,12 @@ impl INode for MusicTaggerNode {
                         .emit_signal("track_found", &[title.to_variant()]);
                 }
                 MusicTaggerEvent::Finished(Ok(library)) => {
-                    let mut arr: Array<Gd<GodotTrack>> = Array::new();
-                    for track in &library.tracks {
-                        arr.push(&Gd::from_init_fn(|base| {
-                            GodotTrack::from_track(track.track.clone(), base)
-                        }));
-                    }
+                    // let mut arr: Array<Gd<GodotTrack>> = Array::new();
+                    // for track in &library.tracks {
+                    //     arr.push(&Gd::from_init_fn(|base| {
+                    //         GodotTrack::from_track(track.track.clone(), base, false)
+                    //     }));
+                    // }
                     let cache_dir = self.cache_directory.to_string();
                     let path = Path::new(&cache_dir);
                     let canonical_path = if let Ok(canonical) = path.canonicalize() {
@@ -235,7 +241,9 @@ impl INode for MusicTaggerNode {
                     log::debug!("Saving library cache to {:?}", canonical_path);
                     let _ = self.cache_tx.send(CacheRequest::Save(canonical_path, library.clone()));
                     self.library = Some(library);
+                    let t = std::time::Instant::now();
                     self.godot_tracks = self.get_all_tracks();
+                    log::debug!("godot tracks: {:?}", t.elapsed());
                     self.base_mut().emit_signal("library_scanned", &[]);
                 }
                 MusicTaggerEvent::Finished(Err(e)) => {
@@ -293,7 +301,7 @@ impl MusicTaggerNode {
             .unwrap_or_default()
         {
             let gd_track =
-                Gd::from_init_fn(|base| GodotTrack::from_track(track.track.clone(), base));
+                Gd::from_init_fn(|base| GodotTrack::from_track(track.track.clone(), base, false));
             tracks.push(&gd_track);
         }
         tracks
@@ -329,7 +337,7 @@ impl MusicTaggerNode {
                     out.push(track);
                 }
             } else {
-                let gd_track = Gd::from_init_fn(|base| GodotTrack::from_track(track.clone(), base));
+                let gd_track = Gd::from_init_fn(|base| GodotTrack::from_track(track.clone(), base, false));
                 out.push(&gd_track);
             }
         }
@@ -489,12 +497,23 @@ impl MusicTaggerNode {
     #[func]
     pub fn scan_directory(&mut self, directory: String) -> String {
         let tx = self.event_tx.clone();
+        let directory = MusicTaggerNode::tilde_path(&Path::new(&directory));
+        log::debug!("Scanning directory: {}", directory);
         std::thread::spawn(move || {
             let library = crate::library::scanner::walk_dir(Path::new(&directory), &tx);
             let _ = tx.send(MusicTaggerEvent::Finished(library));
         });
 
         return "".into();
+    }
+    fn tilde_path(path: &Path) -> String {
+        let home = env::var("HOME").unwrap();
+        let home = Path::new(&home);
+        if path.starts_with("~/") {
+            format!("{}/{}", home.display(), path.strip_prefix("~/").unwrap().display())
+        } else {
+            path.display().to_string()
+        }
     }
 
     #[func]

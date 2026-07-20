@@ -33,7 +33,9 @@ func _on_scan_but_pressed() -> void:
 	#SignalBus.scan.emit()
 	var result = _try_cache_or_scan()
 	if !result:
+		print("Awaiting")
 		await Global.menu_manager.music_tagger_node.library_scanned
+		print("Fnished")
 	Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
 #region Music directory functions
 func _delete_dir_entry(dir:DirectoryEntry) -> void:
@@ -76,8 +78,10 @@ func _on_cache_submit(text:String) -> void:
 func _try_cache_or_scan() -> bool:
 	var result = Global.menu_manager.music_tagger_node.try_load_cache()
 	print("Cached result: %s" % result)
+	for dir in Global.menu_manager.music_tagger_node.music_directories:
+		print("Music dir: %s" % dir)
 	if result == false:
-		print("Scan result: %s" % Global.menu_manager.music_tagger_node.scan_directory(Global.menu_manager.settings.music_directories[0]))
+		print("Scan result: %s" % Global.menu_manager.music_tagger_node.scan_directory(Global.menu_manager.music_tagger_node.music_directories[0]))
 	Global.menu_manager.has_library = true
 	return result
 
