@@ -200,7 +200,7 @@ impl TrackLocation {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Library {
     pub tracks: Vec<TrackLocation>,
 }

@@ -141,12 +141,16 @@ struct CoverRequest {
     isrc: String,
     path: PathBuf,
 }
+enum CacheRequest {
+    Save(PathBuf, Library),
+}
 
 #[derive(GodotClass)]
 #[class(base = Node)]
 struct MusicTaggerNode {
     cover_request_tx: flume::Sender<CoverRequest>,
     event_tx: flume::Sender<MusicTaggerEvent>,
+    cache_tx: flume::Sender<CacheRequest>,
     receiver: flume::Receiver<MusicTaggerEvent>,
 
     pub library: Option<Library>,
@@ -168,6 +172,7 @@ impl INode for MusicTaggerNode {
         crate::godot_log::godot_log::init_logger();
         let (request_tx, request_rx) = flume::unbounded::<CoverRequest>();
         let (event_tx, event_rx) = flume::unbounded::<MusicTaggerEvent>();
+        let (cache_tx, cache_rx) = flume::unbounded::<CacheRequest>();
         let cover_event_tx = event_tx.clone();
         std::thread::spawn(move || {
             while let Ok(mut request) = request_rx.recv() {
@@ -178,10 +183,16 @@ impl INode for MusicTaggerNode {
                 let cover = get_cover_art(request.path).ok();
                 let _ = cover_event_tx.send(MusicTaggerEvent::LoadedCoverArt(request.isrc, cover));
             }
+            while let Ok(CacheRequest::Save(path, library)) = cache_rx.recv() {
+                if let Err(e) = crate::library::cache::save_library(&path, &library) {
+                    log::error!("{e}");
+                }
+            }
         });
         Self {
             cover_request_tx: request_tx,
             event_tx,
+            cache_tx,
             searched_track_idxs: Array::new(),
             receiver: event_rx,
             library: None,
@@ -222,10 +233,7 @@ impl INode for MusicTaggerNode {
                         PathBuf::from(path)
                     };
                     log::debug!("Saving library cache to {:?}", canonical_path);
-                    if let Err(e) = crate::library::cache::save_library(path, &library) {
-                        self.base_mut()
-                            .emit_signal("error", &[e.to_string().to_variant()]);
-                    }
+                    let _ = self.cache_tx.send(CacheRequest::Save(canonical_path, library.clone()));
                     self.library = Some(library);
                     self.godot_tracks = self.get_all_tracks();
                     self.base_mut().emit_signal("library_scanned", &[]);

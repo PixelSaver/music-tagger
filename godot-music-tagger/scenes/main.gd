@@ -12,13 +12,8 @@ func _ready() -> void:
 			music_tagger_node.scan_directory(dir)
 	)
 	load_settings(settings)
-	var result = music_tagger_node.try_load_cache()
-	print("Cached result: %s" % result)
-	if result == false:
-		print("Scan result: %s" % music_tagger_node.scan_directory(settings.music_directories[0]))
-	print(music_tagger_node.get_signal_connection_list("library_scanned"))
+	
 	super()
-	has_library = true
 
 
 func load_settings(s:TaggerSettings):
