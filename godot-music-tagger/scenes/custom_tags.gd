@@ -1,7 +1,6 @@
 extends HBoxContainer
 class_name CustomTagsDisplay
 
-@export var display_text: RichTextLabel
 @export var button: MenuButton
 @export var line_edit: LineEdit
 signal tags_changed(tags:Array[String])

@@ -20,7 +20,7 @@ theme = ExtResource("1_6l5rq")
 script = ExtResource("1_nwuve")
 song_display = NodePath("HBoxContainer/MarginContainer/SongDisplay")
 radial_selector = NodePath("HBoxContainer/VBoxContainer/RadialSelector")
-search_bar = NodePath("HBoxContainer/VBoxContainer/MarginContainer/LineEdit")
+search_bar = NodePath("HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/LineEdit")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=382708563]
@@ -91,11 +91,10 @@ text = "Lorem: Ipsum"
 fit_content = true
 scroll_active = false
 
-[node name="Genre" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1527957047 node_paths=PackedStringArray("genre_text", "button", "line_edit")]
+[node name="Genre" type="HBoxContainer" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1527957047 node_paths=PackedStringArray("button", "line_edit")]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("3_2or6q")
-genre_text = NodePath("RichTextLabel")
 button = NodePath("MenuButton")
 line_edit = NodePath("MenuButton/LineEdit")
 
@@ -211,11 +210,84 @@ offset_bottom = 103.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=372626817]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer" unique_id=372626817]
 layout_mode = 2
 mouse_filter = 1
 theme_override_font_sizes/font_size = 30
 placeholder_text = "Search"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer" unique_id=749295758]
+layout_mode = 2
+
+[node name="CustomTags" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1301977622 node_paths=PackedStringArray("button", "line_edit")]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4_2or6q")
+button = NodePath("MenuButton")
+line_edit = NodePath("MenuButton/LineEdit")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags" unique_id=7000166]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "Tags:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags" unique_id=1151791146]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags/MenuButton" unique_id=310251115]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="Genre" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1070302755 node_paths=PackedStringArray("button", "line_edit")]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_2or6q")
+button = NodePath("MenuButton")
+line_edit = NodePath("MenuButton/LineEdit")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre" unique_id=959415370]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "Genre:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre" unique_id=1859748598]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre/MenuButton" unique_id=1842558433]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 18
 
 [node name="Label" type="Label" parent="." unique_id=1685975787]
 layout_mode = 0

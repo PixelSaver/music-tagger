@@ -1,7 +1,6 @@
 extends HBoxContainer
 class_name Genre
 
-@export var genre_text: RichTextLabel
 @export var button: MenuButton
 @export var line_edit: LineEdit
 var possible_genres : Array[String] = []

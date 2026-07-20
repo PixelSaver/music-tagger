@@ -6,6 +6,8 @@ class_name SongDisplayPanel
 @export var desc: RichTextLabel
 @export var genre: Genre
 @export var tags: CustomTagsDisplay
+@onready var tags_search: CustomTagsDisplay = $"../../VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags"
+@onready var genre_search: Genre = $"../../VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre"
 var _track: GodotTrack = null
 var _cover_texture : ImageTexture
 
@@ -24,9 +26,12 @@ func _ready() -> void:
 
 func set_genres(_genres: Array[String]) -> void:
 	genre.set_possible_genres(_genres)
+	genre_search.set_possible_genres(_genres)
+	
 
 func set_possible_tags(possible_tags: Array[String]) -> void:
 	tags.set_possible_tags(possible_tags)
+	tags_search.set_possible_tags(possible_tags)
 
 func display_track(track:GodotTrack) -> void:
 	if track == _track: return
