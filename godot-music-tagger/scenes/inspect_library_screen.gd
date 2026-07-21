@@ -1,9 +1,11 @@
 extends PixelMenu
 class_name InspectLibraryScene
 
+signal possible_genres(genres:Array[String])
+signal possible_tags(tags:Array[String])
 @export var song_display: SongDisplayPanel
 @export var radial_selector: RadialSelector
-@export var search_bar: LineEdit
+@export var search_man: SearchManager
 var _genres: Array[String] = []
 var _tags: Array[String] = []
 var _idxs: Array[int] = []
@@ -14,7 +16,7 @@ func _enter_tree() -> void:
 		_selected_idx = idx
 		call_deferred("_on_selection_changed")
 	)
-	search_bar.text_changed.connect(_on_search)
+	search_man.search_query_changed.connect(_on_search)
 	if Global.menu_manager.music_tagger_node.has_library():
 		_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
 	else:
@@ -41,21 +43,21 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 		radial_selector.add_child(label)
 	_genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	_tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()
-	song_display.set_genres(_genres)
-	song_display.set_possible_tags(_tags)
+	#song_display.set_genres(_genres)
+	possible_genres.emit(_genres)
+	possible_tags.emit(_tags)
+	#song_display.set_possible_tags(_tags)
+	
 	
 
-func _on_search(text:String) -> void:
-	if text.is_empty(): 
-		_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
-	else:
-		var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(text)
-		_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
-		
-		_set_all_tracks(searched_tracks)
+func _on_search(query:String, selected_tags:Array[String], selected_genres:Array[String]) -> void:
+	var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(query, selected_tags, selected_genres)
+	_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
+	print("Query sent")
+	_set_all_tracks(searched_tracks)
 
 func _on_selection_changed() -> void:
-	var track_idx = _selected_idx if _idxs.size() == 0 else _idxs[clampi(_selected_idx, 0, _idxs.size())]
+	var track_idx = _selected_idx if _idxs.size() == 0 else _idxs[clampi(_selected_idx, 0, _idxs.size()-1)]
 	var track = Global.menu_manager.music_tagger_node.get_track_at(track_idx)
 	if not track: return
 	song_display.display_track(track)

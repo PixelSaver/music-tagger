@@ -7,8 +7,10 @@
 [ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
 [ext_resource type="Script" uid="uid://cvtd786wu1m2s" path="res://scenes/custom_tags.gd" id="4_2or6q"]
 [ext_resource type="Script" uid="uid://bmekf355e5l0s" path="res://scenes/label.gd" id="6_b1chm"]
+[ext_resource type="PackedScene" uid="uid://dnbweybcl477d" path="res://scenes/search_filter.tscn" id="7_6l5rq"]
+[ext_resource type="Script" uid="uid://bmlujw2lx4mv6" path="res://scenes/search_manager.gd" id="7_y7qbe"]
 
-[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_bar")]
+[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +22,7 @@ theme = ExtResource("1_6l5rq")
 script = ExtResource("1_nwuve")
 song_display = NodePath("HBoxContainer/MarginContainer/SongDisplay")
 radial_selector = NodePath("HBoxContainer/VBoxContainer/RadialSelector")
-search_bar = NodePath("HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/LineEdit")
+search_man = NodePath("HBoxContainer/VBoxContainer/MarginContainer/SearchManager")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=382708563]
@@ -35,7 +37,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc", "genre", "tags")]
+[node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc", "genre", "tags", "genre_search")]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("2_rhkcn")
@@ -44,6 +46,7 @@ cover = NodePath("MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/
 desc = NodePath("MarginContainer/ScrollContainer/VBoxContainer/Description")
 genre = NodePath("MarginContainer/ScrollContainer/VBoxContainer/Genre")
 tags = NodePath("MarginContainer/ScrollContainer/VBoxContainer/CustomTags")
+genre_search = NodePath("")
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/SongDisplay" unique_id=694110974]
 layout_mode = 1
@@ -210,87 +213,46 @@ offset_bottom = 103.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448]
+[node name="SearchManager" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448 node_paths=PackedStringArray("search_bar", "tags_filter", "genres_filter")]
 layout_mode = 2
 theme_override_constants/separation = 10
+script = ExtResource("7_y7qbe")
+search_bar = NodePath("Searchbar")
+tags_filter = NodePath("HBoxContainer/TagsSearch")
+genres_filter = NodePath("HBoxContainer/GenreSearch")
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer" unique_id=372626817]
+[node name="Searchbar" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" unique_id=372626817]
 layout_mode = 2
 mouse_filter = 1
 theme_override_font_sizes/font_size = 30
 placeholder_text = "Search"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer" unique_id=749295758]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" unique_id=749295758]
 layout_mode = 2
 
-[node name="CustomTags" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1301977622 node_paths=PackedStringArray("button", "line_edit")]
-custom_minimum_size = Vector2(0, 35)
+[node name="TagsSearch" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=750160099 instance=ExtResource("7_6l5rq")]
 layout_mode = 2
-size_flags_horizontal = 3
-script = ExtResource("4_2or6q")
-button = NodePath("MenuButton")
-line_edit = NodePath("MenuButton/LineEdit")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags" unique_id=7000166]
-layout_mode = 2
-mouse_filter = 1
-theme_override_font_sizes/normal_font_size = 18
-bbcode_enabled = true
+[node name="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/TagsSearch" index="0" unique_id=108456384]
 text = "Tags:"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-vertical_alignment = 1
 
-[node name="MenuButton" type="MenuButton" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags" unique_id=1151791146]
+[node name="GenreSearch" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=950272936 instance=ExtResource("7_6l5rq")]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags/MenuButton" unique_id=310251115]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_font_sizes/font_size = 18
-
-[node name="Genre" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1070302755 node_paths=PackedStringArray("button", "line_edit")]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_horizontal = 3
-script = ExtResource("3_2or6q")
-button = NodePath("MenuButton")
-line_edit = NodePath("MenuButton/LineEdit")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre" unique_id=959415370]
-layout_mode = 2
-mouse_filter = 1
-theme_override_font_sizes/normal_font_size = 18
-bbcode_enabled = true
-text = "Genre:"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-vertical_alignment = 1
-
-[node name="MenuButton" type="MenuButton" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre" unique_id=1859748598]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre/MenuButton" unique_id=1842558433]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_font_sizes/font_size = 18
+[node name="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/GenreSearch" index="0" unique_id=108456384]
+text = "Genres:"
 
 [node name="Label" type="Label" parent="." unique_id=1685975787]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 55.0
 script = ExtResource("6_b1chm")
+
+[connection signal="possible_genres" from="." to="HBoxContainer/MarginContainer/SongDisplay" method="_on_possible_genres"]
+[connection signal="possible_genres" from="." to="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" method="_on_possible_genres"]
+[connection signal="possible_tags" from="." to="HBoxContainer/MarginContainer/SongDisplay" method="_on_possible_tags"]
+[connection signal="possible_tags" from="." to="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" method="_on_possible_tags"]
+
+[editable path="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/TagsSearch"]
+[editable path="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/GenreSearch"]

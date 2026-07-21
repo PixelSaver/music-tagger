@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dnbweybcl477d"]
+
+[ext_resource type="Script" uid="uid://ba2x666x5fxq1" path="res://scenes/search_filter.gd" id="1_nf1jp"]
+
+[node name="SearchFilter" type="HBoxContainer" unique_id=750160099 node_paths=PackedStringArray("button", "line_edit")]
+custom_minimum_size = Vector2(0, 35)
+size_flags_horizontal = 3
+alignment = 2
+script = ExtResource("1_nf1jp")
+button = NodePath("MenuButton")
+line_edit = NodePath("MenuButton/LineEdit")
+
+[node name="Label" type="Label" parent="." unique_id=108456384]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Filter:"
+
+[node name="MenuButton" type="MenuButton" parent="." unique_id=1544197027]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="LineEdit" type="LineEdit" parent="MenuButton" unique_id=71088333]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 18

@@ -308,11 +308,8 @@ impl MusicTaggerNode {
     }
 
     #[func]
-    pub fn search_tracks(&mut self, query: GString) -> Array<Gd<GodotTrack>> {
+    pub fn search_tracks(&mut self, query: GString, selected_tags: Array<GString>, selected_genres: Array<GString>) -> Array<Gd<GodotTrack>> {
         self.searched_track_idxs.clear();
-        if query.is_empty() {
-            return self.get_all_tracks();
-        }
         let mut out = Array::<Gd<GodotTrack>>::new();
         let library = self.library.as_ref();
         if library.is_none() {
@@ -321,7 +318,7 @@ impl MusicTaggerNode {
         let library = library.unwrap();
         let tracks = library.tracks.iter().map(|t| &t.track);
 
-        let results = search_tracks(&query.to_string(), tracks);
+        let results = search_tracks(&query.to_string(), &selected_tags.iter_shared().map(|t| t.to_string()).collect::<Vec<_>>(), &selected_genres.iter_shared().map(|g| g.to_string()).collect::<Vec<_>>(), tracks);
 
         for (track, _) in results {
             let idx: i32;

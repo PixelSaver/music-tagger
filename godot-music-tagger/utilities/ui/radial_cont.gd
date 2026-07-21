@@ -88,10 +88,12 @@ func _ready() -> void:
 		if excluded.has(node): return
 		current_children.append(node)
 		move_child(scroll_bar, get_child_count() - 1)
+		selected_item_changed.emit(get_closest_idx())
 	)
 	self.child_exiting_tree.connect(func(node:Node):
 		if current_children.has(node): 
 			current_children.erase(node)
+		selected_item_changed.emit(get_closest_idx())
 	)
 	for child in get_children():
 		if not child is Control: continue

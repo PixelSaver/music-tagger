@@ -6,8 +6,8 @@ class_name SongDisplayPanel
 @export var desc: RichTextLabel
 @export var genre: Genre
 @export var tags: CustomTagsDisplay
-@onready var tags_search: CustomTagsDisplay = $"../../VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/CustomTags"
-@onready var genre_search: Genre = $"../../VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Genre"
+@export var tags_search: CustomTagsDisplay 
+@export var genre_search: Genre 
 var _track: GodotTrack = null
 var _cover_texture : ImageTexture
 
@@ -24,14 +24,12 @@ func _ready() -> void:
 	)
 	Global.menu_manager.music_tagger_node.loaded_cover_art.connect(_on_cover_art_received)
 
-func set_genres(_genres: Array[String]) -> void:
+func _on_possible_genres(_genres: Array[String]) -> void:
 	genre.set_possible_genres(_genres)
-	genre_search.set_possible_genres(_genres)
 	
 
-func set_possible_tags(possible_tags: Array[String]) -> void:
+func _on_possible_tags(possible_tags: Array[String]) -> void:
 	tags.set_possible_tags(possible_tags)
-	tags_search.set_possible_tags(possible_tags)
 
 func display_track(track:GodotTrack) -> void:
 	if track == _track: return
