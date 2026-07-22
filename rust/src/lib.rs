@@ -338,7 +338,6 @@ impl MusicTaggerNode {
                 out.push(&gd_track);
             }
         }
-        log::debug!("Found {} tracks", self.searched_track_idxs);
         out
     }
 

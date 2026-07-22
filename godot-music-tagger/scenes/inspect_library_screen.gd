@@ -53,11 +53,14 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 func _on_search(query:String, selected_tags:Array[String], selected_genres:Array[String]) -> void:
 	var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(query, selected_tags, selected_genres)
 	_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
+	radial_selector.scroll_angle = 0.
+	radial_selector.target_scroll_angle = 0.
 	print("Query sent")
 	_set_all_tracks(searched_tracks)
 
 func _on_selection_changed() -> void:
 	var track_idx = _selected_idx if _idxs.size() == 0 else _idxs[clampi(_selected_idx, 0, _idxs.size()-1)]
+	if track_idx == -1: return
 	var track = Global.menu_manager.music_tagger_node.get_track_at(track_idx)
 	if not track: return
 	song_display.display_track(track)
