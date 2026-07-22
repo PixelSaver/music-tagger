@@ -13,7 +13,8 @@ use std::path::{Path, PathBuf};
 
 use godot::classes::{Image, Node};
 use godot::prelude::*;
-use strsim::jaro_winkler;
+// use strsim::jaro_winkler;
+use nucleo_matcher::{Config, Matcher, Utf32Str};
 
 struct MusicTaggerGDExtension;
 // use crate::error::*;
@@ -514,10 +515,36 @@ impl MusicTaggerNode {
 
     #[func]
     pub fn search_list(list_godot: Array<GString>, query: String) -> Array<GString> {
+        let mut matcher = Matcher::new(Config::DEFAULT);
+        let mut buf = Vec::new();
+        let mut query_buf = Vec::new();
         Array::from_iter(
             list_godot
                 .iter_shared()
-                .filter(|item| jaro_winkler(&item.to_string(), &query) > 0.6)
+                .filter(|item| matcher.fuzzy_match(Utf32Str::new(&item.to_string(), &mut buf), Utf32Str::new(&query, &mut query_buf)).is_some())
         )
+    }
+
+    #[func]
+    pub fn sort_list(list_godot: Array<GString>, method: i32) -> Array<GString> {
+        let mut list = list_godot.iter_shared().collect::<Vec<_>>();
+        match method {
+            0 => {},
+            1 => list.sort_by(|a, b| a.to_string().cmp(&b.to_string())),
+            2 => list.sort_by(|a, b| b.to_string().cmp(&a.to_string())),
+            _ => {}
+        }
+        Array::from_iter(list)
+    }
+    #[func]
+    pub fn sort_tracks(list_godot: Array<Gd<GodotTrack>>, method: i32) -> Array<Gd<GodotTrack>> {
+        let mut list = list_godot.iter_shared().collect::<Vec<_>>();
+        match method {
+            0 => {},
+            1 => list.sort_by(|a, b| a.get("track_title").to_string().cmp(&b.get("track_title").to_string())),
+            2 => list.sort_by(|a, b| b.get("track_title").to_string().cmp(&a.get("track_title").to_string())),
+            _ => {}
+        }
+        Array::from_iter(list)
     }
 }

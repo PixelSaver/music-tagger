@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bmekf355e5l0s" path="res://scenes/label.gd" id="6_b1chm"]
 [ext_resource type="PackedScene" uid="uid://dnbweybcl477d" path="res://scenes/search_filter.tscn" id="7_6l5rq"]
 [ext_resource type="Script" uid="uid://bmlujw2lx4mv6" path="res://scenes/search_manager.gd" id="7_y7qbe"]
+[ext_resource type="Script" uid="uid://su2jjrgrsxbh" path="res://scenes/sort_by.gd" id="9_g0aan"]
 
 [node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man")]
 layout_mode = 3
@@ -212,13 +213,14 @@ offset_bottom = 103.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="SearchManager" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448 node_paths=PackedStringArray("search_bar", "tags_filter", "genres_filter")]
+[node name="SearchManager" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448 node_paths=PackedStringArray("search_bar", "tags_filter", "genres_filter", "sort_by")]
 layout_mode = 2
 theme_override_constants/separation = 10
 script = ExtResource("7_y7qbe")
 search_bar = NodePath("Searchbar")
 tags_filter = NodePath("HBoxContainer/TagsSearch")
 genres_filter = NodePath("HBoxContainer/GenreSearch")
+sort_by = NodePath("HBoxContainer/SortBy")
 
 [node name="Searchbar" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" unique_id=372626817]
 layout_mode = 2
@@ -240,6 +242,38 @@ layout_mode = 2
 
 [node name="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/GenreSearch" index="0" unique_id=108456384]
 text = "Genres:"
+
+[node name="SortBy" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=1643706373 node_paths=PackedStringArray("option_button")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("9_g0aan")
+option_button = NodePath("MenuButton")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/SortBy" unique_id=2019566817]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Sort By:"
+
+[node name="MenuButton" type="OptionButton" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/SortBy" unique_id=492120589]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_font_sizes/font_size = 18
+alignment = 1
+selected = 0
+item_count = 1
+popup/item_0/text = "Alphabetic"
+popup/item_0/id = 0
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/SortBy/MenuButton" unique_id=1832154529]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 
 [node name="Label" type="Label" parent="." unique_id=1685975787]
 layout_mode = 0

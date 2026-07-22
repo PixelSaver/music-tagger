@@ -1,15 +1,23 @@
 extends VBoxContainer
 class_name SearchManager
 
+const METHOD = SortByContainer.SortMethod
+
+signal method_requested(method:METHOD)
 @export var search_bar: LineEdit
 @export var tags_filter: SearchFilter
 @export var genres_filter: SearchFilter
+@export var sort_by: SortByContainer
 
 signal search_query_changed(query:String, tags:Array[String], genres:Array[String])
 func _ready() -> void:
 	search_bar.text_changed.connect(func(_t:String): _emit_query())
 	tags_filter.search_filters_changed.connect(func(_n:Array[String]): _emit_query())
 	genres_filter.search_filters_changed.connect(func(_n:Array[String]): _emit_query())
+	sort_by.method_requested.connect(_on_method_req)
+
+func _on_method_req(method:METHOD) -> void:
+	method_requested.emit(method)
 
 func _emit_query() -> void:
 	print("queried")
