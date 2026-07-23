@@ -11,10 +11,11 @@ extends Node
 @export var direction : Vector2 = Vector2.ZERO
 @export var distance: float = 100.0
 @export_tool_button("Randomize distance") var randomize_action = _randomize_distance
+@export var randomized_range := Vector2(0, 100)
 var parent : Control
 
 func _randomize_distance():
-	distance = randf_range(0.2, 4.0) * 100
+	distance = randf_range(randomized_range.x, randomized_range.y)
 
 func _ready() -> void:
 	parent = get_parent() as Control

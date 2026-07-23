@@ -6,7 +6,7 @@ signal possible_tags(tags:Array[String])
 @export var song_display: SongDisplayPanel
 @export var radial_selector: RadialSelector
 @export var search_man: SearchManager
-var _cached_tracks :Array[GodotTrack] = []
+var _displayed_tracks: Array[GodotTrack] = []
 var _genres: Array[String] = []
 var _tags: Array[String] = []
 var _idxs: Array[int] = []
@@ -18,13 +18,16 @@ func _enter_tree() -> void:
 		call_deferred("_on_selection_changed")
 	)
 	search_man.search_query_changed.connect(_on_search)
+	search_man.method_requested.connect(_on_method_req)
+	
 	if Global.menu_manager.music_tagger_node.has_library():
-		_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
+		_displayed_tracks = Global.menu_manager.music_tagger_node.get_all_tracks()
+		_set_all_tracks(_displayed_tracks)
 	else:
 		Global.menu_manager.music_tagger_node.library_scanned.connect(func():
-			_set_all_tracks(Global.menu_manager.music_tagger_node.get_all_tracks())
+			_displayed_tracks = Global.menu_manager.music_tagger_node.get_all_tracks()
+			_set_all_tracks(_displayed_tracks)
 		)
-	search_man.method_requested.connect(_on_method_req)
 	
 
 func start_anim() -> void: 
@@ -33,9 +36,11 @@ func start_anim() -> void:
 func end_anim() -> void: pass
 
 func _on_method_req(method:SortByContainer.SortMethod) -> void:
-	var tracks = _cached_tracks.duplicate() if _cached_tracks else Global.menu_manager.music_tagger_node.get_all_tracks()
-	tracks = MusicTaggerNode.sort_tracks(tracks, method)
-	_set_all_tracks(tracks)
+	if method == SortByContainer.SortMethod.RELEVANT:
+		_displayed_tracks = Global.menu_manager.music_tagger_node.get_all_tracks()
+	else:
+		_displayed_tracks = MusicTaggerNode.sort_tracks(_displayed_tracks, method)
+	_set_all_tracks(_displayed_tracks)
 
 func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	for child in radial_selector.get_children(): 
@@ -56,20 +61,23 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	possible_tags.emit(_tags)
 	#song_display.set_possible_tags(_tags)
 	
-	
 
 func _on_search(query:String, selected_tags:Array[String], selected_genres:Array[String]) -> void:
 	var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(query, selected_tags, selected_genres)
-	_cached_tracks = searched_tracks
+	_displayed_tracks = searched_tracks
 	_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
 	radial_selector.scroll_angle = 0.
 	radial_selector.target_scroll_angle = 0.
 	print("Query sent")
-	_set_all_tracks(searched_tracks)
+	_set_all_tracks(_displayed_tracks)
 
 func _on_selection_changed() -> void:
-	var track_idx = _selected_idx if _idxs.size() == 0 else _idxs[clampi(_selected_idx, 0, _idxs.size()-1)]
-	if track_idx == -1: return
-	var track = _cached_tracks[track_idx] if _cached_tracks.size() > 0 else Global.menu_manager.music_tagger_node.get_track_at(track_idx)
-	if not track: return
-	song_display.display_track(track)
+	if _displayed_tracks.size() > 0:
+		song_display.display_track(_displayed_tracks[_selected_idx])
+	else:
+		var track_idx = _selected_idx if _idxs.size() == 0 else _idxs[clampi(_selected_idx, 0, _idxs.size()-1)]
+		if track_idx == -1: return
+		song_display.display_track(
+			Global.menu_manager.music_tagger_node.get_track_at(track_idx)
+		)
+	#var track = Global.menu_manager.music_tagger_node.get_track_at(track_idx)
