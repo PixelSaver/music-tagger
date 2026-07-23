@@ -19,6 +19,7 @@ func _enter_tree() -> void:
 	)
 	search_man.search_query_changed.connect(_on_search)
 	search_man.method_requested.connect(_on_method_req)
+	search_man.dupe_requested.connect(_on_dupe_req)
 	
 	if Global.menu_manager.music_tagger_node.has_library():
 		_displayed_tracks = Global.menu_manager.music_tagger_node.get_all_tracks()
@@ -41,6 +42,13 @@ func _on_method_req(method:SortByContainer.SortMethod) -> void:
 	else:
 		_displayed_tracks = MusicTaggerNode.sort_tracks(_displayed_tracks, method)
 	_set_all_tracks(_displayed_tracks)
+
+func _on_dupe_req(yes:bool) -> void:
+	if yes:
+		var dupes = Global.menu_manager.music_tagger_node.get_duplicates()
+		_displayed_tracks = MusicTaggerNode.dupes_to_tracks(dupes)
+		_set_all_tracks(_displayed_tracks)
+	
 
 func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	for child in radial_selector.get_children(): 

@@ -275,6 +275,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
+[node name="DupeTest" type="CheckBox" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=2140013743]
+layout_mode = 2
+
 [node name="Label" type="Label" parent="." unique_id=1685975787]
 layout_mode = 0
 offset_right = 40.0

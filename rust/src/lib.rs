@@ -170,6 +170,19 @@ impl IRefCounted for DuplicateTrack {
         }
     }
 }
+#[godot_api]
+impl DuplicateTrack {
+    #[func]
+    pub fn to_godot_track(array: Array<Gd<DuplicateTrack>>) -> Array<Gd<GodotTrack>> {
+        let mut result = Array::default();
+        for item in array.iter_shared() {
+            for track in item.bind().tracks.iter_shared() {
+                result.push(&track);
+            }
+        }
+        result
+    }
+}
 
 
 #[derive(GodotClass)]
@@ -411,6 +424,16 @@ impl MusicTaggerNode {
             dupe.bind_mut().isrc = GString::from(&key);
             dupe.bind_mut().tracks = tracks.iter().map(|t| Gd::from_init_fn(|base| GodotTrack::from_track(t.track.clone(), base, false))).collect::<Array<_>>();
             out.push(&dupe);
+        }
+        out
+    }
+    #[func]
+    pub fn dupes_to_tracks(duplicates: Array<Gd<DuplicateTrack>>) -> Array<Gd<GodotTrack>> {
+        let mut out = Array::<Gd<GodotTrack>>::new();
+        for dupe in duplicates.iter_shared() {
+            for track in dupe.bind().tracks.iter_shared() {
+                out.push(&track);
+            }
         }
         out
     }

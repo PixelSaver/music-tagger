@@ -4,10 +4,12 @@ class_name SearchManager
 const METHOD = SortByContainer.SortMethod
 
 signal method_requested(method:METHOD)
+signal dupe_requested(yes:bool)
 @export var search_bar: LineEdit
 @export var tags_filter: SearchFilter
 @export var genres_filter: SearchFilter
 @export var sort_by: SortByContainer
+@onready var dupe_test: CheckBox = $HBoxContainer/DupeTest
 
 signal search_query_changed(query:String, tags:Array[String], genres:Array[String])
 func _ready() -> void:
@@ -15,6 +17,7 @@ func _ready() -> void:
 	tags_filter.search_filters_changed.connect(func(_n:Array[String]): _emit_query())
 	genres_filter.search_filters_changed.connect(func(_n:Array[String]): _emit_query())
 	sort_by.method_requested.connect(_on_method_req)
+	dupe_test.toggled.connect(func(toggled:bool): dupe_requested.emit(toggled))
 
 func _on_method_req(method:METHOD) -> void:
 	method_requested.emit(method)
