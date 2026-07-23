@@ -6,7 +6,7 @@ pub mod media;
 // pub mod listener;
 pub mod playlists;
 // pub mod util;
-//
+
 pub mod godot_log;
 
 use std::path::{Path, PathBuf};
@@ -149,6 +149,28 @@ struct CoverRequest {
 enum CacheRequest {
     Save(PathBuf, Library),
 }
+
+#[derive(GodotClass)]
+#[class(base = RefCounted)]
+struct DuplicateTrack {
+    #[var]
+    isrc: GString,
+    #[var]
+    tracks: Array<Gd<GodotTrack>>,
+    #[base]
+    base: Base<RefCounted>,
+}
+#[godot_api]
+impl IRefCounted for DuplicateTrack {
+    fn init(base: Base<RefCounted>) -> Self {
+        Self {
+            isrc: GString::default(),
+            tracks: Array::default(),
+            base,
+        }
+    }
+}
+
 
 #[derive(GodotClass)]
 #[class(base = Node)]
@@ -377,6 +399,19 @@ impl MusicTaggerNode {
             });
         });
 
+        out
+    }
+
+    #[func]
+    pub fn get_duplicates(&self) -> Array<Gd<DuplicateTrack>> {
+        let duplicates = crate::library::duplicates::check_duplicates(&self.library.as_ref().unwrap());
+        let mut out = Array::<Gd<DuplicateTrack>>::new();
+        for (key, tracks) in duplicates {
+            let mut dupe = Gd::from_init_fn(|base| DuplicateTrack::init(base));
+            dupe.bind_mut().isrc = GString::from(&key);
+            dupe.bind_mut().tracks = tracks.iter().map(|t| Gd::from_init_fn(|base| GodotTrack::from_track(t.track.clone(), base, false))).collect::<Array<_>>();
+            out.push(&dupe);
+        }
         out
     }
 

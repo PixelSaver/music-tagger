@@ -9,3 +9,4 @@ pub fn read_track_from_file(file: &mut File) -> Result<(Track, TaggedFile)> {
     let track = Track::from_tagged_file(&audio_file)?;
     Ok((track, audio_file))
 }
+
