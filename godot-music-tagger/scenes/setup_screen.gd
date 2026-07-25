@@ -51,7 +51,7 @@ func _setup_dirs() -> void:
 	for child in music_directory_cont.get_children(): child.queue_free()
 	for i in range(dirs.size()):
 		_add_dir(dirs[i])
-func _update_dir(idx:int, dir:String) -> void:
+func _update_dir(dir:String, idx:int) -> void:
 	var m_dirs = Global.menu_manager.music_tagger_node.music_directories
 	if m_dirs.size() <= idx or idx < 0: 
 		push_warning("Update dir idx is outside of Music Directories on MusicTaggerNode: idx=%s" % idx)

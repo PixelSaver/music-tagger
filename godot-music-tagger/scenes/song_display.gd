@@ -6,8 +6,8 @@ class_name SongDisplayPanel
 @export var desc: RichTextLabel
 @export var genre: Genre
 @export var tags: CustomTagsDisplay
-@export var tags_search: CustomTagsDisplay 
-@export var genre_search: Genre 
+@export var fixes: CustomFixesDisplay
+@export var dupe_display: CheckBox
 var _track: GodotTrack = null
 var _cover_texture : ImageTexture
 
@@ -20,7 +20,11 @@ func _ready() -> void:
 	tags.tags_changed.connect(func(_tags:Array[String]):
 		print("Tags changed:", _tags)
 		_track.custom_tags = _tags
-		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _tags)
+		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _track)
+	)
+	fixes.fixes_changed.connect(func(_fixes:Array[String]):
+		_track.set_fixes(_fixes)
+		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _track)
 	)
 	Global.menu_manager.music_tagger_node.loaded_cover_art.connect(_on_cover_art_received)
 
@@ -48,6 +52,8 @@ func display_track(track:GodotTrack) -> void:
 			#if tag.length() <= 0: continue
 			#desc.text += "%s," % tag
 		#desc.text += "\n"
+	dupe_display.button_pressed = track.is_duplicate
+	fixes.set_selected_fixes(track.get_fixes())
 	if track.cover_art != null:
 		cover.texture = ImageTexture.create_from_image(track.cover_art)
 	else:

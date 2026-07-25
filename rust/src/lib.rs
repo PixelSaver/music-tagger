@@ -54,6 +54,10 @@ pub struct GodotTrack {
     pub duration: i32,
     #[var]
     pub custom_tags: Array<GString>,
+    #[var]
+    pub is_duplicate: bool,
+    #[var]
+    pub fixes_needed: Array<MusicFixes>,
     #[base]
     base: Base<RefCounted>,
 }
@@ -73,6 +77,8 @@ impl IRefCounted for GodotTrack {
             genres: Array::<GString>::new(),
             duration: 0,
             custom_tags: Array::<GString>::new(),
+            fixes_needed: Array::<MusicFixes>::new(),
+            is_duplicate: false,
             base,
         }
     }
@@ -80,6 +86,22 @@ impl IRefCounted for GodotTrack {
 #[godot_api]
 impl GodotTrack {
     fn from_track(track: Track, base: Base<RefCounted>, get_cover_art:bool) -> Self {
+        let mut custom_tags = Array::<GString>::new();
+        let mut fixes_needed = Array::<MusicFixes>::new();
+        let mut is_duplicate = false;
+        for tag in &track.custom_tags {
+            let value = tag.value.as_str();
+        
+            if value == "IS_DUPLICATE" {
+                is_duplicate = true;
+            } else if let Some(name) = value.strip_prefix("NEEDSFIX_") {
+                if let Some(fix) = MusicFixes::from_str(name) {
+                    fixes_needed.push(fix);
+                }
+            } else {
+                custom_tags.push(&GString::from(value));
+            }
+        }
         let cover_art = if get_cover_art {
             if let Some(cover_art) = track.cover_art {
                 let mut image = Image::new_gd();
@@ -117,12 +139,72 @@ impl GodotTrack {
                 .map(|genre| GString::from(genre.as_str()))
                 .collect::<Array<GString>>(),
             duration: track.duration as i32,
-            custom_tags: track
-                .custom_tags
-                .iter()
-                .map(|tag| GString::from(tag.value.as_str()))
-                .collect::<Array<GString>>(),
+            custom_tags,
+            fixes_needed,
+            is_duplicate,
             base,
+        }
+    }
+    pub fn get_tags_strings(&self) -> Vec<String> {
+        let mut out = Vec::new();
+        if self.is_duplicate {
+            out.push("IS_DUPLICATE".to_string());
+        }
+        for fix in self.fixes_needed.iter_shared() {
+            out.push(format!("NEEDSFIX_{}", fix.as_str()));
+        }
+        for tag in self.custom_tags.iter_shared() {
+            out.push(tag.to_string());
+        }
+        out
+    }
+    #[func]
+    pub fn get_fixes(&self) -> Array<GString> {
+        self.fixes_needed
+            .iter_shared()
+            .map(|f| GString::from(f.as_str()))
+            .collect()
+    }
+    #[func]
+    pub fn set_fixes(&mut self, fixes: Array<GString>) {
+        self.fixes_needed.clear();
+    
+        for fix in fixes.iter_shared() {
+            if let Some(fix) = MusicFixes::from_str(&fix.to_string()) {
+                self.fixes_needed.push(fix);
+            }
+        }
+    }
+}
+
+#[derive(GodotConvert)]
+#[godot(via = i32)]
+pub enum MusicFixes {
+    Lyrics,
+    Song,
+    Artist,
+    CoverArt,
+    Removal,
+}
+impl MusicFixes {
+    pub fn from_str(s: &str) -> Option<Self> {
+        match s {
+            "Lyrics" => Some(Self::Lyrics),
+            "Song" => Some(Self::Song),
+            "Artist" => Some(Self::Artist),
+            "CoverArt" => Some(Self::CoverArt),
+            "Removal" => Some(Self::Removal),
+            _ => None,
+        }
+    }
+
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Lyrics => "Lyrics",
+            Self::Song => "Song",
+            Self::Artist => "Artist",
+            Self::CoverArt => "CoverArt",
+            Self::Removal => "Removal",
         }
     }
 }
@@ -456,19 +538,19 @@ impl MusicTaggerNode {
         "Track not found.".into()
     }
     #[func]
-    pub fn find_track_write_custom_tags(&mut self, isrc: String, tags: Array<GString>) -> String {
+    pub fn find_track_write_custom_tags(&mut self, isrc: String, changed_track: Gd<GodotTrack>) -> String {
         let library = self.library.as_mut();
         if library.is_none() {
             return "No library loaded / found.".into();
         }
         let library = library.unwrap();
         if let Some(track) = library.find_track_by_isrc(&isrc) {
-            let mut custom_tags: Vec<CustomTag> = Vec::new();
-            let string_tags: Vec<String> = tags.iter_shared().map(|s| s.to_string()).collect();
-            for string in string_tags {
-                custom_tags.push(CustomTag { value: string });
-            }
-            track.track.custom_tags = custom_tags;
+            track.track.custom_tags = changed_track
+                .bind()
+                .get_tags_strings()
+                .iter()
+                .map(|s| CustomTag { value: s.clone() })
+                .collect::<Vec<_>>();
             return match track.write() {
                 Ok(_) => "".into(),
                 Err(e) => e.to_string(),

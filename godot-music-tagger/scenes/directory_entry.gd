@@ -7,7 +7,7 @@ signal delete_pressed
 @onready var delete_button: DefaultButton = $DeleteButton
 
 func _ready() -> void:
-	line_edit.text_changed.connect(func(): text_changed.emit())
+	line_edit.text_changed.connect(func(new_text:String): text_changed.emit(new_text))
 	delete_button.pressed.connect(func(): delete_pressed.emit())
 
 func set_dir(dir:String) -> void:
