@@ -9,6 +9,9 @@ pub enum MusicTaggerError {
     #[error(transparent)]
     Io(#[from] io::Error),
 
+    #[error("Invalid image format: {0}")]
+    InvalidImageFormat(String),
+
     #[error("Path is a directory: {0}")]
     PathIsDirectory(PathBuf),
 

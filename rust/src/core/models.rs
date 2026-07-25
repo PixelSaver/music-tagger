@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct TrackPicture {
     pub data: Vec<u8>,
     pub mime_type: Option<String>,
+    pub colors: Vec<[f32; 3]>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]

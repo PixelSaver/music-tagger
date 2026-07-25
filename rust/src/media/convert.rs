@@ -1,11 +1,13 @@
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
+use image::{DynamicImage, ImageReader};
 use lofty::file::{AudioFile, TaggedFile, TaggedFileExt};
 use lofty::picture::PictureType;
 use lofty::tag::{ItemKey};
 use lofty::config::WriteOptions;
 use crate::error::*;
 use crate::core::models::{CustomTag, Language, Track, TrackLocation, TrackPicture};
+use crate::media::colors;
 // use crate::media::tag;
 use std::fs::OpenOptions;
 
@@ -57,6 +59,7 @@ impl Track {
             .map(|p| TrackPicture {
                 data: p.data().to_vec(),
                 mime_type: p.mime_type().map(|s| s.to_string()),
+                colors: Vec::new(),
             });
         Ok(Track {
             track_title: tag
@@ -139,10 +142,13 @@ impl TrackLocation {
                 .iter()
                 .find(|p| p.pic_type() == PictureType::CoverFront)
                 .or_else(|| tag.pictures().first())
-                .map(|p| TrackPicture {
+                .map(|p| {
+                    TrackPicture {
                     data: p.data().to_vec(),
                     mime_type: p.mime_type().map(|s| s.to_string()),
-                });
+                    colors: Vec::new(),
+                }}
+                );
             if cover.is_none() {
                 return Err(MusicTaggerError::MissingTag);
             }
@@ -174,6 +180,23 @@ impl TrackLocation {
     }
 }
 
+impl TrackPicture {
+    pub fn extract_dominant_colors(&mut self) -> Result<()> {
+        let img = ImageReader::with_format(
+            std::io::Cursor::new(&self.data), 
+            self.mime_type
+                .as_deref()
+                .and_then(|m| image::ImageFormat::from_mime_type(m))
+                .unwrap_or(image::ImageFormat::Png),
+        )
+        .decode()
+        .map_err(|e| MusicTaggerError::InvalidImageFormat(e.to_string()))?;
+        
+        self.colors = colors::get_colors(img);
+        Ok(())
+    }
+}
+
 pub fn get_cover_art(path: PathBuf) -> Result<TrackPicture> {
     let file = lofty::read_from_path(&path)?;
     let tag = file.primary_tag()
@@ -184,9 +207,14 @@ pub fn get_cover_art(path: PathBuf) -> Result<TrackPicture> {
         .iter()
         .find(|p| p.pic_type() == PictureType::CoverFront)
         .or_else(|| tag.pictures().first())
-        .map(|p| TrackPicture {
-            data: p.data().to_vec(),
-            mime_type: p.mime_type().map(|s| s.to_string()),
+        .map(|p| {
+            let mut p = TrackPicture {
+                data: p.data().to_vec(),
+                mime_type: p.mime_type().map(|s| s.to_string()),
+                colors: Vec::new(),
+            };
+            p.extract_dominant_colors();
+            p
         });
     if cover.is_none() {
         return Err(MusicTaggerError::MissingTag);
