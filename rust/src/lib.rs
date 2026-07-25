@@ -426,7 +426,7 @@ impl MusicTaggerNode {
     }
 
     #[func]
-    pub fn search_tracks(&mut self, query: GString, selected_tags: Array<GString>, selected_genres: Array<GString>) -> Array<Gd<GodotTrack>> {
+    pub fn search_tracks(&mut self, query: GString, selected_tags: Array<GString>, selected_genres: Array<GString>, dupes: bool) -> Array<Gd<GodotTrack>> {
         self.searched_track_idxs.clear();
         let mut out = Array::<Gd<GodotTrack>>::new();
         let library = self.library.as_ref();
@@ -436,8 +436,19 @@ impl MusicTaggerNode {
         let library = library.unwrap();
         let tracks = library.tracks.iter().map(|t| &t.track);
 
-        let results = search_tracks(&query.to_string(), &selected_tags.iter_shared().map(|t| t.to_string()).collect::<Vec<_>>(), &selected_genres.iter_shared().map(|g| g.to_string()).collect::<Vec<_>>(), tracks);
+        let mut results: Vec<(&Track, f64)> = search_tracks(&query.to_string(), &selected_tags.iter_shared().map(|t| t.to_string()).collect::<Vec<_>>(), &selected_genres.iter_shared().map(|g| g.to_string()).collect::<Vec<_>>(), tracks);
 
+        if dupes {
+            let mut out = Vec::<(&Track, f64)>::new();
+            let duplicates = crate::library::duplicates::check_duplicates(library);
+            for (track, score) in results {
+                if let Some(_) = duplicates.get(&track.isrc) {
+                    out.push((track, score));
+                }
+            }
+            results = out
+        }
+        
         for (track, _) in results {
             let idx: i32;
             if let Some(library) = &self.library {
@@ -448,11 +459,13 @@ impl MusicTaggerNode {
                     .map(|i| i as i32)
                     .unwrap_or(0);
                 self.searched_track_idxs.push(idx as i32);
-                if let Some(track) = &self.godot_tracks.get(idx as usize) {
-                    out.push(track);
+                if let Some(mut track) = self.godot_tracks.get(idx as usize) {
+                    track.bind_mut().is_duplicate = dupes;
+                    out.push(&track);
                 }
             } else {
-                let gd_track = Gd::from_init_fn(|base| GodotTrack::from_track(track.clone(), base, false));
+                let mut gd_track = Gd::from_init_fn(|base| GodotTrack::from_track(track.clone(), base, false));
+                gd_track.bind_mut().is_duplicate = dupes;
                 out.push(&gd_track);
             }
         }

@@ -16,7 +16,6 @@ where I: IntoIterator<Item = &'a Track>
     let mut buf = Vec::new();
     let mut buf_1 = Vec::new();
     let mut buf_2 = Vec::new();
-    
     let query = Utf32Str::new(query, &mut buf);
     let mut results: Vec<_> = tracks.into_iter()
         .filter(|track| {

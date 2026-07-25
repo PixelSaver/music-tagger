@@ -6,6 +6,7 @@ signal possible_tags(tags:Array[String])
 @export var song_display: SongDisplayPanel
 @export var radial_selector: RadialSelector
 @export var search_man: SearchManager
+@export var settings_button: DefaultButton
 var _displayed_tracks: Array[GodotTrack] = []
 var _genres: Array[String] = []
 var _tags: Array[String] = []
@@ -19,7 +20,10 @@ func _enter_tree() -> void:
 	)
 	search_man.search_query_changed.connect(_on_search)
 	search_man.method_requested.connect(_on_method_req)
-	search_man.dupe_requested.connect(_on_dupe_req)
+	
+	settings_button.pressed.connect(func():
+		Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.SETUP))
+	)
 	
 	if Global.menu_manager.music_tagger_node.has_library():
 		_displayed_tracks = Global.menu_manager.music_tagger_node.get_all_tracks()
@@ -34,7 +38,8 @@ func _enter_tree() -> void:
 func start_anim() -> void: 
 	pass
 
-func end_anim() -> void: pass
+func end_anim() -> void: 
+	queue_free()
 
 func _on_method_req(method:SortByContainer.SortMethod) -> void:
 	if method == SortByContainer.SortMethod.RELEVANT:
@@ -43,11 +48,6 @@ func _on_method_req(method:SortByContainer.SortMethod) -> void:
 		_displayed_tracks = MusicTaggerNode.sort_tracks(_displayed_tracks, method)
 	_set_all_tracks(_displayed_tracks)
 
-func _on_dupe_req(yes:bool) -> void:
-	if yes:
-		var dupes = Global.menu_manager.music_tagger_node.get_duplicates()
-		_displayed_tracks = MusicTaggerNode.dupes_to_tracks(dupes)
-		_set_all_tracks(_displayed_tracks)
 	
 
 func _set_all_tracks(all_tracks: Array[GodotTrack]):
@@ -70,8 +70,8 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	#song_display.set_possible_tags(_tags)
 	
 
-func _on_search(query:String, selected_tags:Array[String], selected_genres:Array[String]) -> void:
-	var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(query, selected_tags, selected_genres)
+func _on_search(query:String, selected_tags:Array[String], selected_genres:Array[String], dupes:bool) -> void:
+	var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(query, selected_tags, selected_genres, dupes)
 	_displayed_tracks = searched_tracks
 	_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
 	radial_selector.scroll_angle = 0.

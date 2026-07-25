@@ -11,8 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://dnbweybcl477d" path="res://scenes/search_filter.tscn" id="7_6l5rq"]
 [ext_resource type="Script" uid="uid://bmlujw2lx4mv6" path="res://scenes/search_manager.gd" id="7_y7qbe"]
 [ext_resource type="Script" uid="uid://su2jjrgrsxbh" path="res://scenes/sort_by.gd" id="9_g0aan"]
+[ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="11_b5doo"]
 
-[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man")]
+[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man", "settings_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,6 +26,7 @@ script = ExtResource("1_nwuve")
 song_display = NodePath("HBoxContainer/MarginContainer/SongDisplay")
 radial_selector = NodePath("HBoxContainer/VBoxContainer/RadialSelector")
 search_man = NodePath("HBoxContainer/VBoxContainer/MarginContainer/SearchManager")
+settings_button = NodePath("HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer/SettingsButton")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=382708563]
@@ -322,11 +324,65 @@ mouse_filter = 1
 [node name="DupeTest" type="CheckBox" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=2140013743]
 layout_mode = 2
 
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=1435740314]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.925
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer2" unique_id=1683585900]
+layout_mode = 2
+alignment = 2
+
+[node name="SettingsButton" type="Button" parent="HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1829825139]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("11_b5doo")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer/SettingsButton" unique_id=1202289048]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="@RichTextLabel@88365" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer/SettingsButton" unique_id=932470789]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "Back to Settings"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Label" type="Label" parent="." unique_id=1685975787]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 55.0
 script = ExtResource("6_b1chm")
+
+[connection signal="possible_genres" from="." to="HBoxContainer/MarginContainer/SongDisplay" method="_on_possible_genres"]
+[connection signal="possible_genres" from="." to="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" method="_on_possible_genres"]
+[connection signal="possible_tags" from="." to="HBoxContainer/MarginContainer/SongDisplay" method="_on_possible_tags"]
+[connection signal="possible_tags" from="." to="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" method="_on_possible_tags"]
 
 [editable path="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/TagsSearch"]
 [editable path="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/GenreSearch"]
