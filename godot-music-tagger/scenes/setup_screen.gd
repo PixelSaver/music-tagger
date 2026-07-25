@@ -6,7 +6,8 @@ const DIRECTORY_ENTRY = preload("res://scenes/directory_entry.tscn")
 @export var music_directory_cont: VBoxContainer 
 @export var add_dir_but: DefaultButton
 @export var cache_dir: LineEdit
-@export var scan_button: DefaultButton
+@export var scan_cache_button: DefaultButton
+@export var force_scan_button: DefaultButton
 var dir_entries : Array[DirectoryEntry] = []
 
 func _ready() -> void:
@@ -15,12 +16,30 @@ func _ready() -> void:
 	#mt.error.connect(_status)
 	#mt.scan_progress.connect(_status)
 	#mt.track_found.connect(_status)
-	scan_button.pressed.connect(_on_scan_but_pressed)
+	scan_cache_button.pressed.connect(_on_scan_but_pressed)
+	force_scan_button.pressed.connect(_on_force_scan_but_pressed)
 	add_dir_but.pressed.connect(_add_dir)
 	cache_dir.placeholder_text = Global.menu_manager.music_tagger_node.cache_directory
 	cache_dir.text_submitted.connect(_on_cache_submit)
 	#cache_dir.focus_entered.connect(_on_cache_focused)
 	#cache_dir.focus_exited.connect(_on_cache_unfocused)
+
+func _on_force_scan_but_pressed() -> void:
+	var dirs: Array[String] = []
+	for child in music_directory_cont.get_children():
+		var dir = child as DirectoryEntry
+		dirs.append(dir.get_dir())
+		dir.tree_exiting.connect(func():
+			dir_entries.erase(dir)
+		)
+	#SignalBus.scan.emit()
+	var result = _force_scan()
+	if !result:
+		print("Awaiting")
+		await Global.menu_manager.music_tagger_node.library_scanned
+		print("Fnished")
+	Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
+	
 
 func _on_scan_but_pressed() -> void:
 	var dirs: Array[String] = []
@@ -84,6 +103,13 @@ func _try_cache_or_scan() -> bool:
 		print("Scan result: %s" % Global.menu_manager.music_tagger_node.scan_directory(Global.menu_manager.music_tagger_node.music_directories[0]))
 	Global.menu_manager.has_library = true
 	return result
+func _force_scan() -> bool:
+	for dir in Global.menu_manager.music_tagger_node.music_directories:
+		print("Music dir: %s" % dir)
+	var result = Global.menu_manager.music_tagger_node.scan_directory(Global.menu_manager.music_tagger_node.music_directories[0])
+	print("Scan result: %s" % result)
+	Global.menu_manager.has_library = true
+	return not result.is_empty()
 
 func start_anim() -> void: 
 	_setup_dirs()

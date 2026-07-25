@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="2_j878g"]
 [ext_resource type="PackedScene" uid="uid://b3lrxeqo3o0kr" path="res://scenes/directory_entry.tscn" id="2_kt6hf"]
 
-[node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_button")]
+[node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_cache_button", "force_scan_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,8 @@ script = ExtResource("1_74idx")
 music_directory_cont = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/MusicDirectoryCont")
 add_dir_but = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer/AddDirectoryButton")
 cache_dir = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/CacheLineEdit")
-scan_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2/GoNext")
+scan_cache_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2/GoNext")
+force_scan_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2/ForceScan")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1169056325]
@@ -190,6 +191,40 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.12
 mouse_filter = 1
+
+[node name="ForceScan" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1734595765]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2/ForceScan" unique_id=545175949]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2/ForceScan" unique_id=1566409938]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]Force Scan"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="GoNext" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=254766802]
 custom_minimum_size = Vector2(300, 50)
