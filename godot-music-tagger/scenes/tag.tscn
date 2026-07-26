@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dc88y83kb1vgw"]
+
+[ext_resource type="Script" uid="uid://duwi1pwm44fdq" path="res://scenes/tag.gd" id="1_r78br"]
+
+[node name="Tag" type="Label" unique_id=1701523425 node_paths=PackedStringArray("panel")]
+theme_override_font_sizes/font_size = 18
+text = "testsadfasdfasdf"
+script = ExtResource("1_r78br")
+panel = NodePath("Panel")
+
+[node name="Panel" type="Panel" parent="." unique_id=302286828]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_right = 5.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2

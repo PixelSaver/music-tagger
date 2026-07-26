@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://bmekf355e5l0s" path="res://scenes/label.gd" id="6_b1chm"]
 [ext_resource type="PackedScene" uid="uid://dnbweybcl477d" path="res://scenes/search_filter.tscn" id="7_6l5rq"]
 [ext_resource type="Script" uid="uid://bmlujw2lx4mv6" path="res://scenes/search_manager.gd" id="7_y7qbe"]
+[ext_resource type="PackedScene" uid="uid://blipa3hnb57dl" path="res://scenes/h_song_display.tscn" id="8_beyge"]
 [ext_resource type="Script" uid="uid://su2jjrgrsxbh" path="res://scenes/sort_by.gd" id="9_g0aan"]
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="11_b5doo"]
 
@@ -221,19 +222,16 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 script = ExtResource("3_hcd5l")
 selector = NodePath("Selector")
-offset = Vector2(520, -13)
 radius = 1300.0
 separation = 100.0
 circle_center = Vector2(-1100, 0)
 flip = true
-target_scroll_angle = 0.07694205481465664
 drag_sensitivity = 0.0005
 scroll_bar = NodePath("VScrollBar")
 excluded = [NodePath("Selector"), null, NodePath("VScrollBar")]
 metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 
 [node name="Selector" type="Control" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=930231776]
-visible = false
 layout_mode = 2
 mouse_filter = 1
 
@@ -243,8 +241,14 @@ layout_mode = 0
 offset_top = -50.0
 offset_right = 1000.0
 offset_bottom = 50.0
+offset_transform_enabled = true
+offset_transform_position_ratio = Vector2(-0.5, 0)
+offset_transform_scale = Vector2(1.05, 1.4)
 mouse_filter = 1
 color = Color(0.27058825, 0.22745098, 1, 0.21960784)
+
+[node name="HSongDisplay" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=1185563949 instance=ExtResource("8_beyge")]
+layout_mode = 2
 
 [node name="VScrollBar" type="VScrollBar" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=877659560]
 z_index = 100

@@ -1,6 +1,8 @@
 extends PixelMenu
 class_name InspectLibraryScene
 
+const H_TRACK_DISPLAY = preload("res://scenes/h_song_display.tscn")
+
 signal possible_genres(genres:Array[String])
 signal possible_tags(tags:Array[String])
 @export var song_display: SongDisplayPanel
@@ -55,12 +57,16 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 		if child is RichTextLabel: child.queue_free()
 	#await get_tree().process_frame
 	for track in all_tracks:
-		var label = RichTextLabel.new()
-		label.custom_minimum_size = Vector2(1000, 100)
-		label.text = track.track_title
-		label.mouse_filter = Control.MOUSE_FILTER_PASS
-		label.visible = false
-		radial_selector.add_child(label)
+		#var label = RichTextLabel.new()
+		#label.custom_minimum_size = Vector2(1000, 100)
+		#label.text = track.track_title
+		#label.mouse_filter = Control.MOUSE_FILTER_PASS
+		#label.visible = false
+		#radial_selector.add_child(label)
+		var display = H_TRACK_DISPLAY.instantiate() as HTrackDisplay
+		display.display_track(track)
+		radial_selector.add_child(display)
+	
 	_genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	_tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()
 	radial_selector.scroll_to_index(0)
