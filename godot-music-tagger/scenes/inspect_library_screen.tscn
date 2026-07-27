@@ -225,6 +225,7 @@ radius = 1300.0
 separation = 100.0
 circle_center = Vector2(-1100, 0)
 flip = true
+visibility_window = 10
 drag_sensitivity = 0.0005
 scroll_bar = NodePath("VScrollBar")
 excluded = [NodePath("Selector"), null, NodePath("VScrollBar")]

@@ -1,13 +1,11 @@
 @tool
 extends Container
 
-## Osu-like container to scroll through options
-class_name RadialContainer
+class_name VirtualizedRadialContainer
 
 signal selected_item_changed(idx: int)
+signal bind_item(control:Control, idx:int)
 
-var _current_selected_idx := -1
-var _last_scrolled_angle : float = INF
 
 @export var radius := 100.0:
 	set(val):
@@ -33,15 +31,19 @@ var _last_scrolled_angle : float = INF
 		queue_sort()
 		if Engine.is_editor_hint():
 			_update_children()
+@export var item_count: int = 0:
+	set(val):
+		item_count = max(val, 0)
+		_recalculate_pool_size()
+		queue_sort()
+@export var visibility_window := 15:
+	set(val):
+		visibility_window = max(val, 0)
+		_recalculate_pool_size()
+		queue_sort()
 @export var target_scroll_angle := 0.0:
 	set(val):
 		target_scroll_angle = val
-		queue_sort()
-		if Engine.is_editor_hint():
-			_update_children()
-@export var visibility_window := 15 :
-	set(val):
-		visibility_window = val
 		queue_sort()
 		if Engine.is_editor_hint():
 			_update_children()
@@ -59,8 +61,12 @@ var _last_scrolled_angle : float = INF
 @export_category("Container Exclusion")
 @export var excluded: Array[Node] = []
 @export var max_lerp_cooldown := 0.6
-var current_children: Array[Control] = []
+
 var scroll_angle := 0.0
+var _pool: Array[Control] = []
+var _pool_start_idx := 0
+var _current_selected_idx := -1
+var _last_scrolled_angle : float = INF
 var _previous_start: int = INT32_MAX
 var _previous_end: int = INT32_MIN
 var _lerp_cooldown: float
@@ -69,12 +75,44 @@ var _lerp_cooldown: float
 var _dragging := false
 var _last_mouse_pos := Vector2.ZERO
 
+#region Public stuff
+func get_children_count() -> int:
+	return item_count
+
+func add_pool_control(control:Control) -> void:
+	control.visible = false
+	_pool.append(control)
+	add_child(control)
+
+func clear_pool() -> void:
+	for child in _pool:
+		child.queue_free()
+	_pool.clear()
+
+
+func scroll_to_index(idx: int):
+	if item_count <= 0:
+		return
+	idx = clampi(idx, 0, item_count - 1)
+	target_scroll_angle = -idx * get_theta()
+
+func get_closest_idx() -> int:
+	if item_count <= 0:
+		return -1
+
+	var idx = round(-(scroll_angle) / get_theta())
+	return clampi(idx, 0, item_count - 1)
+
+#endregion
+
+#region initialization
 func _enter_tree() -> void:
 	if !scroll_bar: 
 		scroll_bar = VScrollBar.new()
 		add_child(scroll_bar)
 		excluded.append(scroll_bar)
 	scroll_bar.z_index = 100
+
 
 func _ready() -> void:
 	self.scroll_angle = 0
@@ -83,58 +121,65 @@ func _ready() -> void:
 	scroll_bar.scrolling.connect(func():
 		self.scroll_to_index(int(scroll_bar.value))
 	)
+	_recalculate_pool_size()
 	self.child_entered_tree.connect(func(node:Node):
 		if node is not Control: return
 		if excluded.has(node): return
-		current_children.append(node)
-		move_child(scroll_bar, get_child_count() - 1)
-		selected_item_changed.emit(get_closest_idx())
+		if not _pool.has(node):
+			_pool.append(node)
+			_recalculate_pool_size()
 	)
 	self.child_exiting_tree.connect(func(node:Node):
-		if current_children.has(node): 
-			current_children.erase(node)
-		selected_item_changed.emit(get_closest_idx())
+		if _pool.has(node):
+			_pool.erase(node)
 	)
-	for child in get_children():
-		if not child is Control: continue
-		if excluded.has(child): continue
-		child.visible = false
-		current_children.append(child)
+#endregion
 
-func _update_scrollbar():
-	if scroll_bar == null or Engine.is_editor_hint():
+#region Pool stuff
+func _get_required_pool_size() -> int:
+	if item_count <= 0:
+		return 0
+	return min(
+		item_count,
+		visibility_window * 2 + 1
+	)
+
+
+func _recalculate_pool_size() -> void:
+	var req := _get_required_pool_size()
+	
+	if req == _pool.size():
 		return
-	var count := _get_layout_children().size()
-	scroll_bar.visible = count > visibility_window
-	if !scroll_bar.visible:
+	
+	if req < _pool.size():
+		while _pool.size() > req:
+			var child = _pool.pop_back() as Control
+			if child: child.queue_free()
+	else:
+		push_warning("Radial container requires %s controls but only has %s" % [req, _pool.size()])
+	
+	_update_children()
+
+func _bind_pool_item(pool_idx:int, item_idx:int) -> void:
+	if pool_idx < 0 or pool_idx >= _pool.size(): return
+	
+	var control := _pool[pool_idx]
+	
+	if item_idx < 0 or item_idx >= item_count:
+		control.hide()
 		return
-	scroll_bar.min_value = 0
-	scroll_bar.max_value = max(0, count - 1)
-	scroll_bar.page = visibility_window
-	scroll_bar.set_value_no_signal(get_closest_idx())
+	
+	control.show()
+	
+	bind_item.emit(control, item_idx)
 
-func _notification(what):
-	if what == NOTIFICATION_SORT_CHILDREN:
-		_update_children()
-
-func _get_layout_children() -> Array[Control]:
-	return current_children
-	#var result: Array[Control] = []
-	#for child in get_children():
-		#if not child is Control:
-			#continue
-		#if excluded.has(child):
-			#continue
-		#result.append(child)
-	#return result
+#endregion
 
 
 func _process(delta: float) -> void:
-	var children = _get_layout_children()
-	if children.size() <= 1:
-		return
-
-	var min_limit = -(children.size() - 1) * get_theta()
+	if item_count <= 0: return
+	
+	var min_limit = -(item_count - 1) * get_theta()
 	var max_limit = 0.0
 
 	var is_overshooting = target_scroll_angle > max_limit or target_scroll_angle < min_limit
@@ -142,21 +187,82 @@ func _process(delta: float) -> void:
 	if is_overshooting:
 		var target = clampf(target_scroll_angle, min_limit, max_limit)
 		target_scroll_angle = lerpf(target_scroll_angle, target, delta * 10.0)
-
+		
 	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 5.0)
+	
 	if !(abs(scroll_angle - _last_scrolled_angle) < .000001) or !(abs(target_scroll_angle - scroll_angle) < .00001):
-		_update_children(children)
+		_update_children()
 		_update_scrollbar()
+		
 	var idx := get_closest_idx()
 	if idx != _current_selected_idx:
 		_current_selected_idx = idx
 		selected_item_changed.emit(idx)
 		
 	if Engine.is_editor_hint(): return
+	
 	_lerp_cooldown -= delta
 	if _lerp_cooldown < 0.0:
 		lerp_to_closest()
 	_last_scrolled_angle = scroll_angle
+
+
+func _update_scrollbar():
+	if scroll_bar == null or Engine.is_editor_hint():
+		return
+	
+	scroll_bar.visible = item_count > visibility_window
+	if !scroll_bar.visible:
+		return
+	scroll_bar.min_value = 0
+	scroll_bar.max_value = max(0, item_count - 1)
+	scroll_bar.page = visibility_window
+	scroll_bar.set_value_no_signal(get_closest_idx())
+
+func _update_children():
+	if _pool.is_empty(): return
+	if scroll_bar:
+		var width := 12.0
+		scroll_bar.position = Vector2(size.x - width, 0)
+		scroll_bar.size = Vector2(width, size.y)
+	
+	var theta = get_theta()
+	var center = get_actual_center()
+	var closest_idx = get_closest_idx()
+	if closest_idx < 0: return
+	
+	var start = maxi(closest_idx - visibility_window, 0)
+	var end = mini(closest_idx + visibility_window + 1, item_count)
+	_pool_start_idx = start
+	
+	for i in range(_pool.size()):
+		var true_idx: int = start + i
+		if true_idx >= end:
+			_pool[i].hide()
+			continue
+		_bind_pool_item(i, true_idx)
+		var child = _pool[i]
+		
+		var current_angle = scroll_angle + (true_idx * theta)
+		var angle_dist = abs(current_angle)
+		if flip:
+			current_angle = PI - current_angle
+		var pos = center + Vector2(cos(current_angle), sin(current_angle)) * radius
+
+		var dist = angle_dist / theta
+		var _scale = pow(1.0 / (1.0 + dist * scale_multiplier), 1.5)
+		#child.pivot_offset_ratio = Vector2(0.0, 0.5) if not flip else Vector2(1.0, 0.5)
+		child.pivot_offset_ratio = Vector2(0.0, 0.5) if flip else Vector2(1.0, 0.5)
+		var child_size = child.get_combined_minimum_size()
+		fit_child_in_rect(child, Rect2(pos - (child_size / 2.0), child_size))
+		child.scale = Vector2(_scale, _scale)
+
+
+
+func _notification(what):
+	if what == NOTIFICATION_SORT_CHILDREN:
+		_update_children()
+
 
 
 ## Angle separation between two children
@@ -165,8 +271,7 @@ func get_theta() -> float:
 
 
 func get_closest_position() -> Vector2:
-	var children = _get_layout_children()
-	if children.is_empty():
+	if _pool.is_empty():
 		return global_position
 
 	var theta = get_theta()
@@ -181,93 +286,31 @@ func get_closest_position() -> Vector2:
 	return center + Vector2(cos(angle), sin(angle)) * radius
 
 
-func scroll_to_index(idx: int):
-	var children = _get_layout_children()
-	idx = clamp(idx, 0, children.size() - 1)
-	target_scroll_angle = -idx * get_theta()
 
-
-func scroll_to_child(child: Control):
-	var children = _get_layout_children()
-	var idx := children.find(child)
-	if idx != -1:
-		scroll_to_index(idx)
-		_on_scrolled()
-
-
-func get_closest_idx() -> int:
-	var theta = get_theta()
-	var children = _get_layout_children()
-	if children.is_empty():
-		return -1
-
-	var idx = round(-(scroll_angle) / theta)
-	idx = clampi(idx, 0, children.size() - 1)
-	return idx
+#func scroll_to_child(child: Control):
+	#var children = _get_layout_children()
+	#var idx := children.find(child)
+	#if idx != -1:
+		#scroll_to_index(idx)
+		#_on_scrolled()
 
 
 func lerp_to_closest():
+	if item_count <= 0: return
 	var theta = get_theta()
-	var children = _get_layout_children()
-	if children.is_empty():
-		return
-
+	
 	var idx = round(-scroll_angle / theta)
-	idx = clampi(idx, 0, children.size() - 1)
-
+	idx = clampi(idx, 0, item_count - 1)
+	
 	var snap = -idx * theta
 	target_scroll_angle = lerpf(target_scroll_angle, snap, 0.03)
 
 
-func _update_children(children:Array[Control]=[]):
-	if children.size() == 0: children = _get_layout_children()
-	if children.size() == 0: return
-	if scroll_bar:
-		var width := 12.0
-		scroll_bar.position = Vector2(size.x - width, 0)
-		scroll_bar.size = Vector2(width, size.y)
-	
-	var theta = get_theta()
-	var center = get_actual_center()
-	
-	var closest_idx = get_closest_idx()
-	if closest_idx == -1: return
-	var start = max(closest_idx - visibility_window, 0)
-	var end = min(closest_idx + visibility_window, children.size())
-	
-	var window_start = max(min(start, _previous_start), 0)
-	var window_end = min(max(end, _previous_end), children.size())
-	_previous_start = start
-	_previous_end = end
-	
-	for i in range(window_start, window_end):
-		children[i].visible = (start <= i && i < end)
-	
-	for i in range(start, end):
-		var child = children[i]
-		var current_angle = scroll_angle + (i * theta)
-		# Distance from selected idx# angular distance from center
-		var angle_dist = abs(current_angle)
-		if flip:
-			current_angle = PI - current_angle
-		var pos = center + Vector2(cos(current_angle), sin(current_angle)) * radius
-
-		var dist = angle_dist / theta
-		var _scale = pow(1.0 / (1.0 + dist * scale_multiplier), 1.5)
-		#child.pivot_offset_ratio = Vector2(0.0, 0.5) if not flip else Vector2(1.0, 0.5)
-		child.pivot_offset_ratio = Vector2(0.0, 0.5) if flip else Vector2(1.0, 0.5)
-		var child_size = child.get_combined_minimum_size()
-		fit_child_in_rect(child, Rect2(pos - (child_size / 2.0), child_size))
-		child.scale = Vector2(_scale, _scale)
-
-func get_children_count() -> int:
-	return _get_layout_children().size()
-
-
 func _gui_input(event: InputEvent) -> void:
+	if item_count <= 0: return
 	var scroll_strength = 0.05
 	var boost = clampf(exp(1.5*scroll_accel*abs(target_scroll_angle - scroll_angle)), 1, 5)
-	if target_scroll_angle > 0 or target_scroll_angle < -(_get_layout_children().size() - 1) * get_theta():
+	if target_scroll_angle > 0 or target_scroll_angle < -(item_count - 1) * get_theta():
 		scroll_strength = 0.025
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -304,5 +347,10 @@ func get_actual_center() -> Vector2:
 	return center
 
 
-func get_current_child() -> Node:
-	return _get_layout_children()[get_closest_idx()]
+func get_current_control() -> Control:
+	var idx := get_closest_idx()
+	if idx < 0: return null
+	var pool_idx = idx - _pool_start_idx
+	if pool_idx < 0 or pool_idx >= _pool.size(): return null
+	return _pool[pool_idx]
+	

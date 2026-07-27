@@ -15,14 +15,10 @@ var _tags: Array[String] = []
 var _idxs: Array[int] = []
 var _selected_idx: int = 0
 
-var _virtual_idx: int = 0
-var _pool: Array[HTrackDisplay] = []
-var _pool_capacity := 0
-
 func _enter_tree() -> void:
 	radial_selector.selected_item_changed.connect(func(idx:int): 
-		_selected_idx = idx + _virtual_idx
-		call_deferred("_on_selection_changed_and_pool")
+		_selected_idx = idx
+		call_deferred("_on_selection_changed")
 	)
 	search_man.search_query_changed.connect(_on_search)
 	search_man.method_requested.connect(_on_method_req)
@@ -46,11 +42,7 @@ func start_anim() -> void:
 
 func end_anim() -> void: 
 	queue_free()
-
-func _on_selection_changed_and_pool() -> void:
-	_update_pool_for_selected_index()
-	_on_selection_changed()
-
+	
 func _on_selection_changed() -> void:
 	if _displayed_tracks.size() > 0:
 		song_display.display_track(_displayed_tracks[_selected_idx])
@@ -63,41 +55,20 @@ func _on_selection_changed() -> void:
 	#var track = Global.menu_manager.music_tagger_node.get_track_at(track_idx)
 	
 
+
 func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	_displayed_tracks = all_tracks
-	
-	for child in radial_selector.get_children(): 
-		if child is RichTextLabel or child is HTrackDisplay: child.queue_free()
-	_pool.clear()
-	
-	# how many pooled items needed
-	#var vw: int = radial_selector.visibility_window
-	var vw = 1
-	_pool_capacity = min(_displayed_tracks.size(), vw*2 + 1)
-	if _pool_capacity <= 0: 
-		push_warning("Pool capacity is <= 0")
-		return
-	
-	for i in range(_pool_capacity):
-		var display := H_TRACK_DISPLAY.instantiate() as HTrackDisplay
-		display.visible = false
-		_pool.append(display)
-		radial_selector.add_child(display)
-	
-	radial_selector.scroll_to_index(0)
-	_update_pool_for_selected_index()
-	
-	#for track in all_tracks:
-		#var label = RichTextLabel.new()
-		#label.custom_minimum_size = Vector2(1000, 100)
-		#label.text = track.track_title
-		#label.mouse_filter = Control.MOUSE_FILTER_PASS
-		#label.visible = false
-		#radial_selector.add_child(label)
-		
-		#var display = H_TRACK_DISPLAY.instantiate() as HTrackDisplay
+	radial_selector.clear_pool()
+	var pool_size := mini(
+		all_tracks.size(),
+		radial_selector.visibility_window * 2 + 5
+	)
+	for i in range(pool_size):
+		var display = H_TRACK_DISPLAY.instantiate() as HTrackDisplay
 		#display.display_track(track)
-		#radial_selector.add_child(display)
+		radial_selector.add_pool_control(display)
+	radial_selector.item_count = _displayed_tracks.size()
+	radial_selector.bind_item.connect(_on_bind_track)
 	
 	_genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	_tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()
@@ -107,27 +78,10 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	possible_tags.emit(_tags)
 	#song_display.set_possible_tags(_tags)
 
-func _update_pool_for_selected_index() -> void:
-	if _displayed_tracks.is_empty() or _pool.is_empty():
-		push_warning("Displayed tracks or pool was empty")
-		return
-	
-	var idx := radial_selector.get_closest_idx() + _virtual_idx
-	if idx < 0: 
-		return
-	
-	#var vw := radial_selector.visibility_window
-	var vw: int = 1
-	var start_idx := idx - vw
-	for i in range(_pool.size()):
-		var track_idx : int = start_idx + i
-		
-		var d := _pool[i]
-		if track_idx >= 0 and track_idx < _displayed_tracks.size():
-			d.display_track(_displayed_tracks[track_idx])
-			#d.visible = true
-		#else:
-			#d.visible = false
+func _on_bind_track(control:Control, idx:int) -> void:
+	var display := control as HTrackDisplay
+	if not display: return
+	display.display_track(_displayed_tracks[idx])
 
 #region Searching 
 func _on_method_req(method:SortByContainer.SortMethod) -> void:
