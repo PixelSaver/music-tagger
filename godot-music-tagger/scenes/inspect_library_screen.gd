@@ -16,6 +16,7 @@ var _idxs: Array[int] = []
 var _selected_idx: int = 0
 
 func _enter_tree() -> void:
+	radial_selector.bind_item.connect(_on_bind_track)
 	radial_selector.selected_item_changed.connect(func(idx:int): 
 		_selected_idx = idx
 		call_deferred("_on_selection_changed")
@@ -68,7 +69,6 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 		#display.display_track(track)
 		radial_selector.add_pool_control(display)
 	radial_selector.item_count = _displayed_tracks.size()
-	radial_selector.bind_item.connect(_on_bind_track)
 	
 	_genres = Global.menu_manager.music_tagger_node.get_all_genres()
 	_tags = Global.menu_manager.music_tagger_node.get_all_custom_tags()

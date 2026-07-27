@@ -122,17 +122,17 @@ func _ready() -> void:
 		self.scroll_to_index(int(scroll_bar.value))
 	)
 	_recalculate_pool_size()
-	self.child_entered_tree.connect(func(node:Node):
-		if node is not Control: return
-		if excluded.has(node): return
-		if not _pool.has(node):
-			_pool.append(node)
-			_recalculate_pool_size()
-	)
-	self.child_exiting_tree.connect(func(node:Node):
-		if _pool.has(node):
-			_pool.erase(node)
-	)
+	#self.child_entered_tree.connect(func(node:Node):
+		#if node is not Control: return
+		#if excluded.has(node): return
+		#if not _pool.has(node):
+			#_pool.append(node)
+			#_recalculate_pool_size()
+	#)
+	#self.child_exiting_tree.connect(func(node:Node):
+		#if _pool.has(node):
+			#_pool.erase(node)
+	#)
 #endregion
 
 #region Pool stuff
@@ -154,11 +154,12 @@ func _recalculate_pool_size() -> void:
 	if req < _pool.size():
 		while _pool.size() > req:
 			var child = _pool.pop_back() as Control
+			if !is_instance_valid(child): continue
 			if child: child.queue_free()
 	else:
 		push_warning("Radial container requires %s controls but only has %s" % [req, _pool.size()])
 	
-	_update_children()
+	#_update_children()
 
 func _bind_pool_item(pool_idx:int, item_idx:int) -> void:
 	if pool_idx < 0 or pool_idx >= _pool.size(): return
@@ -171,6 +172,9 @@ func _bind_pool_item(pool_idx:int, item_idx:int) -> void:
 	
 	control.show()
 	
+	call_deferred("_bind_emit", control, item_idx)
+
+func _bind_emit(control:Control, item_idx:int): 
 	bind_item.emit(control, item_idx)
 
 #endregion
@@ -214,9 +218,10 @@ func _update_scrollbar():
 	scroll_bar.visible = item_count > visibility_window
 	if !scroll_bar.visible:
 		return
+	var vw = visibility_window * 2 + 1
 	scroll_bar.min_value = 0
-	scroll_bar.max_value = max(0, item_count - 1)
-	scroll_bar.page = visibility_window
+	scroll_bar.max_value = max(0, item_count - 1 + vw)
+	scroll_bar.page = vw
 	scroll_bar.set_value_no_signal(get_closest_idx())
 
 func _update_children():
