@@ -67,9 +67,10 @@ var _pool: Array[Control] = []
 var _pool_start_idx := 0
 var _current_selected_idx := -1
 var _last_scrolled_angle : float = INF
-var _previous_start: int = INT32_MAX
-var _previous_end: int = INT32_MIN
+#var _previous_start: int = INT32_MAX
+#var _previous_end: int = INT32_MIN
 var _lerp_cooldown: float
+var _bound_item_idx: Array[int] = []
 
 # Dragging
 var _dragging := false
@@ -133,6 +134,9 @@ func _ready() -> void:
 		#if _pool.has(node):
 			#_pool.erase(node)
 	#)
+	_bound_item_idx.resize(_pool.size())
+	for i in _bound_item_idx.size():
+		_bound_item_idx[i] = -1
 #endregion
 
 #region Pool stuff
@@ -162,17 +166,23 @@ func _recalculate_pool_size() -> void:
 	#_update_children()
 
 func _bind_pool_item(pool_idx:int, item_idx:int) -> void:
-	if pool_idx < 0 or pool_idx >= _pool.size(): return
-	
 	var control := _pool[pool_idx]
 	
 	if item_idx < 0 or item_idx >= item_count:
 		control.hide()
 		return
 	
-	control.show()
+	if _bound_item_idx[pool_idx] == item_idx:
+		control.show()
+		return
 	
-	call_deferred("_bind_emit", control, item_idx)
+	if item_idx < 0 or item_idx >= item_count:
+		control.hide()
+		return
+	
+	_bound_item_idx[pool_idx] = item_idx
+	control.show()
+	_bind_emit(control, item_idx)
 
 func _bind_emit(control:Control, item_idx:int): 
 	bind_item.emit(control, item_idx)
@@ -220,7 +230,7 @@ func _update_scrollbar():
 		return
 	var vw = visibility_window * 2 + 1
 	scroll_bar.min_value = 0
-	scroll_bar.max_value = max(0, item_count - 1 + vw)
+	scroll_bar.max_value = max(0, item_count - 1 + vw) 
 	scroll_bar.page = vw
 	scroll_bar.set_value_no_signal(get_closest_idx())
 
