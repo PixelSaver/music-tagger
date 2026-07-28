@@ -6,12 +6,38 @@
 [ext_resource type="Script" uid="uid://t0ff5c4bnvt0" path="res://scenes/genre.gd" id="3_2or6q"]
 [ext_resource type="Script" uid="uid://oxrd0gxs4rx6" path="res://utilities/ui/radial_selector.gd" id="3_hcd5l"]
 [ext_resource type="Script" uid="uid://cvtd786wu1m2s" path="res://scenes/custom_tags.gd" id="4_2or6q"]
+[ext_resource type="Texture2D" uid="uid://b2oese3sm7bus" path="res://assets/icon.svg" id="4_beyge"]
 [ext_resource type="Script" uid="uid://bxrv4fc7sivq7" path="res://scenes/fixes_display.gd" id="6_8083s"]
 [ext_resource type="Script" uid="uid://bmekf355e5l0s" path="res://scenes/label.gd" id="6_b1chm"]
 [ext_resource type="PackedScene" uid="uid://dnbweybcl477d" path="res://scenes/search_filter.tscn" id="7_6l5rq"]
 [ext_resource type="Script" uid="uid://bmlujw2lx4mv6" path="res://scenes/search_manager.gd" id="7_y7qbe"]
 [ext_resource type="Script" uid="uid://su2jjrgrsxbh" path="res://scenes/sort_by.gd" id="9_g0aan"]
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="11_b5doo"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gkedh"]
+blend_mode = 3
+light_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i4hns"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.12882978, 0.1288298, 0.12882969, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man", "settings_button")]
 layout_mode = 3
@@ -89,7 +115,18 @@ theme_override_constants/margin_bottom = 0
 
 [node name="Picture" type="TextureRect" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer" unique_id=551163036]
 layout_mode = 2
+texture = ExtResource("4_beyge")
 expand_mode = 5
+
+[node name="Panel" type="Panel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/Picture" unique_id=1620846077]
+material = SubResource("CanvasItemMaterial_gkedh")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i4hns")
 
 [node name="Description" type="RichTextLabel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1656760021]
 layout_mode = 2

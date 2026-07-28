@@ -66,7 +66,6 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	)
 	for i in range(pool_size):
 		var display = H_TRACK_DISPLAY.instantiate() as HTrackDisplay
-		#display.display_track(track)
 		radial_selector.add_pool_control(display)
 	radial_selector.item_count = _displayed_tracks.size()
 	
