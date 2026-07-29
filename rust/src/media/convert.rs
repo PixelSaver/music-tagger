@@ -59,13 +59,15 @@ impl Track {
             .map(|p| TrackPicture {
                 data: p.data().to_vec(),
                 mime_type: p.mime_type().map(|s| s.to_string()),
-                colors: Vec::new(),
             });
-        let cover = if let Some(mut pic) = cover {
-            pic.extract_dominant_colors().ok();
-            Some(pic)
+        let palette = if let Some(pic) = &cover {
+            if let Ok(cols) = pic.extract_dominant_colors() {
+                cols
+            } else {
+                Vec::new()
+            }
         } else {
-            None
+            Vec::new()
         };
         Ok(Track {
             track_title: tag
@@ -89,6 +91,7 @@ impl Track {
                 .unwrap_or_default()
                 .to_owned(),
             cover_art: cover,
+            palette,
             copyright_message: tag
                 .get_string(ItemKey::CopyrightMessage)
                 .unwrap_or_default()
@@ -152,7 +155,6 @@ impl TrackLocation {
                     TrackPicture {
                     data: p.data().to_vec(),
                     mime_type: p.mime_type().map(|s| s.to_string()),
-                    colors: Vec::new(),
                 }}
                 );
             if cover.is_none() {
@@ -187,7 +189,7 @@ impl TrackLocation {
 }
 
 impl TrackPicture {
-    pub fn extract_dominant_colors(&mut self) -> Result<()> {
+    pub fn extract_dominant_colors(&self) -> Result<Vec<[f32; 3]>> {
         let img = ImageReader::with_format(
             std::io::Cursor::new(&self.data), 
             self.mime_type
@@ -198,8 +200,7 @@ impl TrackPicture {
         .decode()
         .map_err(|e| MusicTaggerError::InvalidImageFormat(e.to_string()))?;
         
-        self.colors = colors::get_colors(img);
-        Ok(())
+        Ok(colors::get_colors(img))
     }
 }
 
@@ -214,12 +215,10 @@ pub fn get_cover_art(path: PathBuf) -> Result<TrackPicture> {
         .find(|p| p.pic_type() == PictureType::CoverFront)
         .or_else(|| tag.pictures().first())
         .map(|p| {
-            let mut p = TrackPicture {
+            let p = TrackPicture {
                 data: p.data().to_vec(),
                 mime_type: p.mime_type().map(|s| s.to_string()),
-                colors: Vec::new(),
             };
-            p.extract_dominant_colors().ok();
             p
         });
     if cover.is_none() {

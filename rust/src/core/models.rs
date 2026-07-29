@@ -10,7 +10,6 @@ use serde::{Deserialize, Serialize};
 pub struct TrackPicture {
     pub data: Vec<u8>,
     pub mime_type: Option<String>,
-    pub colors: Vec<[f32; 3]>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -22,6 +21,7 @@ pub struct Track {
     pub track_artists: String,
     #[serde(skip)]
     pub cover_art: Option<TrackPicture>,
+    pub palette: Vec<[f32; 3]>,
     pub copyright_message: String,
     pub description: String,
     pub publisher: String,
@@ -62,6 +62,7 @@ impl Track {
             track_artist: String::new(),
             track_artists: String::new(),
             cover_art: Option::None,
+            palette: Vec::new(),
             copyright_message: String::new(),
             description: String::new(),
             publisher: String::new(),

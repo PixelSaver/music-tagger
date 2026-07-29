@@ -25,19 +25,14 @@ func set_display_palette(palette:Array[Color]) -> void:
 		palette = [Color("1a1a1a"), Color.WHITE]
 	_box.bg_color = palette[0]
 	_box.bg_color.a = 0.6
-	label.add_theme_color_override("font_color", palette[1])
+	label.add_theme_color_override("default_color", palette[1])
 
 func display_track(track:GodotTrack):
 	if track == _track:
 		return
-	if _track and _track.has_connections("palette_written"):
-		_track.palette_written.disconnect(set_display_palette)
 	_track = track
 	label.text = track.track_title
-	if track.palette.size() > 0:
-		set_display_palette(track.palette)
-	else:
-		track.palette_written.connect(set_display_palette)
+	set_display_palette(track.palette)
 	
 	if tags_cont.get_children().size() > 0:
 		_clear_tags()
