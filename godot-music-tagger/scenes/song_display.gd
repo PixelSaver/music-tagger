@@ -1,6 +1,7 @@
 extends Panel
 class_name SongDisplayPanel
 
+
 @export var title: RichTextLabel
 @export var cover: TextureRect
 @export var desc: RichTextLabel
@@ -69,7 +70,9 @@ func display_track(track:GodotTrack) -> void:
 
 func _get_cover_art():
 	Global.menu_manager.music_tagger_node.request_track_cover_art(_track.isrc)
-func _on_cover_art_received(isrc:String, image:Image) -> void:
+func _on_cover_art_received(isrc:String, image:Image, palette:Array[Color]) -> void:
 	if isrc != _track.isrc: return
+	print("Colors: %s" % str(palette))
+	_track.palette = palette
 	_cover_texture.set_image(image)
 	

@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
-use image::{DynamicImage, ImageReader};
+use image::ImageReader;
 use lofty::file::{AudioFile, TaggedFile, TaggedFileExt};
 use lofty::picture::PictureType;
 use lofty::tag::{ItemKey};
@@ -61,6 +61,12 @@ impl Track {
                 mime_type: p.mime_type().map(|s| s.to_string()),
                 colors: Vec::new(),
             });
+        let cover = if let Some(mut pic) = cover {
+            pic.extract_dominant_colors().ok();
+            Some(pic)
+        } else {
+            None
+        };
         Ok(Track {
             track_title: tag
                 .get_string(ItemKey::TrackTitle)
@@ -213,7 +219,7 @@ pub fn get_cover_art(path: PathBuf) -> Result<TrackPicture> {
                 mime_type: p.mime_type().map(|s| s.to_string()),
                 colors: Vec::new(),
             };
-            p.extract_dominant_colors();
+            p.extract_dominant_colors().ok();
             p
         });
     if cover.is_none() {

@@ -42,6 +42,8 @@ pub struct GodotTrack {
     #[var]
     pub cover_art: Option<Gd<Image>>,
     #[var]
+    pub palette: Array<Color>,
+    #[var]
     pub copyright_message: GString,
     #[var]
     pub description: GString,
@@ -71,6 +73,7 @@ impl IRefCounted for GodotTrack {
             track_artist: GString::new(),
             track_artists: GString::new(),
             cover_art: None,
+            palette: Array::<Color>::new(),
             copyright_message: GString::new(),
             description: GString::new(),
             publisher: GString::new(),
@@ -85,10 +88,14 @@ impl IRefCounted for GodotTrack {
 }
 #[godot_api]
 impl GodotTrack {
+    #[signal]
+    pub fn palette_written(palette: Array<Color>);
+    
     fn from_track(track: Track, base: Base<RefCounted>, get_cover_art:bool) -> Self {
         let mut custom_tags = Array::<GString>::new();
         let mut fixes_needed = Array::<MusicFixes>::new();
         let mut is_duplicate = false;
+        let mut palette = Array::<Color>::new();
         for tag in &track.custom_tags {
             let value = tag.value.as_str();
         
@@ -104,6 +111,8 @@ impl GodotTrack {
         }
         let cover_art = if get_cover_art {
             if let Some(cover_art) = track.cover_art {
+                palette = cover_art.colors.iter().map(|c| Color::from_rgb(c[0], c[1], c[2])).collect::<Array<Color>>();
+                
                 let mut image = Image::new_gd();
 
                 match cover_art.mime_type.as_deref() {
@@ -130,6 +139,7 @@ impl GodotTrack {
             track_artist: GString::from(track.track_artist.as_str()),
             track_artists: GString::from(track.track_artists.as_str()),
             cover_art,
+            palette,
             copyright_message: GString::from(track.copyright_message.as_str()),
             description: GString::from(track.description.as_str()),
             publisher: GString::from(track.publisher.as_str()),
@@ -174,6 +184,10 @@ impl GodotTrack {
                 self.fixes_needed.push(fix);
             }
         }
+    }
+    pub fn set_track_palette(&mut self, palette: Array<Color>) {
+        self.base_mut().emit_signal("palette_written", &[Variant::from(palette.clone())]);
+        self.palette = palette;
     }
 }
 
@@ -374,10 +388,12 @@ impl INode for MusicTaggerNode {
                     //         track_loc.track.cover_art = Some(cover.clone());
                     //     }
                     // }
+                    let palette = cover.colors.iter().map(|c| Color::from_rgb(c[0], c[1], c[2])).collect::<Array<Color>>();
                     let img = cover.to_gd_image();
+                    log::debug!("Loaded cover art for {}", isrc);
                     self.base_mut().emit_signal(
                         "loaded_cover_art",
-                        &[Variant::from(isrc), Variant::from(img)],
+                        &[Variant::from(isrc), Variant::from(img), Variant::from(palette)],
                     );
                 }
                 MusicTaggerEvent::LoadedCoverArt(isrc, None) => {
@@ -407,7 +423,7 @@ impl MusicTaggerNode {
     #[signal]
     fn library_scanned();
     #[signal]
-    fn loaded_cover_art(isrc: String, cover_art: Option<Gd<Image>>);
+    fn loaded_cover_art(isrc: String, cover_art: Option<Gd<Image>>, palette: Array<Color>);
 
     #[func]
     pub fn get_all_tracks(&self) -> Array<Gd<GodotTrack>> {
@@ -589,7 +605,9 @@ impl MusicTaggerNode {
         };
         match result {
             Some(Ok(cover)) => {
-                self.base_mut().emit_signal("loaded_cover_art", &[Variant::from(isrc.clone()), Variant::from(cover.to_gd_image())]);
+                let palette = cover.colors.iter().map(|c| Color::from_rgb(c[0], c[1], c[2])).collect::<Array<Color>>();
+                log::debug!("Palette calced for {}", isrc);
+                self.base_mut().emit_signal("loaded_cover_art", &[Variant::from(isrc.clone()), Variant::from(cover.to_gd_image()), Variant::from(palette)]);
             }
             Some(Err(path)) => {
                 if let Err(e) = self.cover_request_tx.send(CoverRequest { isrc, path: path }) {
