@@ -300,7 +300,7 @@ struct MusicTaggerNode {
 #[godot_api]
 impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
-        crate::godot_log::godot_log::init_logger();
+        // crate::godot_log::godot_log::init_logger();
         let (request_tx, request_rx) = flume::unbounded::<CoverRequest>();
         let (event_tx, event_rx) = flume::unbounded::<MusicTaggerEvent>();
         let (cache_tx, cache_rx) = flume::unbounded::<CacheRequest>();
@@ -343,9 +343,13 @@ impl INode for MusicTaggerNode {
         }
         for event in events {
             match event {
-                MusicTaggerEvent::Scanning(path) => {
+                MusicTaggerEvent::ProgressStarted(total_items) => {
                     self.base_mut()
-                        .emit_signal("scan_progress", &[path.display().to_string().to_variant()]);
+                        .emit_signal("scan_began", &[Variant::from(total_items)]);
+                },
+                MusicTaggerEvent::ProgressTick(items_done) => {
+                    self.base_mut()
+                        .emit_signal("scan_tick", &[Variant::from(items_done)]);
                 }
                 MusicTaggerEvent::TrackFound(title) => {
                     self.base_mut()
@@ -408,7 +412,9 @@ impl INode for MusicTaggerNode {
 #[godot_api]
 impl MusicTaggerNode {
     #[signal]
-    fn scan_progress(path: String);
+    fn scan_began(total_items: i32);
+    #[signal]
+    fn scan_tick(items_done: i32);
     #[signal]
     fn error(message: String);
     #[signal]

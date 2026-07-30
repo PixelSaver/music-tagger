@@ -1,44 +1,64 @@
-use std::path::Path;
+use crate::core::models::{Library, TrackLocation};
 use crate::error::*;
 use crate::godot_log::event::MusicTaggerEvent;
-use flume::Sender;
 use crate::media::media;
-use crate::core::models::{Library, TrackLocation};
+use flume::Sender;
+use rayon::prelude::*;
+use std::fs::File;
+use std::path::Path;
+use std::path::PathBuf;
+use std::sync::Arc;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use walkdir::WalkDir;
 
 pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library> {
-    // let parent = dir.parent().unwrap_or(dir);
-    let walkdir = WalkDir::new(dir);
-    let mut out = Vec::new();
-    for entry in walkdir
+    let paths: Vec<PathBuf> = WalkDir::new(dir)
         .follow_links(true)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_file()) {
+        .filter(|e| e.file_type().is_file())
+        .map(|e| e.path().to_path_buf())
+        .collect();
 
-            let _ = sender.send(MusicTaggerEvent::Scanning(entry.path().to_path_buf()));
-            
-            let mut file = std::fs::File::open(entry.path())?;
-            match media::read_track_from_file(&mut file) {
+    let total = paths.len() as i32;
+    let _ = sender.send(MusicTaggerEvent::ProgressStarted(total));
+
+    let processed = Arc::new(AtomicUsize::new(0));
+    let tick_every: i32 = if total > 1000 {
+        total / 1000
+    } else if total > 100 {
+        total / 100
+    } else {
+        1
+    };
+
+    let tracks: Vec<TrackLocation> = paths
+        .par_iter()
+        .filter_map(|path| {
+            let mut file = File::open(path).ok()?;
+
+            let result = match media::read_track_from_file(&mut file) {
                 Ok((track, lofty_tagged_file)) => {
-                    // log::debug!("Track: {:?}", track);
                     let _ = sender.send(MusicTaggerEvent::TrackFound(track.track_title.clone()));
-                    // let relative_path = entry.path()
-                    //     .strip_prefix(parent)?.to_path_buf();
-                    out.push(TrackLocation {
+                    Some(TrackLocation {
                         track,
-                        // path: entry.path().canonicalize()?,
-                        path: entry.path().to_path_buf(),
+                        path: path.clone(),
                         lofty_tagged_file: Some(lofty_tagged_file),
-                    });
+                    })
                 }
                 Err(_e) => {
-                    // log::debug!("Error when reading track: {:?}", e);
-                    continue;
+                    // Skip unreadable or errored files
+                    return None;
                 }
+            };
+
+            // Ticking progress bar
+            let done: i32 = processed.fetch_add(1, Ordering::Relaxed) as i32;
+            if done == total || done % tick_every == 0 {
+                let _ = sender.send(MusicTaggerEvent::ProgressTick(done));
             }
-        }
-        return Ok(Library{
-            tracks: out,
-        });
+            result
+        })
+        .collect();
+    Ok(Library { tracks })
 }

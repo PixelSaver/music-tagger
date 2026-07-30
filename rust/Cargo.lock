@@ -979,6 +979,7 @@ dependencies = [
  "log",
  "m3u8-rs",
  "nucleo-matcher",
+ "rayon",
  "serde",
  "serde_json",
  "strsim",

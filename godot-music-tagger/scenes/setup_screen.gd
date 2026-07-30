@@ -8,7 +8,11 @@ const DIRECTORY_ENTRY = preload("res://scenes/directory_entry.tscn")
 @export var cache_dir: LineEdit
 @export var scan_cache_button: DefaultButton
 @export var force_scan_button: DefaultButton
+@export var explore_library_button: DefaultButton
 var dir_entries : Array[DirectoryEntry] = []
+var _total_items := -1
+var _processed_items := -1
+var _scan_notif: PixelNotification
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -18,11 +22,38 @@ func _ready() -> void:
 	#mt.track_found.connect(_status)
 	scan_cache_button.pressed.connect(_on_scan_but_pressed)
 	force_scan_button.pressed.connect(_on_force_scan_but_pressed)
+	explore_library_button.pressed.connect(_on_explore_library_pressed)
 	add_dir_but.pressed.connect(_add_dir)
 	cache_dir.placeholder_text = Global.menu_manager.music_tagger_node.cache_directory
 	cache_dir.text_submitted.connect(_on_cache_submit)
+	mt.scan_began.connect(_on_scan_begin)
+	mt.scan_tick.connect(_on_scan_tick)
 	#cache_dir.focus_entered.connect(_on_cache_focused)
 	#cache_dir.focus_exited.connect(_on_cache_unfocused)
+	
+func _on_scan_begin(total_items: int) -> void:
+	_total_items = total_items
+	_scan_notif = Global.notif_manager.create_notification("Scanning directories", "Reading the tags and cover art of music in directories specified.", true)
+func _on_scan_tick(finished_items: int) -> void:
+	if not _scan_notif: 
+		push_warning("No scan notification when ticking")
+		return
+	_processed_items = finished_items
+	_update_scan_progress(finished_items, _total_items)
+
+func _update_scan_progress(val: int, max_val: int) -> void:
+	if not _scan_notif: 
+		push_warning("No scan notification when updating progress")
+		return
+	_scan_notif.set_progress(val, max_val)
+	if val >= max_val:
+		_scan_notif.end_anim()
+		_scan_notif = null
+	
+
+#region Button reactions
+func _on_explore_library_pressed() -> void:
+	Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
 
 func _on_force_scan_but_pressed() -> void:
 	var dirs: Array[String] = []
@@ -33,12 +64,12 @@ func _on_force_scan_but_pressed() -> void:
 			dir_entries.erase(dir)
 		)
 	#SignalBus.scan.emit()
-	var result = _force_scan()
-	if !result:
-		print("Awaiting")
-		await Global.menu_manager.music_tagger_node.library_scanned
-		print("Fnished")
-	Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
+	var _result = _force_scan()
+	#if !result:
+		#print("Awaiting")
+		#await Global.menu_manager.music_tagger_node.library_scanned
+		#print("Fnished")
+	
 	
 
 func _on_scan_but_pressed() -> void:
@@ -50,12 +81,13 @@ func _on_scan_but_pressed() -> void:
 			dir_entries.erase(dir)
 		)
 	#SignalBus.scan.emit()
-	var result = _try_cache_or_scan()
-	if !result:
-		print("Awaiting")
-		await Global.menu_manager.music_tagger_node.library_scanned
-		print("Fnished")
-	Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
+	var _result = _try_cache_or_scan()
+	#if !result:
+		#print("Awaiting")
+		#await Global.menu_manager.music_tagger_node.library_scanned
+		#print("Fnished")
+	#Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
+#endregion
 #region Music directory functions
 func _delete_dir_entry(dir:DirectoryEntry) -> void:
 	var children = music_directory_cont.get_children()
@@ -92,8 +124,6 @@ func _on_cache_submit(text:String) -> void:
 	#cache_dir.clear()
 #func _on_cache_unfocused() -> void:
 	#cache_dir.placeholder_text = Global.menu_manager.music_tagger_node.cache_directory
-#endregion
-
 func _try_cache_or_scan() -> bool:
 	var result = Global.menu_manager.music_tagger_node.try_load_cache()
 	print("Cached result: %s" % result)
@@ -107,9 +137,11 @@ func _force_scan() -> bool:
 	for dir in Global.menu_manager.music_tagger_node.music_directories:
 		print("Music dir: %s" % dir)
 	var result = Global.menu_manager.music_tagger_node.scan_directory(Global.menu_manager.music_tagger_node.music_directories[0])
-	print("Scan result: %s" % result)
+	if result.length() > 0: print("Scan result: %s" % result)
 	Global.menu_manager.has_library = true
 	return not result.is_empty()
+#endregion
+
 
 func start_anim() -> void: 
 	_setup_dirs()
