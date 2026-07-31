@@ -24,13 +24,8 @@ pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library
     let _ = sender.send(MusicTaggerEvent::ProgressStarted(total));
 
     let processed = Arc::new(AtomicUsize::new(0));
-    let tick_every: i32 = if total > 1000 {
-        total / 1000
-    } else if total > 100 {
-        total / 100
-    } else {
-        1
-    };
+    let target_ticks = 200;
+    let tick_every: i32 = (total / target_ticks).max(1);
 
     let tracks: Vec<TrackLocation> = paths
         .par_iter()
@@ -53,12 +48,15 @@ pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library
             };
 
             // Ticking progress bar
-            let done: i32 = processed.fetch_add(1, Ordering::Relaxed) as i32;
+            let prev = processed.fetch_add(1, Ordering::Relaxed) as i32;
+            let done = prev + 1;
             if done == total || done % tick_every == 0 {
                 let _ = sender.send(MusicTaggerEvent::ProgressTick(done));
             }
             result
         })
         .collect();
+
+    let _ = sender.send(MusicTaggerEvent::ProgressTick(total));
     Ok(Library { tracks })
 }

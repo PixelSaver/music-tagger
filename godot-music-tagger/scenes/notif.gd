@@ -53,9 +53,12 @@ func set_text(title: String, description: String) -> void:
 func set_progress(value: float, max_value: float) -> void:
 	if not _has_progress_bar:
 		return
-	desc_label.text = "%s | progress: %.2f" % [_desc, value/max_value]
+	desc_label.text = "%s | progress: %.1f%%" % [_desc, value/max_value*100]
 	progress_bar.value = value
 	progress_bar.max_value = max_value
+
+func set_remaining_lifetime(remaining:float) -> void:
+	_lifetime = remaining
 #endregion
 
 func start_anim() -> void:

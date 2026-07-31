@@ -300,7 +300,7 @@ struct MusicTaggerNode {
 #[godot_api]
 impl INode for MusicTaggerNode {
     fn init(base: Base<Node>) -> Self {
-        // crate::godot_log::godot_log::init_logger();
+        crate::godot_log::godot_log::init_logger();
         let (request_tx, request_rx) = flume::unbounded::<CoverRequest>();
         let (event_tx, event_rx) = flume::unbounded::<MusicTaggerEvent>();
         let (cache_tx, cache_rx) = flume::unbounded::<CacheRequest>();
@@ -372,9 +372,7 @@ impl INode for MusicTaggerNode {
                     log::debug!("Saving library cache to {:?}", canonical_path);
                     let _ = self.cache_tx.send(CacheRequest::Save(canonical_path, library.clone()));
                     self.library = Some(library);
-                    let t = std::time::Instant::now();
                     self.godot_tracks = self.get_all_tracks();
-                    log::debug!("godot tracks: {:?}", t.elapsed());
                     self.base_mut().emit_signal("library_scanned", &[]);
                 }
                 MusicTaggerEvent::Finished(Err(e)) => {

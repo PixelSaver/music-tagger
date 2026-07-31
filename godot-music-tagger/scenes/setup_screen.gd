@@ -42,7 +42,7 @@ func _on_scan_tick(finished_items: int) -> void:
 	_update_scan_progress(finished_items, _total_items)
 
 func _update_scan_progress(val: int, max_val: int) -> void:
-	print("New progress: %s" % str(float(val)/float(max_val)))
+	print("New progress: %s/%s | %s" % [str(val), str(max_val), str(float(val)/float(max_val))])
 	if not _scan_notif: 
 		push_warning("No scan notification when updating progress")
 		return
@@ -146,4 +146,5 @@ func _force_scan() -> bool:
 
 func start_anim() -> void: 
 	_setup_dirs()
-func end_anim() -> void: queue_free()
+func end_anim() -> void: 
+	hide()

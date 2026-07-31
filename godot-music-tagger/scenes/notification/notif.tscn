@@ -27,6 +27,7 @@ all_t = [NodePath("Tweenable")]
 [node name="Panel" type="Panel" parent="." unique_id=1497245576]
 layout_mode = 2
 offset_transform_enabled = true
+mouse_filter = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1117344502]
 layout_mode = 1
@@ -48,6 +49,7 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.8
+mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 20
 bbcode_enabled = true
 text = "Title"
@@ -57,6 +59,7 @@ scroll_active = false
 [node name="Desc" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer" unique_id=1892995893]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Loreum Ipseum Doloreueueueueueueueueueueueeueueueueue"
@@ -76,5 +79,5 @@ tint_progress = Color(0.13773006, 0.5997449, 0.55178773, 1)
 [node name="Tweenable" type="Node" parent="." unique_id=226546269]
 script = ExtResource("2_xm4gw")
 direction = Vector2(-1, 0)
-distance = 450.0
+distance = 700.0
 metadata/_custom_type_script = "uid://b4pdlxyjxim6i"

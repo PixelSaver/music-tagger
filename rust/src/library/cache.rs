@@ -1,7 +1,7 @@
-use std::{path::Path, fs::File};
-use serde::{de::DeserializeOwned, Serialize};
 use crate::core::models::*;
 use crate::error::*;
+use serde::{Serialize, de::DeserializeOwned};
+use std::{fs::File, path::Path};
 
 pub fn load_library(cache_path: &Path) -> Result<Library> {
     //TODO Don't cache art
@@ -39,6 +39,10 @@ pub fn load_bincode<T: DeserializeOwned>(path: &Path) -> Result<T> {
     }
 }
 pub fn save_bincode<T: Serialize>(path: &Path, data: &T) -> Result<()> {
+    // Make sure the parent folder exists (if there is a parent path)
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)?; // creates recursively if missing
+    }
     let file = File::create(path)?;
     bincode::serialize_into(file, data)?;
     Ok(())

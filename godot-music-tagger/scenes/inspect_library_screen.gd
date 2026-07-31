@@ -42,7 +42,7 @@ func start_anim() -> void:
 	pass
 
 func end_anim() -> void: 
-	queue_free()
+	hide()
 	
 func _on_selection_changed() -> void:
 	if _displayed_tracks.size() > 0:
