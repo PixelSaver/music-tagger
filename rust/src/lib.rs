@@ -770,12 +770,12 @@ impl MusicTaggerNode {
             1 => list.sort_by(|a, b| {
                 a.get("track_title")
                     .to_string()
-                    .cmp(&b.get("track_title").to_string())
+                    .cmp(&b.bind().track_title.to_string())
             }),
             2 => list.sort_by(|a, b| {
                 b.get("track_title")
                     .to_string()
-                    .cmp(&a.get("track_title").to_string())
+                    .cmp(&a.bind().track_title.to_string())
             }),
             _ => {}
         }

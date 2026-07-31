@@ -9,12 +9,16 @@ var _track: GodotTrack
 var _box: StyleBoxFlat
 
 func _ready() -> void:
+	get_viewport().size_changed.connect(_update_size)
+	_update_size()
 	var panel = self.get_theme_stylebox("panel").duplicate()
 	if not panel:
 		panel = StyleBoxFlat.new()
 	_box = panel
 	self.add_theme_stylebox_override("panel", _box)
-	
+
+func _update_size():
+	self.custom_minimum_size = Vector2(get_viewport_rect().size.x*1.2 - 400, 100)
 
 func _clear_tags() -> void:
 	for child in tags_cont.get_children():

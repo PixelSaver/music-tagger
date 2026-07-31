@@ -163,6 +163,9 @@ func _recalculate_pool_size() -> void:
 	else:
 		push_warning("Radial container requires %s controls but only has %s" % [req, _pool.size()])
 	
+	_bound_item_idx.resize(_pool.size())
+	for i in _bound_item_idx.size():
+		_bound_item_idx[i] = -1
 	#_update_children()
 
 func _bind_pool_item(pool_idx:int, item_idx:int) -> void:

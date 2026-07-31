@@ -1,5 +1,5 @@
 @tool
-extends Container
+extends Control
 
 ## Osu-like container to scroll through options
 class_name RadialContainer
@@ -113,9 +113,8 @@ func _update_scrollbar():
 	scroll_bar.page = visibility_window
 	scroll_bar.set_value_no_signal(get_closest_idx())
 
-func _notification(what):
-	if what == NOTIFICATION_SORT_CHILDREN:
-		_update_children()
+func queue_sort():
+	_update_children()
 
 func _get_layout_children() -> Array[Control]:
 	return current_children
@@ -241,10 +240,14 @@ func _update_children(children:Array[Control]=[]):
 	_previous_end = end
 	
 	for i in range(window_start, window_end):
+		if !is_instance_valid(children[i]):
+			continue
 		children[i].visible = (start <= i && i < end)
 	
 	for i in range(start, end):
 		var child = children[i]
+		if !is_instance_valid(child):
+			continue
 		var current_angle = scroll_angle + (i * theta)
 		# Distance from selected idx# angular distance from center
 		var angle_dist = abs(current_angle)
@@ -257,7 +260,8 @@ func _update_children(children:Array[Control]=[]):
 		#child.pivot_offset_ratio = Vector2(0.0, 0.5) if not flip else Vector2(1.0, 0.5)
 		child.pivot_offset_ratio = Vector2(0.0, 0.5) if flip else Vector2(1.0, 0.5)
 		var child_size = child.get_combined_minimum_size()
-		fit_child_in_rect(child, Rect2(pos - (child_size / 2.0), child_size))
+		#fit_child_in_rect(child, Rect2(pos - (child_size / 2.0), child_size))
+		child.position = pos - child_size / 2.0
 		child.scale = Vector2(_scale, _scale)
 
 func get_children_count() -> int:

@@ -300,6 +300,7 @@ mouse_filter = 2
 
 [node name="SearchManager" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448 node_paths=PackedStringArray("search_bar", "tags_filter", "genres_filter", "sort_by")]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 10
 script = ExtResource("7_y7qbe")
 search_bar = NodePath("Searchbar")
@@ -372,9 +373,11 @@ anchor_bottom = 1.0
 offset_top = -40.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer2" unique_id=1683585900]
 layout_mode = 2
+mouse_filter = 2
 alignment = 2
 
 [node name="SettingsButton" type="Button" parent="HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1829825139]

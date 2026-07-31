@@ -80,6 +80,9 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 func _on_bind_track(control:Control, idx:int) -> void:
 	var display := control as HTrackDisplay
 	if not display: return
+	if idx < 0 or idx >= _displayed_tracks.size():
+		push_warning("Bad track index: %s size=%s" % [idx, _displayed_tracks.size()])
+		return
 	display.display_track(_displayed_tracks[idx])
 
 #region Searching 
