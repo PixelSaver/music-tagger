@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="1_6ml0h"]
 [ext_resource type="Script" uid="uid://biw4jm8b54gd5" path="res://scenes/directory_entry.gd" id="1_27i3b"]
-[ext_resource type="PackedScene" uid="uid://b3j7puaxdkexu" path="res://scenes/notification/notif.tscn" id="2_hmkhb"]
 
 [node name="Directory" type="HBoxContainer" unique_id=939549954]
 theme_override_constants/separation = 10
@@ -13,22 +12,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 30
 emoji_menu_enabled = false
-
-[node name="Notif" parent="LineEdit" unique_id=1461304200 node_paths=PackedStringArray("all_t") instance=ExtResource("2_hmkhb")]
-custom_minimum_size = Vector2(600, 100)
-propagate_maximum_size = false
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_filter = 0
-all_t = []
 
 [node name="DeleteButton" type="Button" parent="." unique_id=776226183]
 custom_minimum_size = Vector2(150, 50)

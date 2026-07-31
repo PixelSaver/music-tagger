@@ -65,11 +65,10 @@ func _on_force_scan_but_pressed() -> void:
 			dir_entries.erase(dir)
 		)
 	#SignalBus.scan.emit()
-	var _result = _force_scan()
-	#if !result:
-		#print("Awaiting")
-		#await Global.menu_manager.music_tagger_node.library_scanned
-		#print("Fnished")
+	var result = _force_scan()
+	if !result:
+		await Global.menu_manager.music_tagger_node.library_scanned
+		Global.notif_manager.create_notification("Library finished scanning!", "")
 	
 	
 
@@ -82,11 +81,12 @@ func _on_scan_but_pressed() -> void:
 			dir_entries.erase(dir)
 		)
 	#SignalBus.scan.emit()
-	var _result = _try_cache_or_scan()
-	#if !result:
-		#print("Awaiting")
-		#await Global.menu_manager.music_tagger_node.library_scanned
-		#print("Fnished")
+	var result = _try_cache_or_scan()
+	if result:
+		Global.notif_manager.create_notification("Library loaded from cache!", "")
+	else:
+		await Global.menu_manager.music_tagger_node.library_scanned
+		Global.notif_manager.create_notification("Library finished scanning!", "")
 	#Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
 #endregion
 #region Music directory functions

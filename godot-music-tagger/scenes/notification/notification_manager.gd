@@ -11,7 +11,7 @@ var target_pos : Dictionary[PixelNotification, Vector2] = { }
 func _ready() -> void:
 	Global.notif_manager = self
 
-func create_notification(title:String, description:String, lifetime:int=5, progress_bar:bool=false) -> PixelNotification:
+func create_notification(title:String, description:String="", lifetime:int=5, progress_bar:bool=false) -> PixelNotification:
 	var notif = NOTIF.instantiate() as PixelNotification
 	notif.setup_notif(title, description, lifetime, progress_bar)
 	notif.start_anim()
