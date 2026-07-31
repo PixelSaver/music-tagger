@@ -55,3 +55,18 @@ vertical_alignment = 1
 [node name="TagsCont" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=965628183]
 layout_mode = 2
 theme_override_constants/separation = 10
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1116574348]
+layout_mode = 0
+offset_left = -15.0
+offset_top = -19.0
+offset_right = 25.0
+offset_bottom = 21.0
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=899607414]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 83.0
+offset_right = 196.0
+offset_bottom = 123.0
+scale = Vector2(13.855588, 1.1651201)

@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dnbweybcl477d" path="res://scenes/search_filter.tscn" id="7_6l5rq"]
 [ext_resource type="Script" uid="uid://bmlujw2lx4mv6" path="res://scenes/search_manager.gd" id="7_y7qbe"]
 [ext_resource type="Script" uid="uid://su2jjrgrsxbh" path="res://scenes/sort_by.gd" id="9_g0aan"]
+[ext_resource type="Script" uid="uid://dncnbe7aqaap8" path="res://scenes/selector.gd" id="9_i4hns"]
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="11_b5doo"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gkedh"]
@@ -272,6 +273,7 @@ metadata/_custom_type_script = "uid://oxrd0gxs4rx6"
 visible = false
 layout_mode = 2
 mouse_filter = 1
+script = ExtResource("9_i4hns")
 
 [node name="ColorRect" type="ColorRect" parent="HBoxContainer/VBoxContainer/RadialSelector/Selector" unique_id=410167138]
 custom_minimum_size = Vector2(1000, 100)

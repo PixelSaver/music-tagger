@@ -78,6 +78,11 @@ func _set_all_tracks(all_tracks: Array[GodotTrack]):
 	#song_display.set_possible_tags(_tags)
 
 func _on_bind_track(control:Control, idx:int) -> void:
+	if !control.is_node_ready():
+		control.ready.connect(func():
+			_on_bind_track(control, idx)
+		, CONNECT_ONE_SHOT)
+		return
 	var display := control as HTrackDisplay
 	if not display: return
 	if idx < 0 or idx >= _displayed_tracks.size():

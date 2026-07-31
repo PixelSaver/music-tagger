@@ -7,6 +7,7 @@ const TAG = preload("res://scenes/tag.tscn")
 @export var tags_cont: Control
 var _track: GodotTrack
 var _box: StyleBoxFlat
+var _palette: Array[Color] = []
 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_update_size)
@@ -27,9 +28,13 @@ func _clear_tags() -> void:
 func set_display_palette(palette:Array[Color]) -> void:
 	if palette.size() < 2:
 		palette = [Color("1a1a1a"), Color.WHITE]
+	_palette = palette
+	if not _box:
+		return
 	_box.bg_color = palette[0]
 	_box.bg_color.a = 0.6
-	label.add_theme_color_override("default_color", palette[1])
+	$ColorRect.color = palette[1]
+	label.add_theme_color_override("default_color", palette[2])
 
 func display_track(track:GodotTrack):
 	if track == _track:

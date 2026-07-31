@@ -1,5 +1,5 @@
 @tool
-extends Container
+extends Control
 
 class_name VirtualizedRadialContainer
 
@@ -81,9 +81,9 @@ func get_children_count() -> int:
 	return item_count
 
 func add_pool_control(control:Control) -> void:
+	add_child(control)
 	control.visible = false
 	_pool.append(control)
-	add_child(control)
 
 func clear_pool() -> void:
 	for child in _pool:
@@ -152,23 +152,24 @@ func _get_required_pool_size() -> int:
 func _recalculate_pool_size() -> void:
 	var req := _get_required_pool_size()
 	
-	if req == _pool.size():
-		return
-	
-	if req < _pool.size():
-		while _pool.size() > req:
-			var child = _pool.pop_back() as Control
-			if !is_instance_valid(child): continue
-			if child: child.queue_free()
-	else:
-		push_warning("Radial container requires %s controls but only has %s" % [req, _pool.size()])
+	if req != _pool.size():
+		if req < _pool.size():
+			while _pool.size() > req:
+				var child = _pool.pop_back() as Control
+				if !is_instance_valid(child): continue
+				if child: child.queue_free()
+		else:
+			push_warning("Radial container requires %s controls but only has %s" % [req, _pool.size()])
 	
 	_bound_item_idx.resize(_pool.size())
 	for i in _bound_item_idx.size():
 		_bound_item_idx[i] = -1
-	#_update_children()
+	_update_children()
 
 func _bind_pool_item(pool_idx:int, item_idx:int) -> void:
+	if pool_idx >= _bound_item_idx.size():
+		push_error("Pool/bind mismatch: pool=%s bound=%s" % [_pool.size(), _bound_item_idx.size()])
+		return
 	var control := _pool[pool_idx]
 	
 	if item_idx < 0 or item_idx >= item_count:
@@ -272,15 +273,21 @@ func _update_children():
 		#child.pivot_offset_ratio = Vector2(0.0, 0.5) if not flip else Vector2(1.0, 0.5)
 		child.pivot_offset_ratio = Vector2(0.0, 0.5) if flip else Vector2(1.0, 0.5)
 		var child_size = child.get_combined_minimum_size()
-		fit_child_in_rect(child, Rect2(pos - (child_size / 2.0), child_size))
+		#fit_child_in_rect(child, Rect2(pos - (child_size / 2.0), child_size))
+		child.position = pos - child_size * .5
 		child.scale = Vector2(_scale, _scale)
 
+var _sort_queued := false
 
+func queue_sort():
+	if _sort_queued:
+		return
+	_sort_queued = true
+	call_deferred("_deferred_sort")
 
-func _notification(what):
-	if what == NOTIFICATION_SORT_CHILDREN:
-		_update_children()
-
+func _deferred_sort():
+	_sort_queued = false
+	_update_children()
 
 
 ## Angle separation between two children
