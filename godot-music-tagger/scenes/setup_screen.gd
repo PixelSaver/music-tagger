@@ -33,7 +33,7 @@ func _ready() -> void:
 	
 func _on_scan_begin(total_items: int) -> void:
 	_total_items = total_items
-	_scan_notif = Global.notif_manager.create_notification("Scanning directories", "Reading the tags and cover art of music in directories specified.", true)
+	_scan_notif = Global.notif_manager.create_notification("Scanning directories", "Reading the tags and cover art of music in directories specified.", -1, true)
 func _on_scan_tick(finished_items: int) -> void:
 	if not _scan_notif: 
 		push_warning("No scan notification when ticking")
@@ -42,10 +42,11 @@ func _on_scan_tick(finished_items: int) -> void:
 	_update_scan_progress(finished_items, _total_items)
 
 func _update_scan_progress(val: int, max_val: int) -> void:
+	print("New progress: %s" % str(float(val)/float(max_val)))
 	if not _scan_notif: 
 		push_warning("No scan notification when updating progress")
 		return
-	_scan_notif.set_progress(val, max_val)
+	_scan_notif.set_progress(float(val), float(max_val))
 	if val >= max_val:
 		_scan_notif.end_anim()
 		_scan_notif = null
