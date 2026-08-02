@@ -5,6 +5,7 @@ const H_TRACK_DISPLAY = preload("res://scenes/h_song_display.tscn")
 
 signal possible_genres(genres:Array[String])
 signal possible_tags(tags:Array[String])
+signal possible_fixes(fixes: Array[String])
 @export var song_display: SongDisplayPanel
 @export var radial_selector: RadialSelector
 @export var search_man: SearchManager
@@ -16,6 +17,7 @@ var _idxs: Array[int] = []
 var _selected_idx: int = 0
 
 func _enter_tree() -> void:
+	possible_fixes.emit(MusicTaggerNode.get_all_fixes())
 	radial_selector.bind_item.connect(_on_bind_track)
 	radial_selector.selected_item_changed.connect(func(idx:int): 
 		_selected_idx = idx
@@ -98,8 +100,8 @@ func _on_method_req(method:SortByContainer.SortMethod) -> void:
 		_displayed_tracks = MusicTaggerNode.sort_tracks(_displayed_tracks, method)
 	_set_all_tracks(_displayed_tracks)
 
-func _on_search(query:String, selected_tags:Array[String], selected_genres:Array[String], dupes:bool) -> void:
-	var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(query, selected_tags, selected_genres, dupes)
+func _on_search(query:String, selected_tags:Array[String], selected_genres:Array[String], selected_fixes:Array[String], dupes:bool) -> void:
+	var searched_tracks = Global.menu_manager.music_tagger_node.search_tracks(query, selected_tags, selected_genres, selected_fixes, dupes)
 	_displayed_tracks = searched_tracks
 	_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
 	radial_selector.scroll_angle = 0.

@@ -32,7 +32,7 @@ func set_display_palette(palette:Array[Color]) -> void:
 	if not _box:
 		return
 	var panel_col = palette[1]
-	panel_col.v = clampf(panel_col.v, 0.0, 0.4)
+	panel_col.ok_hsl_l = clampf(panel_col.ok_hsl_l, 0.2, 0.4)
 	_box.bg_color = panel_col
 	_box.bg_color.a = 0.6
 	#$ColorRect.color = palette[1]

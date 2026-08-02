@@ -54,7 +54,7 @@ vertical_alignment = 1
 
 [node name="TagsCont" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=965628183]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 15
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1116574348]
 visible = false

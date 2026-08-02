@@ -343,7 +343,7 @@ mouse_filter = 2
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7op15")
 
-[node name="SearchManager" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448 node_paths=PackedStringArray("search_bar", "tags_filter", "genres_filter", "sort_by")]
+[node name="SearchManager" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=1272754448 node_paths=PackedStringArray("search_bar", "tags_filter", "genres_filter", "fixes_filter", "sort_by")]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 10
@@ -351,6 +351,7 @@ script = ExtResource("7_y7qbe")
 search_bar = NodePath("Searchbar")
 tags_filter = NodePath("HBoxContainer/TagsSearch")
 genres_filter = NodePath("HBoxContainer/GenreSearch")
+fixes_filter = NodePath("HBoxContainer2/FixesSearch")
 sort_by = NodePath("HBoxContainer/SortBy")
 
 [node name="Searchbar" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" unique_id=372626817]
@@ -366,12 +367,14 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/TagsSearch" index="0" unique_id=108456384]
+theme_override_colors/font_color = Color(1, 0.47843137, 0.56078434, 1)
 text = "Tags:"
 
 [node name="GenreSearch" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=950272936 instance=ExtResource("7_6l5rq")]
 layout_mode = 2
 
 [node name="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/GenreSearch" index="0" unique_id=108456384]
+theme_override_colors/font_color = Color(1, 0.47843137, 0.56078434, 1)
 text = "Genres:"
 
 [node name="SortBy" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=1643706373 node_paths=PackedStringArray("option_button")]
@@ -382,6 +385,7 @@ option_button = NodePath("MenuButton")
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/SortBy" unique_id=2019566817]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.47843137, 0.56078434, 1)
 theme_override_font_sizes/font_size = 18
 text = "Sort By:"
 
@@ -409,6 +413,16 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jcdqb")
 
 [node name="DupeTest" type="CheckBox" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=2140013743]
 layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" unique_id=2041170645]
+layout_mode = 2
+
+[node name="FixesSearch" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer2" unique_id=1790033753 instance=ExtResource("7_6l5rq")]
+layout_mode = 2
+
+[node name="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer2/FixesSearch" index="0" unique_id=108456384]
+theme_override_colors/font_color = Color(1, 0.47843137, 0.56078434, 1)
+text = "Fixes"
 
 [node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=1435740314]
 layout_mode = 1
@@ -468,6 +482,7 @@ offset_right = 40.0
 offset_bottom = 55.0
 script = ExtResource("6_b1chm")
 
+[connection signal="possible_fixes" from="." to="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" method="_on_inspect_library_screen_possible_fixes"]
 [connection signal="possible_genres" from="." to="HBoxContainer/MarginContainer/SongDisplay" method="_on_possible_genres"]
 [connection signal="possible_genres" from="." to="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" method="_on_possible_genres"]
 [connection signal="possible_tags" from="." to="HBoxContainer/MarginContainer/SongDisplay" method="_on_possible_tags"]
@@ -475,3 +490,4 @@ script = ExtResource("6_b1chm")
 
 [editable path="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/TagsSearch"]
 [editable path="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer/GenreSearch"]
+[editable path="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer2/FixesSearch"]

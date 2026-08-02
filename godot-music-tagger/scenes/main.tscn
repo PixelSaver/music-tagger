@@ -12,6 +12,15 @@ music_directories = Array[String](["~/Music/spotiflacopus"])
 cache_directory = "../test/.cache/library.bin"
 metadata/_custom_type_script = "uid://d342b2ltiplk1"
 
+[sub_resource type="Gradient" id="Gradient_tbgi4"]
+offsets = PackedFloat32Array(0, 0.25, 0.5, 0.75, 1)
+colors = PackedColorArray(0.26666668, 0.38039216, 0.4627451, 1, 0.54901963, 0.9372549, 0.7137255, 1, 0.26666668, 0.38039216, 0.4627451, 1, 0.54901963, 0.9372549, 0.7137255, 1, 0.26666668, 0.38039216, 0.4627451, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gkedh"]
+gradient = SubResource("Gradient_tbgi4")
+fill_from = Vector2(0, 1)
+repeat = 1
+
 [node name="PixelMenuManager" type="Control" unique_id=33857186]
 layout_mode = 3
 anchors_preset = 15
@@ -25,6 +34,16 @@ script = ExtResource("2_sugp2")
 settings = SubResource("Resource_sugp2")
 first_scene = ExtResource("3_sugp2")
 metadata/_custom_type_script = "uid://bpo0dsawpb3qj"
+
+[node name="ColorRect" type="TextureRect" parent="." unique_id=1764817381]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_gkedh")
 
 [node name="MusicTaggerNode" type="MusicTaggerNode" parent="." unique_id=469680657]
 

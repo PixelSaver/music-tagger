@@ -10,6 +10,8 @@ pub mod playlists;
 pub mod godot_log;
 
 use std::path::{Path, PathBuf};
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
 
 use godot::classes::{Image, Node};
 use godot::prelude::*;
@@ -159,7 +161,7 @@ impl GodotTrack {
             out.push("IS_DUPLICATE".to_string());
         }
         for fix in self.fixes_needed.iter_shared() {
-            out.push(format!("NEEDSFIX_{}", fix.as_str()));
+            out.push(fix.as_tag_str());
         }
         for tag in self.custom_tags.iter_shared() {
             out.push(tag.to_string());
@@ -190,7 +192,7 @@ impl GodotTrack {
     }
 }
 
-#[derive(GodotConvert)]
+#[derive(GodotConvert, EnumIter)]
 #[godot(via = i32)]
 pub enum MusicFixes {
     Lyrics,
@@ -219,6 +221,10 @@ impl MusicFixes {
             Self::CoverArt => "CoverArt",
             Self::Removal => "Removal",
         }
+    }
+
+    pub fn as_tag_str(&self) -> String {
+        format!("NEEDSFIX_{}", &self.as_str())
     }
 }
 
@@ -451,6 +457,7 @@ impl MusicTaggerNode {
         query: GString,
         selected_tags: Array<GString>,
         selected_genres: Array<GString>,
+        selected_fixes: Array<GString>,
         dupes: bool,
     ) -> Array<Gd<GodotTrack>> {
         self.searched_track_idxs.clear();
@@ -470,7 +477,14 @@ impl MusicTaggerNode {
                 .collect::<Vec<_>>(),
             &selected_genres
                 .iter_shared()
-                .map(|g| g.to_string())
+                .map(|t| t.to_string())
+                .collect::<Vec<_>>(),
+            &selected_fixes
+                .iter_shared()
+                .filter_map(|t| match MusicFixes::from_str(&t.to_string()) {
+                    Some(fix) => Some(fix.as_tag_str()),
+                    None => None,
+                })
                 .collect::<Vec<_>>(),
             tracks,
         );
@@ -780,5 +794,10 @@ impl MusicTaggerNode {
             _ => {}
         }
         Array::from_iter(list)
+    }
+
+    #[func]
+    pub fn get_all_fixes() -> Array<GString> {
+        Array::from_iter(MusicFixes::iter().map(|fix| GString::from(fix.as_str())))
     }
 }

@@ -8,6 +8,7 @@ pub fn search_tracks<'a, I>(
     query: &str, 
     selected_tags: &[String],
     selected_genres: &[String],
+    selected_fixes: &[String],
     tracks: I
 ) -> Vec<(&'a Track, f64)>
 where I: IntoIterator<Item = &'a Track>
@@ -23,7 +24,9 @@ where I: IntoIterator<Item = &'a Track>
                 || selected_genres.iter().any(|selected_genre| track.genre.iter().any(|genre| genre.eq_ignore_ascii_case(selected_genre)));
             let tags_ok = selected_tags.is_empty()
                 || selected_tags.iter().any(|selected_tag| track.custom_tags.iter().any(|tag| tag.value.eq_ignore_ascii_case(selected_tag)));
-            genre_ok && tags_ok
+            let fixes_ok = selected_fixes.is_empty()
+                || selected_fixes.iter().any(|selected_fix| track.custom_tags.iter().any(|tag| tag.value.eq_ignore_ascii_case(selected_fix)));
+            genre_ok && tags_ok && fixes_ok
         })
         .map(|track| {
             

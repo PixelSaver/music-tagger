@@ -1,4 +1,4 @@
-extends Label
+extends RichTextLabel
 class_name TagDisplay
 @export var panel: Panel 
 
