@@ -94,6 +94,7 @@ func clear_pool() -> void:
 func scroll_to_index(idx: int):
 	if item_count <= 0:
 		return
+	_lerp_cooldown = max_lerp_cooldown
 	idx = clampi(idx, 0, item_count - 1)
 	target_scroll_angle = -idx * get_theta()
 
@@ -207,7 +208,7 @@ func _process(delta: float) -> void:
 		target_scroll_angle = lerpf(target_scroll_angle, target, delta * 10.0)
 		
 	scroll_angle = lerpf(scroll_angle, target_scroll_angle, delta * 5.0)
-	
+	#print("Target angle: %s" % target_scroll_angle)
 	if !(abs(scroll_angle - _last_scrolled_angle) < .000001) or !(abs(target_scroll_angle - scroll_angle) < .00001):
 		_update_children()
 		_update_scrollbar()
@@ -322,6 +323,7 @@ func get_closest_position() -> Vector2:
 
 func lerp_to_closest():
 	if item_count <= 0: return
+	print("Lerping")
 	var theta = get_theta()
 	
 	var idx = round(-scroll_angle / theta)

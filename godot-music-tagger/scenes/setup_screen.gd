@@ -13,6 +13,7 @@ var dir_entries : Array[DirectoryEntry] = []
 var _total_items := -1
 var _processed_items := -1
 var _scan_notif: PixelNotification
+var _scan_start_time := 0
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -32,6 +33,7 @@ func _ready() -> void:
 	#cache_dir.focus_exited.connect(_on_cache_unfocused)
 	
 func _on_scan_begin(total_items: int) -> void:
+	_scan_start_time = Time.get_ticks_msec()
 	_total_items = total_items
 	_scan_notif = Global.notif_manager.create_notification("Scanning directories", "Reading the tags and cover art of music in directories specified.", -1, true)
 func _on_scan_tick(finished_items: int) -> void:
@@ -47,10 +49,33 @@ func _update_scan_progress(val: int, max_val: int) -> void:
 		push_warning("No scan notification when updating progress")
 		return
 	_scan_notif.set_progress(float(val), float(max_val))
+	
+	if val > 0:
+		var elapsed := (Time.get_ticks_msec() - _scan_start_time) / 1000.0
+		var rate := val / elapsed # songs/sec
+		if rate > 0.0:
+			var remaining := max_val - val
+			var eta := remaining / rate
+			_scan_notif.set_text(
+				"Scanning directories",
+				"Reading the tags and cover art of music in directories specified.| %d / %d • ETA %s"
+				% [val, max_val, _format_eta(eta)]
+			)
 	if val >= max_val:
 		_scan_notif.end_anim()
 		_scan_notif = null
-	
+func _format_eta(seconds: float) -> String:
+	var s := int(round(seconds))
+	var h := float(s) / 3600
+	s %= 3600
+	var m := float(s) / 60
+	s %= 60
+	if h > 0:
+		return "%dh %02dm %02ds" % [h, m, s]
+	elif m > 0:
+		return "%dm %02ds" % [m, s]
+	else:
+		return "%ds" % s
 
 #region Button reactions
 func _on_explore_library_pressed() -> void:

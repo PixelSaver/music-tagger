@@ -31,10 +31,12 @@ func set_display_palette(palette:Array[Color]) -> void:
 	_palette = palette
 	if not _box:
 		return
-	_box.bg_color = palette[0]
+	_box.bg_color = palette[1]
 	_box.bg_color.a = 0.6
-	$ColorRect.color = palette[1]
-	label.add_theme_color_override("default_color", palette[2])
+	#$ColorRect.color = palette[1]
+	var text_col = palette[0]
+	text_col.ok_hsl_s = clampf(text_col.ok_hsl_s, 0.0, 0.6)
+	label.add_theme_color_override("default_color", text_col)
 
 func display_track(track:GodotTrack):
 	if track == _track:
