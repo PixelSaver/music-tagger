@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="1_6ml0h"]
 [ext_resource type="Script" uid="uid://biw4jm8b54gd5" path="res://scenes/directory_entry.gd" id="1_27i3b"]
+[ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="3_hmkhb"]
 
 [node name="Directory" type="HBoxContainer" unique_id=939549954]
 theme_override_constants/separation = 10
@@ -27,6 +28,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = ExtResource("3_hmkhb")
 
 [node name="_RichTextLabel_58217" type="RichTextLabel" parent="DeleteButton" unique_id=387592557]
 clip_contents = false

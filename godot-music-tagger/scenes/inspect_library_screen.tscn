@@ -14,22 +14,19 @@
 [ext_resource type="Script" uid="uid://su2jjrgrsxbh" path="res://scenes/sort_by.gd" id="9_g0aan"]
 [ext_resource type="Script" uid="uid://dncnbe7aqaap8" path="res://scenes/selector.gd" id="9_i4hns"]
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="11_b5doo"]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gkedh"]
-blend_mode = 3
-light_mode = 1
+[ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="14_7op15"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i4hns"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
-bg_color = Color(1, 1, 1, 1)
+draw_center = false
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0.12882978, 0.1288298, 0.12882969, 1)
+border_color = Color(0.3148199, 0.23629145, 0.39989236, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -39,6 +36,18 @@ expand_margin_left = 5.0
 expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7op15"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.76862746, 0.3647059, 0.62352943, 0.23137255)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
 
 [node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man", "settings_button")]
 layout_mode = 3
@@ -71,6 +80,7 @@ size_flags_horizontal = 3
 [node name="SongDisplay" type="Panel" parent="HBoxContainer/MarginContainer" unique_id=726544897 node_paths=PackedStringArray("title", "cover", "desc", "genre", "tags", "fixes", "dupe_display")]
 layout_mode = 2
 mouse_filter = 1
+theme = ExtResource("1_6l5rq")
 script = ExtResource("2_rhkcn")
 title = NodePath("MarginContainer/ScrollContainer/VBoxContainer/Title")
 cover = NodePath("MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/Picture")
@@ -120,7 +130,6 @@ texture = ExtResource("4_beyge")
 expand_mode = 5
 
 [node name="Panel" type="Panel" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/Picture" unique_id=1620846077]
-material = SubResource("CanvasItemMaterial_gkedh")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -362,6 +371,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7op15")
 
 [node name="DupeTest" type="CheckBox" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager/HBoxContainer" unique_id=2140013743]
 layout_mode = 2
@@ -397,6 +407,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = ExtResource("14_7op15")
 
 [node name="@RichTextLabel@88365" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer/SettingsButton" unique_id=932470789]
 clip_contents = false

@@ -323,7 +323,6 @@ func get_closest_position() -> Vector2:
 
 func lerp_to_closest():
 	if item_count <= 0: return
-	print("Lerping")
 	var theta = get_theta()
 	
 	var idx = round(-scroll_angle / theta)

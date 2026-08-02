@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b0nod34odjyy4" path="res://scenes/setup_screen.gd" id="1_74idx"]
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="2_j878g"]
 [ext_resource type="PackedScene" uid="uid://b3lrxeqo3o0kr" path="res://scenes/directory_entry.tscn" id="2_kt6hf"]
+[ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="4_kt6hf"]
 
 [node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_cache_button", "force_scan_button", "explore_library_button")]
 layout_mode = 3
@@ -69,7 +70,8 @@ theme_override_constants/separation = 15
 layout_mode = 2
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
-text = "Setup Music Tagger"
+bbcode_enabled = true
+text = "[b]Setup Music Tagger"
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1
@@ -79,7 +81,8 @@ layout_mode = 2
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 30
-text = "Music Directories"
+bbcode_enabled = true
+text = "[b][font_size=40]Music Directories"
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1
@@ -109,6 +112,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
 
 [node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow/AddDirectoryButton" unique_id=415361679]
 clip_contents = false
@@ -151,6 +155,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
 
 [node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow/ScanButton" unique_id=1655844418]
 clip_contents = false
@@ -177,7 +182,8 @@ layout_mode = 2
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 theme_override_font_sizes/normal_font_size = 30
-text = "Cache Directory"
+bbcode_enabled = true
+text = "[b][font_size=40]Cache Directory"
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1
@@ -215,6 +221,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
 
 [node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/ForceScan" unique_id=1566409938]
 clip_contents = false
@@ -249,6 +256,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
 
 [node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/GoNext" unique_id=566670095]
 clip_contents = false
@@ -308,6 +316,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
 
 [node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer/HBoxContainer/GoNext" unique_id=606473390]
 clip_contents = false

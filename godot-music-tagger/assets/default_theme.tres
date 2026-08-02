@@ -1,5 +1,8 @@
 [gd_resource type="Theme" format=3 uid="uid://djxds56cenfds"]
 
+[ext_resource type="FontFile" uid="uid://bh6hg0he7q647" path="res://assets/fonts/chela-one/ChelaOne-Regular.ttf" id="1_81pgw"]
+[ext_resource type="FontFile" uid="uid://dmu5dhh5a2mcv" path="res://assets/fonts/just-for-fun/JustForFun-Regular.ttf" id="1_qew4h"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oal56"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qew4h"]
@@ -11,6 +14,7 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cs2sx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_203bq"]
+bg_color = Color(0.16862746, 0.6627451, 0.7058824, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o54fn"]
 content_margin_left = 4.0
@@ -38,9 +42,9 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
+bg_color = Color(0.9411765, 0.85490197, 0.69411767, 1)
 border_width_bottom = 2
-border_color = Color(0, 0, 0, 0.6)
+border_color = Color(0.39215687, 0.38039216, 0.7607843, 0.6)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -78,23 +82,79 @@ content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
+bg_color = Color(0.8901961, 0.6039216, 0.6745098, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oal56"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.8901961, 0.6039216, 0.6745098, 0.4)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qlib5"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.8901961, 0.6039216, 0.6745098, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xakvy"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.8901961, 0.6039216, 0.6745098, 0.73333335)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2wygu"]
+content_margin_left = 4.0
+content_margin_top = 0.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+bg_color = Color(0.76862746, 0.3647059, 0.62352943, 0.4)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+
+[sub_resource type="FontVariation" id="FontVariation_vkpim"]
+base_font = ExtResource("1_qew4h")
+
 [resource]
-default_font_size = 40
+default_font = SubResource("FontVariation_vkpim")
+default_font_size = 60
 Button/styles/disabled = SubResource("StyleBoxEmpty_oal56")
 Button/styles/focus = SubResource("StyleBoxEmpty_qew4h")
 Button/styles/hover = SubResource("StyleBoxEmpty_81pgw")
 Button/styles/normal = SubResource("StyleBoxEmpty_vkpim")
 Button/styles/pressed = SubResource("StyleBoxEmpty_cs2sx")
+CheckBox/colors/checkbox_checked_color = Color(0.16862746, 0.6627451, 0.7058824, 1)
+CheckBox/colors/checkbox_unchecked_color = Color(1.6232737, 1.2669051, 2.0093396, 1)
 CheckBox/constants/line_spacing = 100
 CheckBox/font_sizes/font_size = 16
 CheckBox/styles/hover = SubResource("StyleBoxFlat_203bq")
+Label/colors/font_color = Color(0.9411765, 0.85490197, 0.69411767, 1)
+LineEdit/colors/font_color = Color(0.3882353, 0.29411766, 0.49019608, 1)
 LineEdit/font_sizes/font_size = 30
 LineEdit/styles/focus = SubResource("StyleBoxFlat_o54fn")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_qew4h")
@@ -106,3 +166,9 @@ MarginContainer/constants/margin_top = 20
 MenuButton/styles/hover = SubResource("StyleBoxFlat_vkpim")
 Panel/styles/panel = SubResource("StyleBoxFlat_cs2sx")
 PopupMenu/font_sizes/font_size = 22
+RichTextLabel/colors/default_color = Color(0.3882353, 0.29411766, 0.49019608, 1)
+RichTextLabel/fonts/bold_font = ExtResource("1_81pgw")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_oal56")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_qlib5")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_xakvy")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_2wygu")
