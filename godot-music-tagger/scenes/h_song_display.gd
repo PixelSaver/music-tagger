@@ -27,15 +27,18 @@ func _clear_tags() -> void:
 
 func set_display_palette(palette:Array[Color]) -> void:
 	if palette.size() < 2:
-		palette = [Color("1a1a1a"), Color.WHITE]
+		palette = [Color("bec0c0ff"), Color.WHITE]
 	_palette = palette
 	if not _box:
 		return
-	_box.bg_color = palette[1]
+	var panel_col = palette[1]
+	panel_col.v = clampf(panel_col.v, 0.0, 0.4)
+	_box.bg_color = panel_col
 	_box.bg_color.a = 0.6
 	#$ColorRect.color = palette[1]
 	var text_col = palette[0]
-	text_col.ok_hsl_s = clampf(text_col.ok_hsl_s, 0.0, 0.6)
+	text_col.ok_hsl_s = clampf(text_col.ok_hsl_s, 0.0, 0.8)
+	text_col.v = clampf(text_col.v, 0.8, 1.0)
 	label.add_theme_color_override("default_color", text_col)
 
 func display_track(track:GodotTrack):
