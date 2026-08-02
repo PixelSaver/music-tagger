@@ -4,4 +4,4 @@ extends Control
 func _ready() -> void:
 	get_viewport().size_changed.connect(_update_size)
 func _update_size():
-	self.custom_minimum_size = Vector2(get_viewport_rect().size.x*1.2 - 400, 100)
+	$ColorRect.position.x = -get_viewport_rect().size.x*0.45 + $ColorRect.get_combined_minimum_size().x*.5

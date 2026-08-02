@@ -37,12 +37,26 @@ expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7op15"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_env4r"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
-bg_color = Color(0.76862746, 0.3647059, 0.62352943, 0.23137255)
+bg_color = Color(0.24313726, 0.6666667, 0.68235296, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7op15"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.74509805, 0.7529412, 0.7529412, 1)
+border_width_bottom = 2
+border_color = Color(0.39215687, 0.38039216, 0.7607843, 0.6)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -284,7 +298,7 @@ layout_mode = 2
 mouse_filter = 1
 script = ExtResource("9_i4hns")
 
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer/VBoxContainer/RadialSelector/Selector" unique_id=410167138]
+[node name="ColorRect" type="Panel" parent="HBoxContainer/VBoxContainer/RadialSelector/Selector" unique_id=1476159837]
 custom_minimum_size = Vector2(1000, 100)
 layout_mode = 0
 offset_top = -50.0
@@ -294,7 +308,7 @@ offset_transform_enabled = true
 offset_transform_position_ratio = Vector2(-0.5, 0)
 offset_transform_scale = Vector2(1.05, 1.4)
 mouse_filter = 1
-color = Color(0.27058825, 0.22745098, 1, 0.21960784)
+theme_override_styles/panel = SubResource("StyleBoxFlat_env4r")
 
 [node name="VScrollBar" type="VScrollBar" parent="HBoxContainer/VBoxContainer/RadialSelector" unique_id=877659560]
 z_index = 100

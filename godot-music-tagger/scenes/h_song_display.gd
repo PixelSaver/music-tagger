@@ -51,12 +51,12 @@ func display_track(track:GodotTrack):
 	for genre in track.genres:
 		if genre.is_empty(): continue
 		var t = TAG.instantiate() as TagDisplay
-		t.set_tag(genre, Color("1a1a1a99"))
+		t.set_tag(genre, Color("c4f0c2ff"))
 		tags_cont.add_child(t)
 	for tag in track.custom_tags:
 		if tag.is_empty(): continue
 		var t = TAG.instantiate() as TagDisplay
-		t.set_tag(tag, Color("1a1a1a99"))
+		t.set_tag(tag, Color("ffa7b9ff"))
 		tags_cont.add_child(t)
 	for fix in track.get_fixes():
 		if fix.is_empty(): continue

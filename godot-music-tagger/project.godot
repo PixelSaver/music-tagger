@@ -129,4 +129,4 @@ r_click={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.16862746, 0.6627451, 0.7058824, 1)
+environment/defaults/default_clear_color=Color(0.26666668, 0.38039216, 0.4627451, 1)
