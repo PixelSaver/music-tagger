@@ -1,0 +1,374 @@
+[gd_scene format=3 uid="uid://ch2phmrhhhody"]
+
+[ext_resource type="Script" uid="uid://b0nod34odjyy4" path="res://scenes/setup_screen.gd" id="1_74idx"]
+[ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="2_j878g"]
+[ext_resource type="PackedScene" uid="uid://b3lrxeqo3o0kr" path="res://scenes/directory_entry.tscn" id="2_kt6hf"]
+[ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="4_kt6hf"]
+
+[node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_cache_button", "force_scan_button", "explore_library_button", "to_start_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_74idx")
+music_directory_cont = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MusicDirectoryCont")
+add_dir_but = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow/AddDirectoryButton")
+cache_dir = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/CacheLineEdit")
+scan_cache_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/GoNext")
+force_scan_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/ForceScan")
+explore_library_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer/HBoxContainer/GoNext")
+to_start_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2/Start")
+metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1169056325]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1676815303]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="ScrollContainer/VBoxContainer" unique_id=671225937]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2" unique_id=1093474392]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel" unique_id=1574493896]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer" unique_id=1421780853]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer" unique_id=1433615418]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer" unique_id=114748104]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=328084526]
+layout_mode = 2
+size_flags_stretch_ratio = 0.1
+mouse_filter = 1
+bbcode_enabled = true
+text = "[b]Setup Music Tagger"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="MusicDirectories" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=550018634]
+layout_mode = 2
+size_flags_stretch_ratio = 0.1
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[b][font_size=40]Music Directories"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="MusicDirectoryCont" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=821014499]
+layout_mode = 2
+
+[node name="Directory" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MusicDirectoryCont" unique_id=939549954 instance=ExtResource("2_kt6hf")]
+layout_mode = 2
+
+[node name="AddDirRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1565685391]
+layout_mode = 2
+alignment = 2
+
+[node name="AddDirectoryButton" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow" unique_id=597011220]
+custom_minimum_size = Vector2(280, 50)
+layout_mode = 2
+size_flags_stretch_ratio = 1.6
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow/AddDirectoryButton" unique_id=1409829370]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow/AddDirectoryButton" unique_id=415361679]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]+ Add directory"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow" unique_id=918844658]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.12
+mouse_filter = 1
+
+[node name="ScanButton" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow" unique_id=100687868]
+visible = false
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow/ScanButton" unique_id=1403345417]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AddDirRow/ScanButton" unique_id=1655844418]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]Scan"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=444191513]
+layout_mode = 2
+
+[node name="CacheDirectory" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=14598566]
+layout_mode = 2
+size_flags_stretch_ratio = 0.1
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[b][font_size=40]Cache Directory"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="CacheLineEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1279290556]
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=400433538]
+layout_mode = 2
+
+[node name="ScanButtons" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1855696250]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 2
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons" unique_id=2117001695]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.12
+mouse_filter = 1
+
+[node name="ForceScan" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons" unique_id=1734595765]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/ForceScan" unique_id=545175949]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/ForceScan" unique_id=1566409938]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]Force Scan"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GoNext" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons" unique_id=254766802]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/GoNext" unique_id=1924951580]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/GoNext" unique_id=566670095]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]Cache / Scan"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=2145772795]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer" unique_id=412849755]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2" unique_id=1336009333]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2/Start" unique_id=933530936]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2/Start" unique_id=753743093]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]←"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer" unique_id=1468459277]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel" unique_id=634143970]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer" unique_id=1892086472]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer/HBoxContainer" unique_id=1218412903]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="GoNext" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer/HBoxContainer" unique_id=1173037221]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer/HBoxContainer/GoNext" unique_id=885594703]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer/HBoxContainer/GoNext" unique_id=606473390]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]Explore Library"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1

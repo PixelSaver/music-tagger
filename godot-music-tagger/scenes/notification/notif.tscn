@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://b3j7puaxdkexu"]
+
+[ext_resource type="Script" uid="uid://6oeduxrv6ath" path="res://scenes/notif.gd" id="1_5nab7"]
+[ext_resource type="Script" uid="uid://b4pdlxyjxim6i" path="res://utilities/ui/tweenable.gd" id="2_xm4gw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xm4gw"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.89, 0.6052, 0.6764, 0.81960785)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
+
+[sub_resource type="Gradient" id="Gradient_5nab7"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gkedh"]
+gradient = SubResource("Gradient_5nab7")
+width = 1
+
+[node name="Notif" type="MarginContainer" unique_id=1461304200 node_paths=PackedStringArray("title_label", "desc_label", "progress_bar", "all_t")]
+custom_minimum_size = Vector2(450, 80)
+offset_right = 450.0
+offset_bottom = 80.0
+offset_transform_enabled = true
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("1_5nab7")
+title_label = NodePath("Panel/MarginContainer/VBoxContainer/Title")
+desc_label = NodePath("Panel/MarginContainer/VBoxContainer/Desc")
+progress_bar = NodePath("Panel/MarginContainer/VBoxContainer/TextureProgressBar")
+all_t = [NodePath("Tweenable")]
+
+[node name="Panel" type="Panel" parent="." unique_id=1497245576]
+layout_mode = 2
+offset_transform_enabled = true
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_xm4gw")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1117344502]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=289692507]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer" unique_id=558412153]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.8
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "Title"
+fit_content = true
+scroll_active = false
+
+[node name="Desc" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer" unique_id=1892995893]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "Loreum Ipseum Doloreueueueueueueueueueueueeueueueueue"
+fit_content = true
+scroll_active = false
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Panel/MarginContainer/VBoxContainer" unique_id=664653672]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+step = 0.1
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_gkedh")
+texture_progress = SubResource("GradientTexture1D_gkedh")
+tint_under = Color(0.3882353, 0.29411766, 0.49019608, 1)
+tint_progress = Color(0.16862746, 0.6627451, 0.7058824, 1)
+
+[node name="Tweenable" type="Node" parent="." unique_id=226546269]
+script = ExtResource("2_xm4gw")
+direction = Vector2(-1, 0)
+distance = 700.0
+metadata/_custom_type_script = "uid://b4pdlxyjxim6i"

@@ -1,0 +1,39 @@
+{
+	"nodes":[
+		{"id":"aa9200a8ffe94755","type":"group","x":-857,"y":-240,"width":640,"height":525,"label":"Display Song"},
+		{"id":"839d43b94b711ddf","type":"group","x":-732,"y":-25,"width":495,"height":288,"label":"Editing"},
+		{"id":"68067e658876f72d","type":"group","x":-120,"y":-119,"width":500,"height":283,"label":"Playlists"},
+		{"id":"e2f2c91dabad862b","type":"group","x":-677,"y":-680,"width":380,"height":360,"label":"Search"},
+		{"id":"f8515e6f4e771eca","type":"group","x":-757,"y":-960,"width":540,"height":210,"label":"Scanning"},
+		{"id":"1578b5ef503ca687","type":"text","text":"# User","x":-1300,"y":-405,"width":250,"height":60},
+		{"id":"638ecc76ec0a7f97","type":"text","text":"Get directory","x":-737,"y":-940,"width":250,"height":60},
+		{"id":"71dd8e3f72e0c56f","type":"text","text":"If error, print and return","x":-452,"y":-860,"width":200,"height":60,"color":"1"},
+		{"id":"a4814ee73d8b9a9c","type":"text","text":"Scan directory","x":-737,"y":-830,"width":250,"height":60},
+		{"id":"05e42e8f2a0d8ecf","type":"text","text":"Fuzzy search titles / metadata","x":-657,"y":-660,"width":335,"height":60},
+		{"id":"0838fdd2e46a25ec","type":"text","text":"Return ranked list","x":-657,"y":-555,"width":250,"height":60},
+		{"id":"7985b15e5844352d","type":"text","text":"Cry","x":-614,"y":-385,"width":250,"height":60,"color":"5"},
+		{"id":"45648fe7843bc2a4","type":"text","text":"Display all of the metadata","x":-837,"y":-220,"width":250,"height":60},
+		{"id":"19878e049f4fc69b","type":"text","text":"For the given tag (ex: Genre) show all tags in library (ex: J-pop, J-Pop, jpop, etc)","x":-712,"y":-5,"width":395,"height":90},
+		{"id":"08dd905d2b42c6ff","type":"text","text":"Click to toggle on and off?","x":-712,"y":145,"width":221,"height":60},
+		{"id":"d42fc7d9530db87f","type":"text","text":"Add / remove button","x":-477,"y":145,"width":221,"height":60},
+		{"id":"01921fff0848e415","type":"text","text":"Show playlists a song is in","x":-28,"y":-99,"width":188,"height":58},
+		{"id":"bdd7ddb838e1ec0e","type":"text","text":"Show all playlists, and have them be toggles ","x":-100,"y":50,"width":230,"height":94},
+		{"id":"879fee79dd613b6d","type":"text","text":"Just tag songs, and generate playlists from that","x":130,"y":55,"width":230,"height":88}
+	],
+	"edges":[
+		{"id":"4ac0731b05b22f70","fromNode":"638ecc76ec0a7f97","fromSide":"bottom","toNode":"a4814ee73d8b9a9c","toSide":"top"},
+		{"id":"0254612be46b2b62","fromNode":"a4814ee73d8b9a9c","fromSide":"right","toNode":"71dd8e3f72e0c56f","toSide":"left","color":"1"},
+		{"id":"b6a7c83bdfdaa47c","fromNode":"1578b5ef503ca687","fromSide":"right","toNode":"f8515e6f4e771eca","toSide":"left"},
+		{"id":"6b4e4f9b52496033","fromNode":"f8515e6f4e771eca","fromSide":"bottom","toNode":"e2f2c91dabad862b","toSide":"top"},
+		{"id":"22e161992b11d01a","fromNode":"05e42e8f2a0d8ecf","fromSide":"bottom","toNode":"0838fdd2e46a25ec","toSide":"top"},
+		{"id":"7249b5ff68c003eb","fromNode":"0838fdd2e46a25ec","fromSide":"bottom","toNode":"7985b15e5844352d","toSide":"top","label":"Select multiple"},
+		{"id":"6de9a975361dcb51","fromNode":"1578b5ef503ca687","fromSide":"right","toNode":"e2f2c91dabad862b","toSide":"left"},
+		{"id":"ce3a7d545027c306","fromNode":"0838fdd2e46a25ec","fromSide":"right","toNode":"45648fe7843bc2a4","toSide":"right","color":"4","label":"Select one"},
+		{"id":"296cb22ea28e4282","fromNode":"45648fe7843bc2a4","fromSide":"bottom","toNode":"19878e049f4fc69b","toSide":"top"},
+		{"id":"acdf14706806253d","fromNode":"19878e049f4fc69b","fromSide":"bottom","toNode":"08dd905d2b42c6ff","toSide":"top"},
+		{"id":"fe496e52324530fb","fromNode":"19878e049f4fc69b","fromSide":"bottom","toNode":"d42fc7d9530db87f","toSide":"top"},
+		{"id":"8c2e829dad0c15bf","fromNode":"45648fe7843bc2a4","fromSide":"right","toNode":"01921fff0848e415","toSide":"left"},
+		{"id":"2975a3abd4be5604","fromNode":"01921fff0848e415","fromSide":"bottom","toNode":"bdd7ddb838e1ec0e","toSide":"top"},
+		{"id":"e4fa8fa94fd7e99d","fromNode":"01921fff0848e415","fromSide":"bottom","toNode":"879fee79dd613b6d","toSide":"top"}
+	]
+}

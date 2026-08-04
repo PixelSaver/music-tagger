@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://dv7p7axrnbxum"]
+
+[ext_resource type="Script" uid="uid://b03l2p581h6rt" path="res://scenes/test.gd" id="1_wen4y"]
+[ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="2_w8un3"]
+
+[node name="Test" type="Control" unique_id=1712239988]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wen4y")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=431715364]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DirectoryInput" type="LineEdit" parent="VBoxContainer" unique_id=1294641728]
+layout_mode = 2
+placeholder_text = "directory"
+
+[node name="DefaultButton" type="Button" parent="VBoxContainer" unique_id=121597894]
+custom_minimum_size = Vector2(150, 80)
+layout_mode = 2
+script = ExtResource("2_w8un3")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="@RichTextLabel@58217" type="RichTextLabel" parent="VBoxContainer/DefaultButton" unique_id=36705761]
+clip_contents = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -40.0
+offset_bottom = -40.0
+mouse_filter = 2
+bbcode_enabled = true
+text = "Default Button"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Status" type="RichTextLabel" parent="VBoxContainer" unique_id=760081185]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "..."
+scroll_following = true
+
+[node name="MusicTaggerNode" type="MusicTaggerNode" parent="." unique_id=398072247]
+
+[connection signal="pressed" from="VBoxContainer/DefaultButton" to="." method="_on_default_button_pressed"]

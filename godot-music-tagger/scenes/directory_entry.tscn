@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://b3lrxeqo3o0kr"]
+
+[ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="1_6ml0h"]
+[ext_resource type="Script" uid="uid://biw4jm8b54gd5" path="res://scenes/directory_entry.gd" id="1_27i3b"]
+[ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="3_hmkhb"]
+
+[node name="Directory" type="HBoxContainer" unique_id=939549954]
+theme_override_constants/separation = 10
+script = ExtResource("1_27i3b")
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=285468536]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+emoji_menu_enabled = false
+
+[node name="DeleteButton" type="Button" parent="." unique_id=776226183]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+script = ExtResource("1_6ml0h")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="DeleteButton" unique_id=1724912699]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("3_hmkhb")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="DeleteButton" unique_id=387592557]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30][font top=-7]🗑️"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1

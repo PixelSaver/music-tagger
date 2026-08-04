@@ -32,7 +32,7 @@ This cli (might consider tui or gui later) app ~~can~~ will:
 
  There are a lot of caveats and shortcuts I have taken because this is not done to a professional degree, and I have not done trial and error / consulted professionals.
  - All custom tags overwrite the `DESCRIPTION` with the following format: `MUSICTAGGER_CUSTOM_TAG:Tag1,Tag2,Tag3`
- - 
+
 
  ## Roadmap
  - [ ] Add tags to playlists / songs
@@ -44,6 +44,8 @@ This cli (might consider tui or gui later) app ~~can~~ will:
     - [ ] Duration reading from m3u8 for some reason
     - [ ] Upgrade to hls_m3u8 instead of m3u8_rs
 - [ ] Find a way to measure length of a file...
+- [ ] Make albums, find them, group files together...
+- [ ] Get the album cover using Lofty (tag.pictures())
 
 ## Planning
 
