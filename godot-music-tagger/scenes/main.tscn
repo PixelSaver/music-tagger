@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://djxds56cenfds" path="res://assets/default_theme.tres" id="1_sugp2"]
 [ext_resource type="Script" uid="uid://bdffej275fwkl" path="res://scenes/main.gd" id="2_sugp2"]
 [ext_resource type="Script" uid="uid://d342b2ltiplk1" path="res://standalones/tagger_settings.gd" id="3_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://ch2phmrhhhody" path="res://scenes/setup_screen.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://ntda7takqfc0" path="res://scenes/examples/start_screen.tscn" id="4_tbgi4"]
 [ext_resource type="Script" uid="uid://bjnsnqv51pb36" path="res://scenes/notification/notification_manager.gd" id="5_tefeu"]
 
 [sub_resource type="Resource" id="Resource_sugp2"]
@@ -32,7 +32,7 @@ mouse_filter = 1
 theme = ExtResource("1_sugp2")
 script = ExtResource("2_sugp2")
 settings = SubResource("Resource_sugp2")
-first_scene = ExtResource("3_sugp2")
+first_scene = ExtResource("4_tbgi4")
 metadata/_custom_type_script = "uid://bpo0dsawpb3qj"
 
 [node name="ColorRect" type="TextureRect" parent="." unique_id=1764817381]

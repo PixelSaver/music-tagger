@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b3lrxeqo3o0kr" path="res://scenes/directory_entry.tscn" id="2_kt6hf"]
 [ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="4_kt6hf"]
 
-[node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_cache_button", "force_scan_button", "explore_library_button")]
+[node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_cache_button", "force_scan_button", "explore_library_button", "to_start_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +19,7 @@ cache_dir = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxC
 scan_cache_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/GoNext")
 force_scan_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ScanButtons/ForceScan")
 explore_library_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel/MarginContainer/HBoxContainer/GoNext")
+to_start_button = NodePath("ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2/Start")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1169056325]
@@ -278,6 +279,43 @@ vertical_alignment = 1
 [node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=2145772795]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer" unique_id=412849755]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2" unique_id=1336009333]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_j878g")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2/Start" unique_id=933530936]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("4_kt6hf")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/ScrollContainer/MarginContainer2/Start" unique_id=753743093]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]←"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Panel" type="Panel" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer" unique_id=1468459277]
 custom_minimum_size = Vector2(0, 80)

@@ -29,7 +29,7 @@ func _emit_query() -> void:
 	var q := search_bar.text
 	var t := tags_filter.get_selected_filters()
 	var g := genres_filter.get_selected_filters()
-	var f := genres_filter.get_selected_filters()
+	var f := fixes_filter.get_selected_filters()
 	var d := dupe_test.button_pressed
 	search_query_changed.emit(q, t, g, f, d)
 

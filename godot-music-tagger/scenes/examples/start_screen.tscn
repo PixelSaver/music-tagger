@@ -1,17 +1,10 @@
 [gd_scene format=3 uid="uid://ntda7takqfc0"]
 
-[ext_resource type="Script" uid="uid://cj4pcxg1uy6" path="res://scenes/examples/start_menu.gd" id="1_tx5wa"]
+[ext_resource type="Script" uid="uid://cpmtvq57h7ldw" path="res://scenes/examples/start_screen.gd" id="1_o2sd7"]
 [ext_resource type="Script" uid="uid://crut4r5gwigu0" path="res://utilities/ui/menus/default_button.gd" id="2_xm27e"]
+[ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="3_ddckj"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkedh"]
-bg_color = Color(0, 0, 0, 1)
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-
-[node name="StartMenu" type="Control" unique_id=44145697]
+[node name="StartMenu" type="Control" unique_id=12208504 node_paths=PackedStringArray("buttons")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,9 +12,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("1_tx5wa")
+script = ExtResource("1_o2sd7")
+buttons = [NodePath("MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Setup"), NodePath("MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Library"), NodePath("MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Quit")]
+metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=589094818]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1523707269]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2
@@ -29,32 +24,58 @@ anchor_right = 0.8
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=301342606]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer" unique_id=589094818]
+layout_mode = 2
 alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1528641817]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer2" unique_id=1906995270]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer2" unique_id=1528641817]
 layout_mode = 2
 bbcode_enabled = true
-text = "Godot Template Project"
+text = "Music Tagger"
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1523707269]
-layout_mode = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_right = 50
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=226414497]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer2" unique_id=1931801481]
 layout_mode = 2
 
-[node name="TweenableShowcase" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=899641483]
-custom_minimum_size = Vector2(150, 80)
+[node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/VBoxContainer2/MarginContainer2" unique_id=1823925273]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "An open source piece of software to search and mark your library for fixes. It's intended to be used on a downloaded library, where you'll mark songs you listen to that are wrong in some way (wrong  lyrics, cut off audio, etc.) and then later search for all the wrong songs and fix them in one go (by redownloading / retagging). You can also edit the tags in this software directly. [url href=https://github.com/pixelsaver/music-tagger/ underline=always]Source code[/url]!"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer2" unique_id=1904288171]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer2/MarginContainer" unique_id=226414497]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Setup" type="Button" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer" unique_id=1679775654]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
 script = ExtResource("2_xm27e")
 metadata/_custom_type_script = "uid://crut4r5gwigu0"
 
-[node name="Panel" type="Panel" parent="VBoxContainer/MarginContainer/VBoxContainer/TweenableShowcase" unique_id=301983209]
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Setup" unique_id=822776218]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -62,9 +83,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_gkedh")
+theme_override_styles/panel = ExtResource("3_ddckj")
 
-[node name="@RichTextLabel@98832" type="RichTextLabel" parent="VBoxContainer/MarginContainer/VBoxContainer/TweenableShowcase" unique_id=2120989588]
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Setup" unique_id=752040354]
 clip_contents = false
 layout_mode = 1
 anchors_preset = 15
@@ -72,9 +93,79 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
+mouse_filter = 1
 bbcode_enabled = true
-text = "[font_size=20]Tweenable Showcase"
+text = "[font_size=30]Setup and Settings"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Library" type="Button" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer" unique_id=105066046]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_xm27e")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Library" unique_id=165876735]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("3_ddckj")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Library" unique_id=549407873]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]Explore Library (will load cache)"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Quit" type="Button" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer" unique_id=1910599282]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.68
+script = ExtResource("2_xm27e")
+metadata/_custom_type_script = "uid://crut4r5gwigu0"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Quit" unique_id=1245650683]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("3_ddckj")
+
+[node name="_RichTextLabel_58217" type="RichTextLabel" parent="MarginContainer/VBoxContainer2/MarginContainer/VBoxContainer/Quit" unique_id=91006377]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[font_size=30]Quit"
 fit_content = true
 scroll_active = false
 shortcut_keys_enabled = false

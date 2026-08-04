@@ -9,6 +9,7 @@ const DIRECTORY_ENTRY = preload("res://scenes/directory_entry.tscn")
 @export var scan_cache_button: DefaultButton
 @export var force_scan_button: DefaultButton
 @export var explore_library_button: DefaultButton
+@export var to_start_button: DefaultButton
 var dir_entries : Array[DirectoryEntry] = []
 var _total_items := -1
 var _processed_items := -1
@@ -24,6 +25,9 @@ func _ready() -> void:
 	scan_cache_button.pressed.connect(_on_scan_but_pressed)
 	force_scan_button.pressed.connect(_on_force_scan_but_pressed)
 	explore_library_button.pressed.connect(_on_explore_library_pressed)
+	to_start_button.pressed.connect(func():
+		Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.START))
+	)
 	add_dir_but.pressed.connect(_add_dir)
 	cache_dir.placeholder_text = Global.menu_manager.music_tagger_node.cache_directory
 	cache_dir.text_submitted.connect(_on_cache_submit)

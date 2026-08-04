@@ -89,12 +89,29 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3hje5"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.99607843, 0.89411765, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.175, 0.175, 0.175, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oal56"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.8901961, 0.6039216, 0.6745098, 0.4)
+bg_color = Color(1, 0.47843137, 0.56078434, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -167,7 +184,9 @@ MarginContainer/constants/margin_top = 20
 MenuButton/styles/hover = SubResource("StyleBoxFlat_vkpim")
 OptionButton/colors/font_color = Color(0.26666668, 0.38039216, 0.4627451, 1)
 Panel/styles/panel = SubResource("StyleBoxFlat_cs2sx")
+PopupMenu/colors/font_color = Color(0.26666668, 0.38039216, 0.4627451, 1)
 PopupMenu/font_sizes/font_size = 22
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_3hje5")
 RichTextLabel/colors/default_color = Color(0.26666668, 0.38039216, 0.4627451, 1)
 RichTextLabel/fonts/bold_font = ExtResource("1_81pgw")
 VScrollBar/styles/grabber = SubResource("StyleBoxFlat_oal56")
