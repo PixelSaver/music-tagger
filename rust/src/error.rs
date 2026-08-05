@@ -9,6 +9,10 @@ pub enum MusicTaggerError {
     #[error(transparent)]
     Io(#[from] io::Error),
 
+
+    #[error("Cancelled")]
+    Cancelled,
+
     #[error("Invalid image format: {0}")]
     InvalidImageFormat(String),
 

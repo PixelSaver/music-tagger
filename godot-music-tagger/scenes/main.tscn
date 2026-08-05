@@ -8,8 +8,9 @@
 
 [sub_resource type="Resource" id="Resource_sugp2"]
 script = ExtResource("3_jyhfs")
-music_directories = Array[String](["~/Music/spotiflacopus"])
-cache_directory = "../test/.cache/library.bin"
+playlist_directory = "./playlist"
+music_directories = Array[String](["~/Music/"])
+cache_directory = "./.cache/library.bin"
 metadata/_custom_type_script = "uid://d342b2ltiplk1"
 
 [sub_resource type="Gradient" id="Gradient_tbgi4"]

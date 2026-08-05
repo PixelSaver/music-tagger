@@ -40,6 +40,11 @@ func _on_scan_begin(total_items: int) -> void:
 	_scan_start_time = Time.get_ticks_msec()
 	_total_items = total_items
 	_scan_notif = Global.notif_manager.create_notification("Scanning directories", "Reading the tags and cover art of music in directories specified.", -1, true)
+	_scan_notif.ended.connect(func():
+		print("\n\n\n\n\n\n\n\nShould have ended")
+		Global.menu_manager.music_tagger_node.cancel_scan()
+		Global.notif_manager.create_notification("Scan canceled!", "You canceled the scan, and nothing should be happening")
+	)
 func _on_scan_tick(finished_items: int) -> void:
 	if not _scan_notif: 
 		push_warning("No scan notification when ticking")
@@ -115,7 +120,7 @@ func _on_scan_but_pressed() -> void:
 		Global.notif_manager.create_notification("Library loaded from cache!", "")
 	else:
 		await Global.menu_manager.music_tagger_node.library_scanned
-		Global.notif_manager.create_notification("Library finished scanning!", "")
+		var notif = Global.notif_manager.create_notification("Library finished scanning!", "")
 	#Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
 #endregion
 #region Music directory functions

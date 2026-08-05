@@ -7,11 +7,11 @@ use rayon::prelude::*;
 use std::fs::File;
 use std::path::Path;
 use std::path::PathBuf;
-use std::sync::Arc;
+use std::sync::{Arc, atomic::AtomicBool};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use walkdir::WalkDir;
 
-pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library> {
+pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>, cancel_scan: Arc<AtomicBool>) -> Result<Library> {
     let paths: Vec<PathBuf> = WalkDir::new(dir)
         .follow_links(true)
         .into_iter()
@@ -30,7 +30,13 @@ pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library
     let tracks: Vec<TrackLocation> = paths
         .par_iter()
         .filter_map(|path| {
+            if cancel_scan.load(Ordering::Relaxed) {
+                return None;
+            }
             let mut file = File::open(path).ok()?;
+            if cancel_scan.load(Ordering::Relaxed) {
+                return None;
+            }
 
             let result = match media::read_track_from_file(&mut file) {
                 Ok((track, lofty_tagged_file)) => {
@@ -56,7 +62,10 @@ pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>) -> Result<Library
             result
         })
         .collect();
-
+    
+    if cancel_scan.load(Ordering::Relaxed) {
+        return Err(MusicTaggerError::Cancelled);
+    }
     let _ = sender.send(MusicTaggerEvent::ProgressTick(total));
     Ok(Library { tracks })
 }

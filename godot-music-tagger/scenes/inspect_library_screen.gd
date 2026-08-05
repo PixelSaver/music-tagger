@@ -10,6 +10,7 @@ signal possible_fixes(fixes: Array[String])
 @export var radial_selector: RadialSelector
 @export var search_man: SearchManager
 @export var settings_button: DefaultButton
+@export var starting: RichTextLabel 
 var _displayed_tracks: Array[GodotTrack] = []
 var _genres: Array[String] = []
 var _tags: Array[String] = []
@@ -60,6 +61,7 @@ func _on_selection_changed() -> void:
 
 
 func _set_all_tracks(all_tracks: Array[GodotTrack]):
+	starting.hide()
 	_displayed_tracks = all_tracks
 	radial_selector.clear_pool()
 	var pool_size := mini(

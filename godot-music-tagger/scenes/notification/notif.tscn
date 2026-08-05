@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://b3j7puaxdkexu"]
 
 [ext_resource type="Script" uid="uid://6oeduxrv6ath" path="res://scenes/notif.gd" id="1_5nab7"]
+[ext_resource type="Texture2D" uid="uid://cw1nnjjsrgob1" path="res://assets/x.svg" id="2_rhmkt"]
 [ext_resource type="Script" uid="uid://b4pdlxyjxim6i" path="res://utilities/ui/tweenable.gd" id="2_xm4gw"]
+[ext_resource type="Script" uid="uid://bt14g0g2d53t6" path="res://scenes/notification/x_button.gd" id="3_rbqu8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xm4gw"]
 content_margin_left = 0.0
@@ -23,7 +25,7 @@ colors = PackedColorArray(1, 1, 1, 1)
 gradient = SubResource("Gradient_5nab7")
 width = 1
 
-[node name="Notif" type="MarginContainer" unique_id=1461304200 node_paths=PackedStringArray("title_label", "desc_label", "progress_bar", "all_t")]
+[node name="Notif" type="MarginContainer" unique_id=1461304200 node_paths=PackedStringArray("title_label", "desc_label", "progress_bar", "end_button", "all_t")]
 custom_minimum_size = Vector2(450, 80)
 offset_right = 450.0
 offset_bottom = 80.0
@@ -34,6 +36,7 @@ script = ExtResource("1_5nab7")
 title_label = NodePath("Panel/MarginContainer/VBoxContainer/Title")
 desc_label = NodePath("Panel/MarginContainer/VBoxContainer/Desc")
 progress_bar = NodePath("Panel/MarginContainer/VBoxContainer/TextureProgressBar")
+end_button = NodePath("Panel/MarginContainer/Control/TextureButton")
 all_t = [NodePath("Tweenable")]
 
 [node name="Panel" type="Panel" parent="." unique_id=1497245576]
@@ -88,6 +91,26 @@ texture_under = SubResource("GradientTexture1D_gkedh")
 texture_progress = SubResource("GradientTexture1D_gkedh")
 tint_under = Color(0.3882353, 0.29411766, 0.49019608, 1)
 tint_progress = Color(0.16862746, 0.6627451, 0.7058824, 1)
+
+[node name="Control" type="Control" parent="Panel/MarginContainer" unique_id=1193816260]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="TextureButton" type="TextureButton" parent="Panel/MarginContainer/Control" unique_id=1771112198]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+mouse_filter = 1
+texture_normal = ExtResource("2_rhmkt")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("3_rbqu8")
+normal_color = Color(1, 0.99607843, 0.89411765, 1)
+hover_color = Color(1.0954857, 0.5284217, 0.61348104, 1)
+pressed_color = Color(0.7898847, 0.37344864, 0.43591395, 1)
 
 [node name="Tweenable" type="Node" parent="." unique_id=226546269]
 script = ExtResource("2_xm4gw")

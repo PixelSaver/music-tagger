@@ -79,7 +79,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 5
 
-[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man", "settings_button")]
+[node name="InspectLibraryScreen" type="Control" unique_id=1655914214 node_paths=PackedStringArray("song_display", "radial_selector", "search_man", "settings_button", "starting")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -93,6 +93,7 @@ song_display = NodePath("HBoxContainer/MarginContainer/SongDisplay")
 radial_selector = NodePath("HBoxContainer/VBoxContainer/RadialSelector")
 search_man = NodePath("HBoxContainer/VBoxContainer/MarginContainer/SearchManager")
 settings_button = NodePath("HBoxContainer/VBoxContainer/MarginContainer2/HBoxContainer/SettingsButton")
+starting = NodePath("Starting")
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=382708563]
@@ -478,6 +479,26 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 55.0
 script = ExtResource("6_b1chm")
+
+[node name="Starting" type="RichTextLabel" parent="." unique_id=1994074503]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.54901963, 0.9372549, 0.7137255, 1)
+bbcode_enabled = true
+text = "Go to settings and load 
+the cache or scan a library
+to get started!"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="possible_fixes" from="." to="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" method="_on_inspect_library_screen_possible_fixes"]
 [connection signal="possible_genres" from="." to="HBoxContainer/MarginContainer/SongDisplay" method="_on_possible_genres"]

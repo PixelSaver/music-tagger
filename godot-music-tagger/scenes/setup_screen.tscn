@@ -5,6 +5,15 @@
 [ext_resource type="PackedScene" uid="uid://b3lrxeqo3o0kr" path="res://scenes/directory_entry.tscn" id="2_kt6hf"]
 [ext_resource type="StyleBox" uid="uid://y7aaewlb4ka3" path="res://assets/button_panel.tres" id="4_kt6hf"]
 
+[sub_resource type="Gradient" id="Gradient_kt6hf"]
+offsets = PackedFloat32Array(0, 0.9938777)
+colors = PackedColorArray(0.7425, 0.75, 0.75, 0.5294118, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_plx5h"]
+gradient = SubResource("Gradient_kt6hf")
+fill_from = Vector2(0.0070779915, 1)
+fill_to = Vector2(0, 0)
+
 [node name="SetupScreen" type="Control" unique_id=1114331007 node_paths=PackedStringArray("music_directory_cont", "add_dir_but", "cache_dir", "scan_cache_button", "force_scan_button", "explore_library_button", "to_start_button")]
 layout_mode = 3
 anchors_preset = 15
@@ -372,3 +381,13 @@ scroll_active = false
 shortcut_keys_enabled = false
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Panel" type="TextureRect" parent="ScrollContainer/VBoxContainer/MarginContainer2/Panel/VBoxContainer/Panel" unique_id=1009122766]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.2
+anchor_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_plx5h")
