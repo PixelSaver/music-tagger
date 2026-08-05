@@ -3,14 +3,20 @@ use crate::error::*;
 use serde::{Serialize, de::DeserializeOwned};
 use std::{fs::File, path::Path};
 
-pub fn load_library(cache_path: &Path) -> Result<Library> {
-    //TODO Don't cache art
-    log::debug!("Trying cache at path: {:?}", cache_path);
-    let lib: Library = load_bincode(cache_path)?;
-    log::debug!("Cache loaded successfully!");
+// #[cfg(not(target_arch = "wasm32"))]
+// pub fn load_library(cache_path: &Path) -> Result<Library> {
+//     let bytes = std::fs::read(cache_path)?;
+//     let lib = load_bincode(&bytes)?;
+//     Ok(lib)
+// }
+
+// #[cfg(target_arch = "wasm32")]
+pub fn load_library(_cache_path: &Path) -> Result<Library> {
+    let bytes = include_bytes!("../../../.democache/library.bin");
+    let lib = load_bincode(bytes)?;
     Ok(lib)
-    // return Ok(scanner::walk_dir(&PathBuf::from(backup_path))?)
 }
+
 pub fn save_library(cache_path: &Path, library: &Library) -> Result<()> {
     save_bincode(cache_path, library)
 }
@@ -24,9 +30,9 @@ pub fn save_library(cache_path: &Path, library: &Library) -> Result<()> {
 //     serde_json::to_writer(file, data)?;
 //     Ok(())
 // }
-pub fn load_bincode<T: DeserializeOwned>(path: &Path) -> Result<T> {
-    let file = File::open(path)?;
-    log::debug!("Loading bincode from: {:?}", path);
+pub fn load_bincode<T: DeserializeOwned>(file: &[u8]) -> Result<T> {
+    // let file = File::open(path)?;
+    // log::debug!("Loading bincode from: {:?}", path);
     match bincode::deserialize_from(file) {
         Ok(data) => {
             log::debug!("Loaded bincode!");

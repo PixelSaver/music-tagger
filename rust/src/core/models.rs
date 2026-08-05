@@ -19,7 +19,7 @@ pub struct Track {
     pub isrc: String,
     pub track_artist: String,
     pub track_artists: String,
-    #[serde(skip)]
+    // #[serde(skip)]
     pub cover_art: Option<TrackPicture>,
     pub palette: Vec<[f32; 3]>,
     pub copyright_message: String,

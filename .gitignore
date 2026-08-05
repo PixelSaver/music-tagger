@@ -30,3 +30,4 @@ test/
 godot-music-tagger/exports/
 godot-music-tagger/exports/Godot Music Tagger.x86_64
 godot-music-tagger/exports/libmusic_tagger.so
+.democache/
