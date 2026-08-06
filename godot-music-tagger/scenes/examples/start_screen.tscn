@@ -130,7 +130,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 bbcode_enabled = true
-text = "[font_size=30]Explore Library (will load cache)"
+text = "[font_size=30]Explore Library (will load cache / [u color=ff7a8f]demo[/u])"
 fit_content = true
 scroll_active = false
 shortcut_keys_enabled = false
