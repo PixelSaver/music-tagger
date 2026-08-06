@@ -34,9 +34,12 @@ to_start_button = NodePath("VBoxContainer/MarginContainer2/Panel/VBoxContainer/S
 metadata/_custom_type_script = "uid://e0s6oeo4pcwr"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1676815303]
-layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

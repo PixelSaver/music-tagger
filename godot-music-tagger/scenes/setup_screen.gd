@@ -52,13 +52,14 @@ func _on_scan_begin(total_items: int) -> void:
 	_scan_notif.ended.connect(func():
 		print("\n\n\n\n\n\n\n\nShould have ended")
 		Global.menu_manager.music_tagger_node.cancel_scan()
-		Global.notif_manager.create_notification("Scan canceled!", "You canceled the scan, and nothing should be happening")
+		if _processed_items != _total_items:
+			Global.notif_manager.create_notification("Scan canceled!", "You canceled the scan, and nothing should be happening")
 	)
 func _on_scan_tick(finished_items: int) -> void:
+	_processed_items = finished_items
 	if not _scan_notif: 
 		push_warning("No scan notification when ticking")
 		return
-	_processed_items = finished_items
 	_update_scan_progress(finished_items, _total_items)
 
 func _update_scan_progress(val: int, max_val: int) -> void:

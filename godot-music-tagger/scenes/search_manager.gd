@@ -9,7 +9,7 @@ signal method_requested(method:METHOD)
 @export var genres_filter: SearchFilter
 @export var fixes_filter: SearchFilter
 @export var sort_by: SortByContainer
-@onready var dupe_test: CheckBox = $HBoxContainer/DupeTest
+@export var dupe_test: CheckBox
 
 signal search_query_changed(query:String, tags:Array[String], genres:Array[String], fixes:Array[String], dupes:bool)
 func _ready() -> void:
@@ -18,7 +18,14 @@ func _ready() -> void:
 	genres_filter.search_filters_changed.connect(func(_n:Array[String]): _emit_query())
 	fixes_filter.search_filters_changed.connect(func(_n:Array[String]): _emit_query())
 	sort_by.method_requested.connect(_on_method_req)
-	dupe_test.toggled.connect(func(_n:bool): _emit_query())
+	dupe_test.toggled.connect(func(toggled:bool): 
+		_emit_query()
+		if toggled:
+			if sort_by.current_method == SortByContainer.SortMethod.RELEVANT:
+				sort_by.select_method(SortByContainer.SortMethod.ALPHABETIC_ASC)
+		else:
+			sort_by.select_method(SortByContainer.SortMethod.RELEVANT)
+	)
 
 
 func _on_method_req(method:METHOD) -> void:

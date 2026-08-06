@@ -7,6 +7,7 @@ enum SortMethod {
 	ALPHABETIC_DESC,
 }
 signal method_requested(method:SortMethod)
+var current_method := SortMethod.RELEVANT
 @export var option_button : OptionButton
 
 func _ready() -> void:
@@ -20,5 +21,12 @@ func _setup_options() -> void:
 		var label = key as String
 		option_button.add_item(label.capitalize())
 
+func select_method(new_method: SortMethod) -> void:
+	if new_method == current_method: return
+	option_button.select(new_method)
+	_on_idx_pressed(new_method)
+
 func _on_idx_pressed(idx:int) -> void:
+	print("New method req")
+	current_method = idx as SortMethod
 	method_requested.emit(idx)
