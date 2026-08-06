@@ -69,6 +69,12 @@ This application can:
     - [ ] Reads / writes metadata (rating, genre)
     - [ ] Flag for redownload (errors like wrong song, lyrics, etc)
 
+## Showcase
+
+I'll show a video since screenshots are a little annoying to do, and a lot of the interactions are better shown through video.
+https://github.com/user-attachments/assets/a314449d-d8c4-4143-b9ad-167cb5bf1a72
+
+
 ## Planning
 
 My personal planning for structure so I don't get lost. Not really important to understanding the project :D
