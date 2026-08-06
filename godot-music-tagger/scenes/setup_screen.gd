@@ -3,6 +3,8 @@ class_name SetupScreen
 const DIRECTORY_ENTRY = preload("res://scenes/directory_entry.tscn")
 
 @onready var mt : MusicTaggerNode 
+@export var scroll_cont: ScrollContainer
+@export var scroll_hint: TextureRect
 @export var music_directory_cont: VBoxContainer 
 @export var add_dir_but: DefaultButton
 @export var cache_dir: LineEdit
@@ -28,6 +30,7 @@ func _ready() -> void:
 	to_start_button.pressed.connect(func():
 		Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.START))
 	)
+	scroll_cont.get_v_scroll_bar().scrolling.connect(_on_scroll)
 	add_dir_but.pressed.connect(_add_dir)
 	cache_dir.placeholder_text = Global.menu_manager.music_tagger_node.cache_directory
 	cache_dir.text_submitted.connect(_on_cache_submit)
@@ -35,7 +38,13 @@ func _ready() -> void:
 	mt.scan_tick.connect(_on_scan_tick)
 	#cache_dir.focus_entered.connect(_on_cache_focused)
 	#cache_dir.focus_exited.connect(_on_cache_unfocused)
+
+func _on_scroll() -> void:
+	var v = scroll_cont.get_v_scroll_bar()
+	print("Scrolled %s" % v.max_value)
+	scroll_hint.visible = v.value != v.max_value - v.page
 	
+
 func _on_scan_begin(total_items: int) -> void:
 	_scan_start_time = Time.get_ticks_msec()
 	_total_items = total_items
