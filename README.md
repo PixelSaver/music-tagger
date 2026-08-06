@@ -72,7 +72,11 @@ This application can:
 ## Showcase
 
 I'll show a video since screenshots are a little annoying to do, and a lot of the interactions are better shown through video.
-https://github.com/user-attachments/assets/a314449d-d8c4-4143-b9ad-167cb5bf1a72
+
+
+https://github.com/user-attachments/assets/60b41330-677d-4d0f-8840-fab00638aac9
+
+
 
 
 ## Planning
