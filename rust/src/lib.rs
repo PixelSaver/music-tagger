@@ -729,6 +729,22 @@ impl MusicTaggerNode {
         self.library.is_some()
     }
     #[func]
+    pub fn scan_directories(&mut self) -> String {
+        self.cancel_scan.store(false, std::sync::atomic::Ordering::Relaxed);
+        let tx = self.event_tx.clone();
+        let directories = self.music_directories.iter_shared().map(|dir| {
+            let path_str = MusicTaggerNode::tilde_path(&Path::new(&dir.to_string()));
+            PathBuf::from(path_str)
+        }).collect::<Vec<PathBuf>>();
+        let cancel = self.cancel_scan.clone();
+        std::thread::spawn(move || {
+            let library = crate::library::scanner::walk_dirs(&directories, &tx, cancel);
+            let _ = tx.send(MusicTaggerEvent::Finished(library));
+        });
+
+        return "".into();
+    }
+    #[func]
     pub fn scan_directory(&mut self, directory: String) -> String {
         self.cancel_scan.store(false, std::sync::atomic::Ordering::Relaxed);
         let tx = self.event_tx.clone();

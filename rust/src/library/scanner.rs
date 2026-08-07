@@ -11,14 +11,19 @@ use std::sync::{Arc, atomic::AtomicBool};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use walkdir::WalkDir;
 
-pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>, cancel_scan: Arc<AtomicBool>) -> Result<Library> {
-    let paths: Vec<PathBuf> = WalkDir::new(dir)
-        .follow_links(true)
-        .into_iter()
-        .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_file())
-        .map(|e| e.path().to_path_buf())
-        .collect();
+fn collect_paths(dirs: &[PathBuf]) -> Vec<PathBuf> {
+    dirs.iter().flat_map(|dir| {
+        WalkDir::new(dir)
+            .follow_links(true)
+            .into_iter()
+            .filter_map(|e| e.ok())
+            .filter(|e| e.file_type().is_file())
+            .map(|e| e.path().to_path_buf())
+    }).collect()
+}
+
+pub fn walk_dirs(dirs: &[PathBuf], sender: &Sender<MusicTaggerEvent>, cancel_scan: Arc<AtomicBool>) -> Result<Library> {
+    let paths: Vec<PathBuf> = collect_paths(dirs);
 
     let total = paths.len() as i32;
     let _ = sender.send(MusicTaggerEvent::ProgressStarted(total));
@@ -68,4 +73,8 @@ pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>, cancel_scan: Arc<
     }
     let _ = sender.send(MusicTaggerEvent::ProgressTick(total));
     Ok(Library { tracks })
+}
+
+pub fn walk_dir(dir: &Path, sender: &Sender<MusicTaggerEvent>, cancel_scan: Arc<AtomicBool>) -> Result<Library> {
+    walk_dirs(&[dir.to_path_buf()], sender, cancel_scan)
 }
