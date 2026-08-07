@@ -9,7 +9,7 @@ func _ready() -> void:
 	Global.menu_manager = self
 	SignalBus.scan.connect(func():
 		for dir in music_tagger_node.music_directories:
-			music_tagger_node.scan_directory(dir)
+			music_tagger_node.scan_directories()
 	)
 	load_settings(settings)
 	

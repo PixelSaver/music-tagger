@@ -198,7 +198,8 @@ vertical_alignment = 1
 [node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre" unique_id=1000241575]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Click once to access all genres in the library. Click twice to make a new one! (Enter to submit)"
+tooltip_text = "Click once to access all genres in the library. 
+Click twice to make a new one! (Enter to submit)"
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre/MenuButton" unique_id=1314772960]
 layout_mode = 1
@@ -231,6 +232,8 @@ vertical_alignment = 1
 [node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/CustomTags" unique_id=1595321991]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Click once to access all custom tags in the library. 
+Click twice to make a new one! (Enter to submit)"
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/CustomTags/MenuButton" unique_id=1779066694]
 layout_mode = 1
@@ -260,6 +263,8 @@ text = "Fixes: "
 [node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer/Fixes" unique_id=1874632228]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Click once to access all fixes in the library. 
+Click twice to make a new one! (Enter to submit)"
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer/Fixes/MenuButton" unique_id=1394888920]
 layout_mode = 1

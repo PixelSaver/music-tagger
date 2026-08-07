@@ -151,7 +151,10 @@ func _update_dir(dir:String, idx:int) -> void:
 	var m_dirs = Global.menu_manager.music_tagger_node.music_directories
 	if m_dirs.size() <= idx or idx < 0: 
 		push_warning("Update dir idx is outside of Music Directories on MusicTaggerNode: idx=%s" % idx)
-	m_dirs[idx] = dir
+	if m_dirs.size() <= idx:
+		m_dirs.resize(idx+1)
+	else:
+		m_dirs[idx] = dir
 func _add_dir(dir:String="") -> void:
 	var inst = DIRECTORY_ENTRY.instantiate() as DirectoryEntry
 	inst.set_dir(dir)
@@ -175,13 +178,13 @@ func _try_cache_or_scan() -> bool:
 	for dir in Global.menu_manager.music_tagger_node.music_directories:
 		print("Music dir: %s" % dir)
 	if result == false:
-		print("Scan result: %s" % Global.menu_manager.music_tagger_node.scan_directory(Global.menu_manager.music_tagger_node.music_directories[0]))
+		print("Scan result: %s" % Global.menu_manager.music_tagger_node.scan_directories())
 	Global.menu_manager.has_library = true
 	return result
 func _force_scan() -> bool:
 	for dir in Global.menu_manager.music_tagger_node.music_directories:
 		print("Music dir: %s" % dir)
-	var result = Global.menu_manager.music_tagger_node.scan_directory(Global.menu_manager.music_tagger_node.music_directories[0])
+	var result = Global.menu_manager.music_tagger_node.scan_directories()
 	if result.length() > 0: print("Scan result: %s" % result)
 	Global.menu_manager.has_library = true
 	return not result.is_empty()
