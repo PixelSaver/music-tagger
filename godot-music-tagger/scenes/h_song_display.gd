@@ -64,6 +64,6 @@ func display_track(track:GodotTrack):
 	for fix in track.get_fixes():
 		if fix.is_empty(): continue
 		var t = TAG.instantiate() as TagDisplay
-		t.set_tag(fix, Color.CRIMSON)
+		t.set_tag(fix, Color(1.0, 0.478, 0.561, 1.0))
 		tags_cont.add_child(t)
 		

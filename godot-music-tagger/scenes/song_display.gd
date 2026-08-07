@@ -42,9 +42,9 @@ func display_track(track:GodotTrack) -> void:
 	title.text = track.track_title
 	desc.text = ""
 	if track.track_artist.length() > 0:
-		desc.text += "Artist: %s\n" % track.track_artist
+		desc.text += "Artist: %s\n" % ", ".join(track.track_artist.split(";", false))
 	if track.composer.length() > 0:
-		desc.text += "Composer: %s\n" % track.composer
+		desc.text += "Composer: %s\n" % ", ".join(track.composer.split(";", false))
 	#if track.genre.length() > 0:
 		#desc.text += "Genre: %s\n" % track.genre
 	#if track.custom_tags.size() > 0:

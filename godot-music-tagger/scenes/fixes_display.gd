@@ -17,7 +17,9 @@ func _ready() -> void:
 	)
 	line_edit.editing_toggled.connect(func(toggled_on:bool):
 		if toggled_on: line_edit.text = ""
+		else: _update_display()
 	)
+	line_edit.focus_exited.connect(func():_update_display())
 	line_edit.text_changed.connect(func(new_text:String):
 		if new_text.is_empty():
 			_refresh_popup(possible_fixes)
@@ -27,6 +29,7 @@ func _ready() -> void:
 	)
 	line_edit.text_submitted.connect(func(new_text:String):
 		add_fix(new_text)
+		_update_display()
 		pass
 	)
 	self.set_possible_fixes([
@@ -34,7 +37,7 @@ func _ready() -> void:
 		"Song",
 		"Artist",
 		"CoverArt",
-	    "Removal"
+		"Removal"
 	])
 
 func _refresh_popup(fixes:Array[String]) -> void:
@@ -56,6 +59,7 @@ func set_possible_fixes(_possible_fixes: Array[String]) -> void:
 			pop.item_count-1,
 			selected_fixes.has(fixe)
 		)
+	line_edit.release_focus()
 	_update_display()
 func set_selected_fixes(fixes:Array[String]) -> void:
 	selected_fixes = fixes

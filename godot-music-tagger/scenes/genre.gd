@@ -18,7 +18,9 @@ func _ready() -> void:
 	button.get_popup().window_input.connect(_on_popup_input)
 	line_edit.editing_toggled.connect(func(toggled_on:bool):
 		if toggled_on: line_edit.text = ""
+		else: _update_display()
 	)
+	line_edit.focus_exited.connect(func(): _update_display())
 	line_edit.text_changed.connect(func(new_text:String):
 		if new_text.is_empty() or line_edit.text.is_empty():
 			_refresh_popup(possible_genres)
@@ -28,6 +30,7 @@ func _ready() -> void:
 	)
 	line_edit.text_submitted.connect(func(new_text:String):
 		add_tag(new_text)
+		_update_display()
 		pass
 	)
 	line_edit.focus_exited.connect(func() -> void:
@@ -78,6 +81,7 @@ func set_selected_genres(genres:Array[String]) -> void:
 	selected_genres = genres
 	_refresh_popup(possible_genres)
 	_update_display()
+	line_edit.release_focus()
 func _update_display() -> void:
 	if button.get_popup().item_count > 0: button.get_popup().scroll_to_item(0)
 	line_edit.text = ", ".join(selected_genres)

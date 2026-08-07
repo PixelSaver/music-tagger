@@ -55,7 +55,7 @@ Once in the library, you can do a lot of things!
 
 ### Tag, Genre, and Fixes Editing
 
-I would first try out the tag editing; select a song by scrolling, and click the tags or genres. Lists should pop up of all tags/genres in the current library, but if you click again on the selection button, it will allow you to write a custom tag/genre. Once you click enter, it will save the tag *IMMEDIATELY*. 
+I would first try out the tag editing; select a song by scrolling, and click the tags or genres. Lists should pop up of all tags/genres in the current library, but if you click again on the selection button, it will allow you to write a custom tag/genre. Once you click `enter`, it will save the tag *IMMEDIATELY*. 
 
 The fixes are for if something is wrong with the song. For example, if the lyrics are off, the audio is off, etc. They are essentially a more specific use case of the custom tags, and can be recreated in the custom tags if you want. Still though, I use this to mark which songs are borked, and redownload them from other sources by filtering by tags.
 

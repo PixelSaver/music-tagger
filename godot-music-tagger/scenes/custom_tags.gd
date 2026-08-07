@@ -17,7 +17,9 @@ func _ready() -> void:
 	)
 	line_edit.editing_toggled.connect(func(toggled_on:bool):
 		if toggled_on: line_edit.text = ""
+		else: _update_display()
 	)
+	line_edit.focus_exited.connect(func():_update_display())
 	line_edit.text_changed.connect(func(new_text:String):
 		if new_text.is_empty():
 			_refresh_popup(possible_tags)
@@ -27,6 +29,7 @@ func _ready() -> void:
 	)
 	line_edit.text_submitted.connect(func(new_text:String):
 		add_tag(new_text)
+		_update_display()
 		pass
 	)
 
@@ -56,6 +59,7 @@ func set_selected_tags(tags:Array[String]) -> void:
 	for i in pop.item_count:
 		var n = pop.get_item_text(i)
 		pop.set_item_checked(i, selected_tags.has(n))
+	line_edit.release_focus()
 	_update_display()
 func _update_display() -> void:
 	line_edit.text = ", ".join(selected_tags)
