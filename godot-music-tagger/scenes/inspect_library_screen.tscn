@@ -198,6 +198,7 @@ vertical_alignment = 1
 [node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre" unique_id=1000241575]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Click once to access all genres in the library. Click twice to make a new one! (Enter to submit)"
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/MarginContainer/SongDisplay/MarginContainer/ScrollContainer/VBoxContainer/Genre/MenuButton" unique_id=1314772960]
 layout_mode = 1
