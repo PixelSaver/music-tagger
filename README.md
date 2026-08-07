@@ -31,6 +31,9 @@ This application can:
 > ![NOTE] Note
 > All editable fields (like the genre, custom tags, and fixes) are editable if you double click the fields. On the first click, it will only display the found tags within the library. 
 
+> ![WARNING] Duplicates
+> Since this library finds the tracks by isrc, that means that out of two (or more) duplicate songs, the program will only change one of them, and any changes to that one track will be reflected in every instance of that song in the list. There is CURRENTLY no way to delete duplicates or locate the file location of duplicates.
+
 ## Showcase
 
 I'll show a video since screenshots are a little annoying to do, and a lot of the interactions are better shown through video.

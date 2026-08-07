@@ -17,6 +17,7 @@ func _ready() -> void:
 		panel = StyleBoxFlat.new()
 	_box = panel
 	self.add_theme_stylebox_override("panel", _box)
+	SignalBus.track_edited.connect(_on_track_changed)
 
 func _update_size():
 	self.custom_minimum_size = Vector2(get_viewport_rect().size.x*1.2 - 400, 100)
@@ -41,16 +42,19 @@ func set_display_palette(palette:Array[Color]) -> void:
 	text_col.v = clampf(text_col.v, 0.8, 1.0)
 	label.add_theme_color_override("default_color", text_col)
 
+func _on_track_changed(track:GodotTrack):
+	if _track == null or track.isrc != _track.isrc: return
+	#await get_tree().create_timer(0.3).timeout
+	display_track(track)
+
 func display_track(track:GodotTrack):
-	if track == _track:
-		return
 	_track = track
 	label.text = track.track_title
 	set_display_palette(track.palette)
 	
-	if tags_cont.get_children().size() > 0:
-		_clear_tags()
-		#TODO Maybe reuse tags so I don't clear them every time in tag display
+	_clear_tags()
+	#TODO Maybe reuse tags so I don't clear them every time in tag display
+	
 	for genre in track.genres:
 		if genre.is_empty(): continue
 		var t = TAG.instantiate() as TagDisplay

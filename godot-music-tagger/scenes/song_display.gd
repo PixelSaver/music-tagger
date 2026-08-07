@@ -17,15 +17,23 @@ func _ready() -> void:
 	cover.texture = _cover_texture
 	genre.genres_changed.connect(func(_genres:Array[String]):
 		Global.menu_manager.music_tagger_node.find_track_write_genres(_track.isrc, _genres)
+		SignalBus.track_edited.emit(_track)
 	)
 	tags.tags_changed.connect(func(_tags:Array[String]):
 		print("Tags changed:", _tags)
 		_track.custom_tags = _tags
 		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _track)
+		SignalBus.track_edited.emit(_track)
 	)
 	fixes.fixes_changed.connect(func(_fixes:Array[String]):
 		_track.set_fixes(_fixes)
 		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _track)
+		SignalBus.track_edited.emit(_track)
+	)
+	dupe_display.toggled.connect(func(is_dupe:bool):
+		_track.is_duplicate = is_dupe
+		Global.menu_manager.music_tagger_node.find_track_write_custom_tags(_track.isrc, _track)
+		SignalBus.track_edited.emit(_track)
 	)
 	Global.menu_manager.music_tagger_node.loaded_cover_art.connect(_on_cover_art_received)
 

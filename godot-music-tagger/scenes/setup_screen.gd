@@ -153,6 +153,7 @@ func _update_dir(dir:String, idx:int) -> void:
 		push_warning("Update dir idx is outside of Music Directories on MusicTaggerNode: idx=%s" % idx)
 	if m_dirs.size() <= idx:
 		m_dirs.resize(idx+1)
+		m_dirs[idx] = dir
 	else:
 		m_dirs[idx] = dir
 func _add_dir(dir:String="") -> void:

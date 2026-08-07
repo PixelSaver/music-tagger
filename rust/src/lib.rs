@@ -10,8 +10,8 @@ pub mod playlists;
 pub mod godot_log;
 
 use std::path::{Path, PathBuf};
-use std::sync::atomic::AtomicBool;
 use std::sync::Arc;
+use std::sync::atomic::AtomicBool;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
@@ -730,12 +730,17 @@ impl MusicTaggerNode {
     }
     #[func]
     pub fn scan_directories(&mut self) -> String {
-        self.cancel_scan.store(false, std::sync::atomic::Ordering::Relaxed);
+        self.cancel_scan
+            .store(false, std::sync::atomic::Ordering::Relaxed);
         let tx = self.event_tx.clone();
-        let directories = self.music_directories.iter_shared().map(|dir| {
-            let path_str = MusicTaggerNode::tilde_path(&Path::new(&dir.to_string()));
-            PathBuf::from(path_str)
-        }).collect::<Vec<PathBuf>>();
+        let directories = self
+            .music_directories
+            .iter_shared()
+            .map(|dir| {
+                let path_str = MusicTaggerNode::tilde_path(&Path::new(&dir.to_string()));
+                PathBuf::from(path_str)
+            })
+            .collect::<Vec<PathBuf>>();
         let cancel = self.cancel_scan.clone();
         std::thread::spawn(move || {
             let library = crate::library::scanner::walk_dirs(&directories, &tx, cancel);
@@ -746,7 +751,8 @@ impl MusicTaggerNode {
     }
     #[func]
     pub fn scan_directory(&mut self, directory: String) -> String {
-        self.cancel_scan.store(false, std::sync::atomic::Ordering::Relaxed);
+        self.cancel_scan
+            .store(false, std::sync::atomic::Ordering::Relaxed);
         let tx = self.event_tx.clone();
         let directory = MusicTaggerNode::tilde_path(&Path::new(&directory));
         log::debug!("Scanning directory: {}", directory);
@@ -825,6 +831,7 @@ impl MusicTaggerNode {
 
     #[func]
     pub fn cancel_scan(&self) {
-        self.cancel_scan.store(true, std::sync::atomic::Ordering::Relaxed);
+        self.cancel_scan
+            .store(true, std::sync::atomic::Ordering::Relaxed);
     }
 }
