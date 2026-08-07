@@ -4,11 +4,11 @@ compatibility_minimum = 4.1
 reloadable = true
 
 [libraries]
+linux.release.x86_64 =   "res://bin/linux/libmusic_tagger.so"
+windows.release.x86_64 = "res://bin/windows/music_tagger.dll"
+macos.release =          "res://bin/macos/arm64/libmusic_tagger.dylib"
+macos.release.arm64 =    "res://bin/macos/arm64/libmusic_tagger.dylib"
 linux.debug.x86_64 =     "res://../rust/target/debug/libmusic_tagger.so"
-linux.release.x86_64 =   "res://../rust/target/release/libmusic_tagger.so"
 windows.debug.x86_64 =   "res://../rust/target/debug/music_tagger.dll"
-windows.release.x86_64 = "res://../rust/target/release/music_tagger.dll"
 macos.debug =            "res://../rust/target/debug/libmusic_tagger.dylib"
-macos.release =          "res://../rust/target/release/libmusic_tagger.dylib"
 macos.debug.arm64 =      "res://../rust/target/debug/libmusic_tagger.dylib"
-macos.release.arm64 =    "res://../rust/target/release/libmusic_tagger.dylib"

@@ -31,18 +31,40 @@ This application can:
 > ![NOTE] Note
 > All editable fields (like the genre, custom tags, and fixes) are editable if you double click the fields. On the first click, it will only display the found tags within the library. 
 
-### Definitely not going to happen, but I want it to 
- - Album and metadata matching using MusicBrainz
- - Lyrics fetching 
- - Turn into a gdextension to write frontend in godot
+## Showcase
 
- ## DISCLAIMERS
+I'll show a video since screenshots are a little annoying to do, and a lot of the interactions are better shown through video.
+
+
+https://github.com/user-attachments/assets/60b41330-677d-4d0f-8840-fab00638aac9
+
+ ## Tutorial / Usage
+ 
+ ### DISCLAIMERS
 
  There are a lot of caveats and shortcuts I have taken because this is not done to a professional degree, and I have not done trial and error / consulted professionals.
  - All custom tags overwrite the `DESCRIPTION` with the following format: `MUSICTAGGER_CUSTOM_TAG:Tag1,Tag2,Tag3`
  - All fixes are custom tags with the prefix: `NEEDSFIX_{fix}`
  - All actions are *irreversible*, `Ctrl+Z` does absolutely NOTHING. You have been warned.
- - 
+
+### Get Started
+
+Open the app! On first download, if you click `Explore Library`, it will automatically load the cache. You can also go through the `Setup & Settings` button, then click `Cache / Scan`, and it will load the demo list; then click `Explore Library` from the settings screen.
+
+Once in the library, you can do a lot of things! 
+
+### Tag, Genre, and Fixes Editing
+
+I would first try out the tag editing; select a song by scrolling, and click the tags or genres. Lists should pop up of all tags/genres in the current library, but if you click again on the selection button, it will allow you to write a custom tag/genre. Once you click enter, it will save the tag *IMMEDIATELY*. 
+
+The fixes are for if something is wrong with the song. For example, if the lyrics are off, the audio is off, etc. They are essentially a more specific use case of the custom tags, and can be recreated in the custom tags if you want. Still though, I use this to mark which songs are borked, and redownload them from other sources by filtering by tags.
+
+> ![NOTE] Note on filters
+> No filter can be reversed (no `does not have artist`). Multiple filters of one category (tags, genres, fixes) are considered `or` (ex: `has genre POP or ALT ROCK`).
+
+### Searching
+
+You can filter by the fixes, tags, genres, etc. Searching using the main search bar fuzzy searches through fields like the title and track artists to filter for songs. There is also a duplicates filter, which cannot delete songs (yet) but is nice to know without searching with your file explorer. 
 
 
  ## Roadmap
@@ -69,14 +91,11 @@ This application can:
     - [ ] Reads / writes metadata (rating, genre)
     - [ ] Flag for redownload (errors like wrong song, lyrics, etc)
 
-## Showcase
 
-I'll show a video since screenshots are a little annoying to do, and a lot of the interactions are better shown through video.
-
-
-https://github.com/user-attachments/assets/60b41330-677d-4d0f-8840-fab00638aac9
-
-
+### Definitely not going to happen, but I want it to 
+ - Album and metadata matching using MusicBrainz
+ - Lyrics fetching 
+ - Turn into a gdextension to write frontend in godot
 
 
 ## Planning
