@@ -52,7 +52,7 @@ https://github.com/user-attachments/assets/60b41330-677d-4d0f-8840-fab00638aac9
 
 ### Get Started
 
-Open the app! On first download, if you click `Explore Library`, it will automatically load the cache. You can also go through the `Setup & Settings` button, then click `Cache / Scan`, and it will load the demo list; then click `Explore Library` from the settings screen.
+Open the app! On first download, if you click `Explore Library`, it will load the demo cache. You can also go through the `Setup & Settings` button, then click `Cache / Scan`, and it will scan the directories you inputted; then click `Explore Library` from the settings screen.
 
 Once in the library, you can do a lot of things! 
 
