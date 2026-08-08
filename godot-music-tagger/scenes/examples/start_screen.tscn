@@ -107,6 +107,7 @@ custom_minimum_size = Vector2(300, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.68
+tooltip_text = "This loads a demo library if you don't have music to test on."
 script = ExtResource("2_xm27e")
 metadata/_custom_type_script = "uid://crut4r5gwigu0"
 
@@ -130,7 +131,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 bbcode_enabled = true
-text = "[font_size=30]Explore Library (will load cache / [u color=ff7a8f]demo[/u])"
+text = "[font_size=30]Explore Library (will load [u color=ff7a8f]demo[/u])"
 fit_content = true
 scroll_active = false
 shortcut_keys_enabled = false

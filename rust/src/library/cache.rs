@@ -4,14 +4,14 @@ use serde::{Serialize, de::DeserializeOwned};
 use std::{fs::File, path::Path};
 
 // #[cfg(not(target_arch = "wasm32"))]
-// pub fn load_library(cache_path: &Path) -> Result<Library> {
-//     let bytes = std::fs::read(cache_path)?;
-//     let lib = load_bincode(&bytes)?;
-//     Ok(lib)
-// }
+pub fn load_library(cache_path: &Path) -> Result<Library> {
+    let bytes = std::fs::read(cache_path)?;
+    let lib = load_bincode(&bytes)?;
+    Ok(lib)
+}
 
 // #[cfg(target_arch = "wasm32")]
-pub fn load_library(_cache_path: &Path) -> Result<Library> {
+pub fn load_library_demo(_cache_path: &Path) -> Result<Library> {
     let bytes = include_bytes!("../../../.democache/library.bin");
     let lib = load_bincode(bytes)?;
     Ok(lib)

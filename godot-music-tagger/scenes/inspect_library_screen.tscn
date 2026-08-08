@@ -361,6 +361,7 @@ dupe_test = NodePath("HBoxContainer2/HBoxContainer/DupeTest")
 
 [node name="Searchbar" type="LineEdit" parent="HBoxContainer/VBoxContainer/MarginContainer/SearchManager" unique_id=372626817]
 layout_mode = 2
+tooltip_text = "Use this to search by title, artist, or composer!"
 mouse_filter = 1
 theme_override_font_sizes/font_size = 30
 placeholder_text = "Search"

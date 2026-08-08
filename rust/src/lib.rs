@@ -728,6 +728,21 @@ impl MusicTaggerNode {
         }
     }
     #[func]
+    pub fn load_demo_cache(&mut self) -> bool {
+        if let Ok(library) =
+            crate::library::cache::load_library_demo(&Path::new(&self.cache_directory.to_string()))
+        {
+            self.library = Some(library);
+            self.godot_tracks = self.get_all_tracks();
+            log::debug!("Library loaded from cache successfully!");
+            self.base_mut().emit_signal("cache_loaded", &[]);
+            self.base_mut().emit_signal("library_scanned", &[]);
+            true
+        } else {
+            false
+        }
+    }
+    #[func]
     pub fn has_library(&self) -> bool {
         self.library.is_some()
     }

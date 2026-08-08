@@ -15,10 +15,12 @@ func _on_button_pressed(_name:String) -> void:
 		"setup":
 			Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.SETUP))
 		"library":
-			var result = Global.menu_manager.music_tagger_node.try_load_cache()
+			var result = Global.menu_manager.music_tagger_node.load_demo_cache()
 			if result:
+				Global.notif_manager.create_notification("Demo Cache Loaded", "You can now explore a pre-tagged, small, example library.")
 				Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.INSPECT))
 			else:
+				Global.notif_manager.create_notification("Demo Cache Failed", "For some reason, the demo cache failed to load. You can try your own music library / cache in the setup screen.")
 				Global.menu_manager.transition_to_scene(SceneDatabase.get_scene(SceneDatabase.Scene.SETUP))
 		"quit":
 			pass
