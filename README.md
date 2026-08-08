@@ -28,10 +28,10 @@ This application can:
     - Custom Tags
     - Fixes
 
-> [!Note] Note
+> [!NOTE]
 > All editable fields (like the genre, custom tags, and fixes) are editable if you double click the fields. On the first click, it will only display the found tags within the library. 
 
-> [!Warning] Duplicates
+> [!WARNING]
 > Since this library finds the tracks by isrc, that means that out of two (or more) duplicate songs, the program will only change one of them, and any changes to that one track will be reflected in every instance of that song in the list. There is CURRENTLY no way to delete duplicates or locate the file location of duplicates.
 
 ## Showcase
@@ -62,7 +62,7 @@ I would first try out the tag editing; select a song by scrolling, and click the
 
 The fixes are for if something is wrong with the song. For example, if the lyrics are off, the audio is off, etc. They are essentially a more specific use case of the custom tags, and can be recreated in the custom tags if you want. Still though, I use this to mark which songs are borked, and redownload them from other sources by filtering by tags.
 
-> ![NOTE] Note on filters
+> [!NOTE]
 > No filter can be reversed (no `does not have artist`). Multiple filters of one category (tags, genres, fixes) are considered `or` (ex: `has genre POP or ALT ROCK`).
 
 ### Searching
