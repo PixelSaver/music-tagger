@@ -76,7 +76,6 @@ func end_anim() -> void:
 		t = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT).set_parallel(true)
 		for table in all_t:
 			t.tween_property(table, "tween_value", 1.0, 0.7)
-		print("Exiting tween edone")
 		await t.finished
 	ended.emit()
 	queue_free()

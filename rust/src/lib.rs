@@ -560,6 +560,9 @@ impl MusicTaggerNode {
         library.tracks.iter().for_each(|track| {
             track.track.custom_tags.iter().for_each(|tag| {
                 if out.find(&tag.value, 0.into()).is_none() {
+                    if tag.value.starts_with("IS_DUPLICATE") || tag.value.starts_with("NEEDSFIX_") {
+                        return;
+                    }
                     out.push(&tag.value);
                 };
             });

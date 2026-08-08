@@ -108,7 +108,6 @@ func _on_search(query:String, selected_tags:Array[String], selected_genres:Array
 	_idxs = Global.menu_manager.music_tagger_node.searched_track_idxs
 	radial_selector.scroll_angle = 0.
 	radial_selector.target_scroll_angle = 0.
-	print("Query sent")
 	_set_all_tracks(_displayed_tracks)
 
 #endregion
